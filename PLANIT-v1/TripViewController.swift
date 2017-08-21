@@ -29,11 +29,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //View controllers
     var chatController: ChatViewController?
     var flightResultsController: UIViewController?
-    var reviewAndBookFlightsController: ReviewAndBookViewController?
-    var carRentalResultsController: carRentalResultsViewController?
-    var reviewAndBookCarRentalController: ReviewAndBookViewController?
+//    var reviewAndBookFlightsController: ReviewAndBookViewController?
+//    var carRentalResultsController: carRentalResultsViewController?
+//    var reviewAndBookCarRentalController: ReviewAndBookViewController?
     var hotelResultsController: UIViewController?
-    var reviewAndBookHotelController: ReviewAndBookViewController?
+//    var reviewAndBookHotelController: ReviewAndBookViewController?
         //Itinerary View Controllers
     var hotelBookedOnPlanitController: JRNavigationController?
     var flightBookedOnPlanitController: JRNavigationController?
@@ -1011,29 +1011,34 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             calloutRect.origin = CGPoint(x: (itineraryButton2?.layer.frame.midX)!, y: topView.frame.height + (itineraryButton2?.layer.frame.maxY)! - 7)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
             
+            showContactsTutorial = false
         }
     }
 
     func sendInvites(){
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-        
-        if ((SavedPreferencesForTrip["selected_dates"] as? [Date])?.count)! == 0 || destinationsForTrip.count == 0 {
-            let alertController = UIAlertController(title: "Are you sure you want to send invites?", message: "We recommend at least proposing dates and a destination!", preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Wait to send", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                self.showContactsTutorialIfFirstContactAdded()
-            }
-            let okAction = UIAlertAction(title: "Send now!", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+        let when = DispatchTime.now() + 0.4
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            
+            let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+            var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+            
+            if ((SavedPreferencesForTrip["selected_dates"] as? [Date])?.count)! == 0 || destinationsForTrip.count == 0 {
+                let alertController = UIAlertController(title: "Are you sure you want to send invites?", message: "We recommend at least proposing dates and a destination!", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Wait to send", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                    self.showContactsTutorialIfFirstContactAdded()
+                }
+                let okAction = UIAlertAction(title: "Send now!", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
+                    self.itineraryButton2?.stopPulseEffect()
+                    self.showContactsTutorialIfFirstContactAdded()
+                }
+                alertController.addAction(cancelAction)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            } else {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
-                self.itineraryButton2?.stopPulseEffect()
-                self.showContactsTutorialIfFirstContactAdded()
+                //            itineraryButton2?.stopPulseEffect()
             }
-            alertController.addAction(cancelAction)
-            alertController.addAction(okAction)
-            self.present(alertController, animated: true, completion: nil)
-        } else {
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
-//            itineraryButton2?.stopPulseEffect()
         }
     }
 
@@ -4660,7 +4665,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         
         if numberOfContacts == 0 {
             contactsCollectionView.isHidden = true
-            addInviteeButton.setTitle("Plan invitee list", for: .normal)
+            addInviteeButton.setTitle("Invite travelers", for: .normal)
             addInviteeButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 22)
             addInviteeButton.frame.size.height = 30
             addInviteeButton.frame.size.width = 190
@@ -5402,14 +5407,14 @@ extension TripViewController {
         switch CNContactStore.authorizationStatus(for: .contacts) {
         // Update our UI if the user has granted access to their Contacts
         case .authorized:            
-            // Obtain a configured MFMessageComposeViewController
-            let addInviteesAlert = UIAlertController(title: "We won't send your itinerary\nuntil you say so!", message: "", preferredStyle: UIAlertControllerStyle.alert)
-            let continueAction = UIAlertAction(title: "Sounds good", style: UIAlertActionStyle.default) {
-                (result : UIAlertAction) -> Void in
+//            // Obtain a configured MFMessageComposeViewController
+//            let addInviteesAlert = UIAlertController(title: "We won't send your itinerary\nuntil you say so!", message: "", preferredStyle: UIAlertControllerStyle.alert)
+//            let continueAction = UIAlertAction(title: "Sounds good", style: UIAlertActionStyle.default) {
+//                (result : UIAlertAction) -> Void in
                 self.showContactsPicker()
-            }
-            addInviteesAlert.addAction(continueAction)
-            self.present(addInviteesAlert, animated: true, completion: nil)
+//            }
+//            addInviteesAlert.addAction(continueAction)
+//            self.present(addInviteesAlert, animated: true, completion: nil)
             
         // Prompt the user for access to Contacts if there is no definitive answer
         case .notDetermined :
@@ -5492,198 +5497,197 @@ extension TripViewController {
             print(error)
         }
     }
-    func contactPicker(_ picker: CNContactPickerViewController,
-                       didSelectContactProperties contactProperties: [CNContactProperty]) {
-        showContactsTutorial = false
-        for contactProperty in contactProperties {
-            if (contactIDs?.count)! > 0 {
-                
-                contacts?.append(contactProperty.contact)
-                contactIDs?.append(contactProperty.contact.identifier as NSString)
-                let allPhoneNumbersForContact = contactProperty.contact.phoneNumbers
-                var indexForCorrectPhoneNumber: Int?
-                for indexOfPhoneNumber in 0...(allPhoneNumbersForContact.count - 1) {
-                    if allPhoneNumbersForContact[indexOfPhoneNumber].value == contactProperty.value as! CNPhoneNumber {
-                        indexForCorrectPhoneNumber = indexOfPhoneNumber
-                    }
-                }
-                let phoneNumberToAdd = contactProperty.contact.phoneNumbers[indexForCorrectPhoneNumber!].value.value(forKey: "digits") as! NSString
-                contactPhoneNumbers.append(phoneNumberToAdd)
-                
-                let numberContactsInTable = (contacts?.count)! - 1
-                
-                //Update trip preferences dictionary
-                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-                SavedPreferencesForTrip["contacts_in_group"] = contactIDs
-                SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
-                
-                //Save updated trip preferences dictionary
-                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                
-                let addedRowIndexPath = [IndexPath(row: numberContactsInTable, section: 0)]
-                if sendProposalQuestionView != nil {
-                    sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
-                }
-                let addedRowIndexPathCollectionView = [IndexPath(row: numberContactsInTable + 1, section: 0)]
-                contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
-            }
-            else {
-                showContactsTutorial = true
-                contacts = [contactProperty.contact]
-                contactIDs = [contactProperty.contact.identifier as NSString]
-                let allPhoneNumbersForContact = contactProperty.contact.phoneNumbers
-                var indexForCorrectPhoneNumber: Int?
-                for indexOfPhoneNumber in 0...(allPhoneNumbersForContact.count - 1) {
-                    if allPhoneNumbersForContact[indexOfPhoneNumber].value == contactProperty.value as! CNPhoneNumber {
-                        indexForCorrectPhoneNumber = indexOfPhoneNumber
-                    }
-                }
-                let phoneNumberToAdd = contactProperty.contact.phoneNumbers[indexForCorrectPhoneNumber!].value.value(forKey: "digits") as! NSString
-                contactPhoneNumbers = [phoneNumberToAdd]
-                
-                //Update trip preferences dictionary
-                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-                SavedPreferencesForTrip["contacts_in_group"] = contactIDs
-                SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
-                
-                //Save updated trip preferences dictionary
-                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                
-                let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
-                if sendProposalQuestionView != nil {
-                    sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath, with: .left)
-                }
-                let addedRowIndexPathCollectionView = [addedRowIndexPath[0],IndexPath(row: 1, section: 0)]
-                contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
-                
-                
-                
-            }
-        }
-        
-        sendInvites()
-        
-        
-        
-        if sendProposalQuestionView != nil {
-            sendProposalQuestionView?.contactsTableView?.isHidden = false
-            sendProposalQuestionView?.button3?.isHidden = false
-        }
-        updateProgress()
-        handleAddInviteesButton()
-        handleSendInvitesButton()
-        handleTwicketSegmentedControl()
-        if isAssistantEnabled {
-            self.segmentedControl?.move(to: 1)
-        } else {
-            self.segmentedControl?.move(to: 0)
-        }
-
-    }
-    
-    func contactPicker(_ picker: CNContactPickerViewController, didSelect contactProperty: CNContactProperty) {
-        
-        if (contactIDs?.count)! > 0 {
-            contacts?.append(contactProperty.contact)
-            contactIDs?.append(contactProperty.contact.identifier as NSString)
-            let allPhoneNumbersForContact = contactProperty.contact.phoneNumbers
-            var indexForCorrectPhoneNumber: Int?
-            for indexOfPhoneNumber in 0...(allPhoneNumbersForContact.count - 1) {
-                if allPhoneNumbersForContact[indexOfPhoneNumber].value == contactProperty.value as! CNPhoneNumber {
-                    indexForCorrectPhoneNumber = indexOfPhoneNumber
-                }
-            }
-            let phoneNumberToAdd = contactProperty.contact.phoneNumbers[indexForCorrectPhoneNumber!].value.value(forKey: "digits") as! NSString
-            contactPhoneNumbers.append(phoneNumberToAdd)
-            
-            let numberContactsInTable = (contacts?.count)! - 1
-            
-            //Update trip preferences dictionary
-            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
-            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
-            
-            //Save updated trip preferences dictionary
-            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            
-            let addedRowIndexPath = [IndexPath(row: numberContactsInTable, section: 0)]
-            if sendProposalQuestionView != nil {
-                    sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
-            }
-            let addedRowIndexPathCollectionView = [IndexPath(row: numberContactsInTable + 1, section: 0)]
-            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
-        }
-        else {
-            contacts = [contactProperty.contact]
-            contactIDs = [contactProperty.contact.identifier as NSString]
-            let allPhoneNumbersForContact = contactProperty.contact.phoneNumbers
-            var indexForCorrectPhoneNumber: Int?
-            for indexOfPhoneNumber in 0...(allPhoneNumbersForContact.count - 1) {
-                if allPhoneNumbersForContact[indexOfPhoneNumber].value == contactProperty.value as! CNPhoneNumber {
-                    indexForCorrectPhoneNumber = indexOfPhoneNumber
-                }
-            }
-            let phoneNumberToAdd = contactProperty.contact.phoneNumbers[indexForCorrectPhoneNumber!].value.value(forKey: "digits") as! NSString
-            contactPhoneNumbers = [phoneNumberToAdd]
-            
-            //Update trip preferences dictionary
-            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
-            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
-            
-            //Save updated trip preferences dictionary
-            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            
-            let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
-            if sendProposalQuestionView != nil {
-                sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath, with: .left)
-            }
-            let addedRowIndexPathCollectionView = [addedRowIndexPath[0],IndexPath(row: 1, section: 0)]
-            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
-            
-            //Show instructions for first contact added
-            self.focusBackgroundViewWithinTopView.isHidden = false
-            self.focusBackgroundViewWithinItineraryView.isHidden = false
-            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
-            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
-            self.itineraryView.bringSubview(toFront: itineraryButton2!)
-            
-            self.smCalloutView.contentView = contactsTutorialView0
-            self.smCalloutView.isHidden = false
-            self.smCalloutView.animation(withType: .stretch, presenting: true)
-            self.smCalloutView.permittedArrowDirection = .up
-            var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: (itineraryButton2?.layer.frame.midX)!, y: topView.frame.height + (itineraryButton2?.layer.frame.maxY)! - 7)
-            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
-            
-
-        }
-        if sendProposalQuestionView != nil {
-            sendProposalQuestionView?.contactsTableView?.isHidden = false
-            sendProposalQuestionView?.button3?.isHidden = false
-        }
-        updateProgress()
-        handleAddInviteesButton()
-        handleSendInvitesButton()
-        handleTwicketSegmentedControl()
-        if isAssistantEnabled {
-            self.segmentedControl?.move(to: 1)
-        } else {
-            self.segmentedControl?.move(to: 0)
-        }        //        //Uncomment for testing on Simulator
-        //        //        chatButton.isHidden = true
-        //        //        subviewDoneButton.isHidden = false
-        //
-        //        //Uncomment for testing on iPhone
-        //        if (contacts?.count)! > 0 {
-        //            chatButton.isHidden = false
-        //            subviewDoneButton.isHidden = true
-        //
-        //        } else {
-        //            chatButton.isHidden = true
-        //            subviewDoneButton.isHidden = false
-        //        }
-    }
+//    func contactPicker(_ picker: CNContactPickerViewController, didSelectContactProperties contactProperties: [CNContactProperty]) {
+//        showContactsTutorial = false
+//        for contactProperty in contactProperties {
+//            if (contactIDs?.count)! > 0 {
+//                
+//                contacts?.append(contactProperty.contact)
+//                contactIDs?.append(contactProperty.contact.identifier as NSString)
+//                let allPhoneNumbersForContact = contactProperty.contact.phoneNumbers
+//                var indexForCorrectPhoneNumber: Int?
+//                for indexOfPhoneNumber in 0...(allPhoneNumbersForContact.count - 1) {
+//                    if allPhoneNumbersForContact[indexOfPhoneNumber].value == contactProperty.value as! CNPhoneNumber {
+//                        indexForCorrectPhoneNumber = indexOfPhoneNumber
+//                    }
+//                }
+//                let phoneNumberToAdd = contactProperty.contact.phoneNumbers[indexForCorrectPhoneNumber!].value.value(forKey: "digits") as! NSString
+//                contactPhoneNumbers.append(phoneNumberToAdd)
+//                
+//                let numberContactsInTable = (contacts?.count)! - 1
+//                
+//                //Update trip preferences dictionary
+//                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//                SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+//                SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+//                
+//                //Save updated trip preferences dictionary
+//                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//                
+//                let addedRowIndexPath = [IndexPath(row: numberContactsInTable, section: 0)]
+//                if sendProposalQuestionView != nil {
+//                    sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
+//                }
+//                let addedRowIndexPathCollectionView = [IndexPath(row: numberContactsInTable + 1, section: 0)]
+//                contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
+//            }
+//            else {
+//                showContactsTutorial = true
+//                contacts = [contactProperty.contact]
+//                contactIDs = [contactProperty.contact.identifier as NSString]
+//                let allPhoneNumbersForContact = contactProperty.contact.phoneNumbers
+//                var indexForCorrectPhoneNumber: Int?
+//                for indexOfPhoneNumber in 0...(allPhoneNumbersForContact.count - 1) {
+//                    if allPhoneNumbersForContact[indexOfPhoneNumber].value == contactProperty.value as! CNPhoneNumber {
+//                        indexForCorrectPhoneNumber = indexOfPhoneNumber
+//                    }
+//                }
+//                let phoneNumberToAdd = contactProperty.contact.phoneNumbers[indexForCorrectPhoneNumber!].value.value(forKey: "digits") as! NSString
+//                contactPhoneNumbers = [phoneNumberToAdd]
+//                
+//                //Update trip preferences dictionary
+//                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//                SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+//                SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+//                
+//                //Save updated trip preferences dictionary
+//                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//                
+//                let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
+//                if sendProposalQuestionView != nil {
+//                    sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath, with: .left)
+//                }
+//                let addedRowIndexPathCollectionView = [addedRowIndexPath[0],IndexPath(row: 1, section: 0)]
+//                contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
+//                
+//                
+//                
+//            }
+//        }
+//        
+//        sendInvites()
+//        
+//        
+//        
+//        if sendProposalQuestionView != nil {
+//            sendProposalQuestionView?.contactsTableView?.isHidden = false
+//            sendProposalQuestionView?.button3?.isHidden = false
+//        }
+//        updateProgress()
+//        handleAddInviteesButton()
+//        handleSendInvitesButton()
+//        handleTwicketSegmentedControl()
+//        if isAssistantEnabled {
+//            self.segmentedControl?.move(to: 1)
+//        } else {
+//            self.segmentedControl?.move(to: 0)
+//        }
+//
+//    }
+//    
+//    func contactPicker(_ picker: CNContactPickerViewController, didSelect contactProperty: CNContactProperty) {
+//        
+//        if (contactIDs?.count)! > 0 {
+//            contacts?.append(contactProperty.contact)
+//            contactIDs?.append(contactProperty.contact.identifier as NSString)
+//            let allPhoneNumbersForContact = contactProperty.contact.phoneNumbers
+//            var indexForCorrectPhoneNumber: Int?
+//            for indexOfPhoneNumber in 0...(allPhoneNumbersForContact.count - 1) {
+//                if allPhoneNumbersForContact[indexOfPhoneNumber].value == contactProperty.value as! CNPhoneNumber {
+//                    indexForCorrectPhoneNumber = indexOfPhoneNumber
+//                }
+//            }
+//            let phoneNumberToAdd = contactProperty.contact.phoneNumbers[indexForCorrectPhoneNumber!].value.value(forKey: "digits") as! NSString
+//            contactPhoneNumbers.append(phoneNumberToAdd)
+//            
+//            let numberContactsInTable = (contacts?.count)! - 1
+//            
+//            //Update trip preferences dictionary
+//            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+//            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+//            
+//            //Save updated trip preferences dictionary
+//            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//            
+//            let addedRowIndexPath = [IndexPath(row: numberContactsInTable, section: 0)]
+//            if sendProposalQuestionView != nil {
+//                    sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
+//            }
+//            let addedRowIndexPathCollectionView = [IndexPath(row: numberContactsInTable + 1, section: 0)]
+//            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
+//        }
+//        else {
+//            contacts = [contactProperty.contact]
+//            contactIDs = [contactProperty.contact.identifier as NSString]
+//            let allPhoneNumbersForContact = contactProperty.contact.phoneNumbers
+//            var indexForCorrectPhoneNumber: Int?
+//            for indexOfPhoneNumber in 0...(allPhoneNumbersForContact.count - 1) {
+//                if allPhoneNumbersForContact[indexOfPhoneNumber].value == contactProperty.value as! CNPhoneNumber {
+//                    indexForCorrectPhoneNumber = indexOfPhoneNumber
+//                }
+//            }
+//            let phoneNumberToAdd = contactProperty.contact.phoneNumbers[indexForCorrectPhoneNumber!].value.value(forKey: "digits") as! NSString
+//            contactPhoneNumbers = [phoneNumberToAdd]
+//            
+//            //Update trip preferences dictionary
+//            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+//            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+//            
+//            //Save updated trip preferences dictionary
+//            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//            
+//            let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
+//            if sendProposalQuestionView != nil {
+//                sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath, with: .left)
+//            }
+//            let addedRowIndexPathCollectionView = [addedRowIndexPath[0],IndexPath(row: 1, section: 0)]
+//            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
+//            
+//            //Show instructions for first contact added
+//            self.focusBackgroundViewWithinTopView.isHidden = false
+//            self.focusBackgroundViewWithinItineraryView.isHidden = false
+//            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
+//            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
+//            self.itineraryView.bringSubview(toFront: itineraryButton2!)
+//            
+//            self.smCalloutView.contentView = contactsTutorialView0
+//            self.smCalloutView.isHidden = false
+//            self.smCalloutView.animation(withType: .stretch, presenting: true)
+//            self.smCalloutView.permittedArrowDirection = .up
+//            var calloutRect: CGRect = CGRect.zero
+//            calloutRect.origin = CGPoint(x: (itineraryButton2?.layer.frame.midX)!, y: topView.frame.height + (itineraryButton2?.layer.frame.maxY)! - 7)
+//            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+//            
+//
+//        }
+//        if sendProposalQuestionView != nil {
+//            sendProposalQuestionView?.contactsTableView?.isHidden = false
+//            sendProposalQuestionView?.button3?.isHidden = false
+//        }
+//        updateProgress()
+//        handleAddInviteesButton()
+//        handleSendInvitesButton()
+//        handleTwicketSegmentedControl()
+//        if isAssistantEnabled {
+//            self.segmentedControl?.move(to: 1)
+//        } else {
+//            self.segmentedControl?.move(to: 0)
+//        }        //        //Uncomment for testing on Simulator
+//        //        //        chatButton.isHidden = true
+//        //        //        subviewDoneButton.isHidden = false
+//        //
+//        //        //Uncomment for testing on iPhone
+//        //        if (contacts?.count)! > 0 {
+//        //            chatButton.isHidden = false
+//        //            subviewDoneButton.isHidden = true
+//        //
+//        //        } else {
+//        //            chatButton.isHidden = true
+//        //            subviewDoneButton.isHidden = false
+//        //        }
+//    }
     func spawnMessages() {
         // Make sure the device can send text messages
         if (messageComposer.canSendText()) {
@@ -5705,70 +5709,76 @@ extension TripViewController {
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
         updateProgress()
     }
-    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contacts: [CNContact]) {
+        showContactsTutorial = false
+        for contact in contacts {
+            //Update changed preferences as variables
+            if (contactIDs?.count)! > 0 {
+                self.contacts?.append(contact)
+                contactIDs?.append(contact.identifier as NSString)
+                let phoneNumberToAdd = contact.phoneNumbers[0].value.value(forKey: "digits") as! NSString
+                contactPhoneNumbers.append(phoneNumberToAdd)
+                
+                let numberContactsInTable = (self.contacts?.count)! - 1
+                
+                //Update trip preferences dictionary
+                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+                SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+                
+                //Save updated trip preferences dictionary
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
+                let addedRowIndexPath = [IndexPath(row: numberContactsInTable, section: 0)]
+                if sendProposalQuestionView != nil {
+                    sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
+                }
+                let addedRowIndexPathCollectionView = [IndexPath(row: numberContactsInTable + 1, section: 0)]
+                contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
+            }
+            else {
+                self.contacts = [contact]
+                contactIDs = [contact.identifier as NSString]
+                let phoneNumberToAdd = contact.phoneNumbers[0].value.value(forKey: "digits") as! NSString
+                contactPhoneNumbers = [phoneNumberToAdd]
+                
+                //Update trip preferences dictionary
+                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+                SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+                
+                //Save updated trip preferences dictionary
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
+                let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
+                if sendProposalQuestionView != nil {
+                    sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath, with: .left)
+                }
+                let addedRowIndexPathCollectionView = [addedRowIndexPath[0],IndexPath(row: 1, section: 0)]
+                contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
+                
+//                //Show instructions for first contact added
+//                self.focusBackgroundViewWithinTopView.isHidden = false
+//                self.focusBackgroundViewWithinItineraryView.isHidden = false
+//                self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
+//                self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
+//                self.itineraryView.bringSubview(toFront: itineraryButton2!)
+//                
+//                self.smCalloutView.contentView = contactsTutorialView0
+//                self.smCalloutView.isHidden = false
+//                self.smCalloutView.animation(withType: .stretch, presenting: true)
+//                self.smCalloutView.permittedArrowDirection = .up
+//                var calloutRect: CGRect = CGRect.zero
+//                calloutRect.origin = CGPoint(x: (itineraryButton2?.layer.frame.midX)!, y: topView.frame.height + (itineraryButton2?.layer.frame.maxY)! - 7)
+//                self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+                
+                
+            }
+            
+
+        }
         
-        //Update changed preferences as variables
-        if (contactIDs?.count)! > 0 {
-            contacts?.append(contact)
-            contactIDs?.append(contact.identifier as NSString)
-            let phoneNumberToAdd = contact.phoneNumbers[0].value.value(forKey: "digits") as! NSString
-            contactPhoneNumbers.append(phoneNumberToAdd)
-            
-            let numberContactsInTable = (contacts?.count)! - 1
-            
-            //Update trip preferences dictionary
-            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
-            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
-            
-            //Save updated trip preferences dictionary
-            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            
-            let addedRowIndexPath = [IndexPath(row: numberContactsInTable, section: 0)]
-            if sendProposalQuestionView != nil {
-                sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
-            }
-            let addedRowIndexPathCollectionView = [IndexPath(row: numberContactsInTable + 1, section: 0)]
-            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
-        }
-        else {
-            contacts = [contact]
-            contactIDs = [contact.identifier as NSString]
-            let phoneNumberToAdd = contact.phoneNumbers[0].value.value(forKey: "digits") as! NSString
-            contactPhoneNumbers = [phoneNumberToAdd]
-            
-            //Update trip preferences dictionary
-            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
-            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
-            
-            //Save updated trip preferences dictionary
-            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            
-            let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
-            if sendProposalQuestionView != nil {
-                sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath, with: .left)
-            }
-            let addedRowIndexPathCollectionView = [addedRowIndexPath[0],IndexPath(row: 1, section: 0)]
-            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
-            
-            //Show instructions for first contact added
-            self.focusBackgroundViewWithinTopView.isHidden = false
-            self.focusBackgroundViewWithinItineraryView.isHidden = false
-            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
-            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
-            self.itineraryView.bringSubview(toFront: itineraryButton2!)
-            
-            self.smCalloutView.contentView = contactsTutorialView0
-            self.smCalloutView.isHidden = false
-            self.smCalloutView.animation(withType: .stretch, presenting: true)
-            self.smCalloutView.permittedArrowDirection = .up
-            var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: (itineraryButton2?.layer.frame.midX)!, y: topView.frame.height + (itineraryButton2?.layer.frame.maxY)! - 7)
-            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
-
-
-        }
+        sendInvites()
         
         if sendProposalQuestionView != nil {
             sendProposalQuestionView?.contactsTableView?.isHidden = false
@@ -5784,20 +5794,104 @@ extension TripViewController {
         } else {
             self.segmentedControl?.move(to: 0)
         }
-        //        //Uncomment for testing on Simulator
-        //        //        chatButton.isHidden = true
-        //        //        subviewDoneButton.isHidden = false
-        //
-        //        //Uncomment for testing on iPhone
-        //        if (contacts?.count)! > 0 {
-        //            chatButton.isHidden = false
-        //            subviewDoneButton.isHidden = true
-        //            
-        //        } else {
-        //            chatButton.isHidden = true
-        //            subviewDoneButton.isHidden = false
-        //        }
+
     }
+    
+    
+    
+//    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+//        
+//        //Update changed preferences as variables
+//        if (contactIDs?.count)! > 0 {
+//            contacts?.append(contact)
+//            contactIDs?.append(contact.identifier as NSString)
+//            let phoneNumberToAdd = contact.phoneNumbers[0].value.value(forKey: "digits") as! NSString
+//            contactPhoneNumbers.append(phoneNumberToAdd)
+//            
+//            let numberContactsInTable = (contacts?.count)! - 1
+//            
+//            //Update trip preferences dictionary
+//            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+//            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+//            
+//            //Save updated trip preferences dictionary
+//            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//            
+//            let addedRowIndexPath = [IndexPath(row: numberContactsInTable, section: 0)]
+//            if sendProposalQuestionView != nil {
+//                sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath as [IndexPath], with: .left)
+//            }
+//            let addedRowIndexPathCollectionView = [IndexPath(row: numberContactsInTable + 1, section: 0)]
+//            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
+//        }
+//        else {
+//            contacts = [contact]
+//            contactIDs = [contact.identifier as NSString]
+//            let phoneNumberToAdd = contact.phoneNumbers[0].value.value(forKey: "digits") as! NSString
+//            contactPhoneNumbers = [phoneNumberToAdd]
+//            
+//            //Update trip preferences dictionary
+//            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//            SavedPreferencesForTrip["contacts_in_group"] = contactIDs
+//            SavedPreferencesForTrip["contact_phone_numbers"] = contactPhoneNumbers
+//            
+//            //Save updated trip preferences dictionary
+//            saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//            
+//            let addedRowIndexPath = [IndexPath(row: 0, section: 0)]
+//            if sendProposalQuestionView != nil {
+//                sendProposalQuestionView?.contactsTableView?.insertRows(at: addedRowIndexPath, with: .left)
+//            }
+//            let addedRowIndexPathCollectionView = [addedRowIndexPath[0],IndexPath(row: 1, section: 0)]
+//            contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
+//            
+//            //Show instructions for first contact added
+//            self.focusBackgroundViewWithinTopView.isHidden = false
+//            self.focusBackgroundViewWithinItineraryView.isHidden = false
+//            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
+//            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
+//            self.itineraryView.bringSubview(toFront: itineraryButton2!)
+//            
+//            self.smCalloutView.contentView = contactsTutorialView0
+//            self.smCalloutView.isHidden = false
+//            self.smCalloutView.animation(withType: .stretch, presenting: true)
+//            self.smCalloutView.permittedArrowDirection = .up
+//            var calloutRect: CGRect = CGRect.zero
+//            calloutRect.origin = CGPoint(x: (itineraryButton2?.layer.frame.midX)!, y: topView.frame.height + (itineraryButton2?.layer.frame.maxY)! - 7)
+//            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+//
+//
+//        }
+//        
+//        if sendProposalQuestionView != nil {
+//            sendProposalQuestionView?.contactsTableView?.isHidden = false
+//            sendProposalQuestionView?.button3?.isHidden = false
+//            
+//        }
+//        updateProgress()
+//        handleAddInviteesButton()
+//        handleSendInvitesButton()
+//        handleTwicketSegmentedControl()
+//        if isAssistantEnabled {
+//            self.segmentedControl?.move(to: 1)
+//        } else {
+//            self.segmentedControl?.move(to: 0)
+//        }
+//        //        //Uncomment for testing on Simulator
+//        //        //        chatButton.isHidden = true
+//        //        //        subviewDoneButton.isHidden = false
+//        //
+//        //        //Uncomment for testing on iPhone
+//        //        if (contacts?.count)! > 0 {
+//        //            chatButton.isHidden = false
+//        //            subviewDoneButton.isHidden = true
+//        //            
+//        //        } else {
+//        //            chatButton.isHidden = true
+//        //            subviewDoneButton.isHidden = false
+//        //        }
+//    }
 }
 
 //MARK: UICollectionViewDelegate & UICollectionViewDatasource

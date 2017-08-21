@@ -68,12 +68,45 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
+        
+        //Color current center view cell
+        if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: TripViewController.self)) {
+            let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
+
+            for row in 0 ... menuTableView.numberOfRows(inSection: 1) - 1 {
+                let cell = menuTableView.cellForRow(at: IndexPath(row: row, section: 1)) as! ExistingTripTableViewCell
+                if cell.existingTripTableViewLabel.text == tripNameValue {
+                    cell.backgroundColor = UIColor.gray
+                }
+            }
+        } else if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: bucketListViewController.self)) {
+            let cell = menuTableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ExistingTripTableViewCell
+            cell.backgroundColor = UIColor.gray
+        } else if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: SettingsViewController.self)) || ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) || ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: PasswordViewController.self)) {
+            let cell = menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell
+            cell.backgroundColor = UIColor.gray
+        }
+
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "leftViewControllerViewWillDisappear"), object: nil)
         UIApplication.shared.sendAction("resignFirstResponder", to:nil, from:nil, for:nil)
+        
+        //Reset cell colors
+        for section in 0 ... 3 {
+            if section != 1 {
+                let cell = menuTableView.cellForRow(at: IndexPath(row: 0, section: section)) as! ExistingTripTableViewCell
+                cell.backgroundColor = UIColor.clear
+            } else if section == 1 && menuTableView.numberOfRows(inSection: 1) > 0 {
+                for row in 0 ... menuTableView.numberOfRows(inSection: 1) - 1 {
+                    let cell = menuTableView.cellForRow(at: IndexPath(row: row, section: 1)) as! ExistingTripTableViewCell
+                    cell.backgroundColor = UIColor.clear
+                }
+            }
+        }
+
     }
 
     

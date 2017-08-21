@@ -297,29 +297,29 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "addTripDestinationUndecided" {
-            let destination = segue.destination as? NewTripNameViewController
-            
-            var NewOrAddedTripForSegue = Int()
-            
-            let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
-            let currentTripIndex = DataContainerSingleton.sharedDataContainer.currenttrip!
-            var numberSavedTrips: Int?
-            if existing_trips == nil {
-                numberSavedTrips = 0
-                NewOrAddedTripForSegue = 1
-            } else {
-                numberSavedTrips = (existing_trips?.count)! - 1
-                if currentTripIndex <= numberSavedTrips! {
-                    NewOrAddedTripForSegue = 0
-                } else {
-                    NewOrAddedTripForSegue = 1
-                }
-            }
-            destination?.NewOrAddedTripFromSegue = NewOrAddedTripForSegue
-            //FIREBASEDISABLED
-//            destination?.newChannelRef = channelRef
-        }
+//        if segue.identifier == "addTripDestinationUndecided" {
+//            let destination = segue.destination as? NewTripNameViewController
+//            
+//            var NewOrAddedTripForSegue = Int()
+//            
+//            let existing_trips = DataContainerSingleton.sharedDataContainer.usertrippreferences
+//            let currentTripIndex = DataContainerSingleton.sharedDataContainer.currenttrip!
+//            var numberSavedTrips: Int?
+//            if existing_trips == nil {
+//                numberSavedTrips = 0
+//                NewOrAddedTripForSegue = 1
+//            } else {
+//                numberSavedTrips = (existing_trips?.count)! - 1
+//                if currentTripIndex <= numberSavedTrips! {
+//                    NewOrAddedTripForSegue = 0
+//                } else {
+//                    NewOrAddedTripForSegue = 1
+//                }
+//            }
+//            destination?.NewOrAddedTripFromSegue = NewOrAddedTripForSegue
+//            //FIREBASEDISABLED
+////            destination?.newChannelRef = channelRef
+//        }
         if segue.identifier == "tripListToTripViewController" {
 //            let navVC = segue.destination as? UINavigationController
 //            

@@ -96,10 +96,10 @@ final class ChatViewController: JSQMessagesViewController {
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
-        if segue.identifier == "chatToFlightResults" {
-            let destination = segue.destination as? flightResultsViewController
-            destination?.searchMode = self.searchMode
-        }
+//        if segue.identifier == "chatToFlightResults" {
+//            let destination = segue.destination as? flightResultsViewController
+//            destination?.searchMode = self.searchMode
+//        }
     }
 
     deinit {

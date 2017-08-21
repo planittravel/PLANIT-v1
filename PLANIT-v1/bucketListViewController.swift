@@ -188,8 +188,11 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-
+    override func viewDidAppear(_ animated: Bool) {        
+        if DataContainerSingleton.sharedDataContainer.timesViewedNonTrip as? [String : Int] == nil {
+            DataContainerSingleton.sharedDataContainer.timesViewedNonTrip = timesViewed as NSDictionary
+        }
+        
         timesViewed = DataContainerSingleton.sharedDataContainer.timesViewedNonTrip as! [String : Int]
         
         if timesViewed["globe"] == nil {
@@ -200,10 +203,11 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                 self.timesViewed["globe"] = 1
                 DataContainerSingleton.sharedDataContainer.timesViewedNonTrip = self.timesViewed as NSDictionary
             }
+            return
         }
     }
     func hamburgerArrowButtonTouchedUpInside(sender:Icomation){
-        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
         self.view.endEditing(true)
         hamburgerArrowButton?.close()
