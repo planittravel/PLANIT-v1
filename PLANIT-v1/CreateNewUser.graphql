@@ -1,0 +1,9 @@
+mutation CreateUser($user: CreateUserInput!) {
+createUser(input: $user) {
+changedUser {
+id
+username
+}
+token
+}
+}
