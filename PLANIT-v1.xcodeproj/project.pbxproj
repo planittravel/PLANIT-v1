@@ -745,7 +745,7 @@
 		FA52010A1EC4CE91001EA849 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201091EC4CE91001EA849 /* libz.tbd */; };
 		FA52010C1EC4CE9E001EA849 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA52010B1EC4CE9E001EA849 /* libxml2.tbd */; };
 		FA52010E1EC4CEA9001EA849 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA52010D1EC4CEA9001EA849 /* libsqlite3.tbd */; };
-		FA52010F1EC4D2FB001EA849 /* ReferenceProxy in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201001EC4CE2E001EA849 /* WhirlyGlobeMaplyComponent.framework */; };
+		FA52010F1EC4D2FB001EA849 /* WhirlyGlobeMaplyComponent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5201001EC4CE2E001EA849 /* WhirlyGlobeMaplyComponent.framework */; };
 		FA5201171EC4DC4C001EA849 /* geography-class_medres.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = FA5201161EC4DC4C001EA849 /* geography-class_medres.mbtiles */; };
 		FA5D5CD31F2F893E00E4653A /* buttonDashedBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5D5CD21F2F893D00E4653A /* buttonDashedBorder.swift */; };
 		FA5F13AB1EB92E310003A992 /* amenityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5F13AA1EB92E310003A992 /* amenityTableViewCell.swift */; };
@@ -2046,7 +2046,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA52010F1EC4D2FB001EA849 /* ReferenceProxy in Frameworks */,
+				FA52010F1EC4D2FB001EA849 /* WhirlyGlobeMaplyComponent.framework in Frameworks */,
 				FA52010E1EC4CEA9001EA849 /* libsqlite3.tbd in Frameworks */,
 				FA52010C1EC4CE9E001EA849 /* libxml2.tbd in Frameworks */,
 				FA52010A1EC4CE91001EA849 /* libz.tbd in Frameworks */,
