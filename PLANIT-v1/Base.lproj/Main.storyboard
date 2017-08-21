@@ -12,7 +12,7 @@
         <!--Password View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="PasswordViewController" id="BYZ-38-t0r" customClass="PasswordViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PasswordViewController" id="BYZ-38-t0r" customClass="PasswordViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -57,7 +57,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gxj-rU-q1b">
-                                <rect key="frame" x="54" y="600" width="41" height="30"/>
+                                <rect key="frame" x="54" y="598" width="41" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <state key="normal" title="Back"/>
@@ -70,6 +70,7 @@
                     </view>
                     <connections>
                         <outlet property="Password" destination="EgK-jy-RMs" id="wIW-PH-VSd"/>
+                        <outlet property="backButton" destination="gxj-rU-q1b" id="Y7h-fL-ZQ9"/>
                         <outlet property="createPasswordLabel" destination="b6y-Y7-2Ts" id="2ol-Bw-IWD"/>
                         <outlet property="enterPasswordLabel" destination="mZJ-rV-QuP" id="TcE-Zu-zKr"/>
                         <segue destination="c7O-w7-no5" kind="show" identifier="passwordToTripList" animates="NO" id="GNg-b7-XVH"/>
@@ -82,7 +83,7 @@
         <!--Center View Controller-->
         <scene sceneID="D4k-a0-pCA">
             <objects>
-                <viewController storyboardIdentifier="CenterViewController" id="ZOc-Ay-JYR" customClass="CenterViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CenterViewController" id="ZOc-Ay-JYR" customClass="CenterViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ee6-kF-xxR"/>
                         <viewControllerLayoutGuide type="bottom" id="a68-zy-BWN"/>
@@ -100,7 +101,7 @@
         <!--Left View Controller-->
         <scene sceneID="991-pE-DsI">
             <objects>
-                <viewController storyboardIdentifier="LeftViewController" id="fz4-ke-5vB" customClass="LeftViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LeftViewController" id="fz4-ke-5vB" customClass="LeftViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="lin-ph-JP4"/>
                         <viewControllerLayoutGuide type="bottom" id="3zI-zN-Du0"/>
@@ -117,7 +118,7 @@
                                 <color key="sectionIndexColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="existingTripViewPrototypeCell" rowHeight="70" id="spa-GU-vTp" customClass="ExistingTripTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="existingTripViewPrototypeCell" rowHeight="70" id="spa-GU-vTp" customClass="ExistingTripTableViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="1" width="290" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="spa-GU-vTp" id="XKc-Wb-3Ng">
@@ -241,7 +242,7 @@
         <!--Email View Controller-->
         <scene sceneID="4X5-PG-FNp">
             <objects>
-                <viewController storyboardIdentifier="EmailViewController" id="bhU-Qo-H8O" customClass="EmailViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EmailViewController" id="bhU-Qo-H8O" customClass="EmailViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="5xe-Ql-1yC"/>
                         <viewControllerLayoutGuide type="bottom" id="kP1-SU-YCA"/>
@@ -296,7 +297,7 @@
         <!--Settings View Controller-->
         <scene sceneID="gdT-jW-UcN">
             <objects>
-                <viewController storyboardIdentifier="SettingsViewController" id="tCq-uR-8sF" customClass="SettingsViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SettingsViewController" id="tCq-uR-8sF" customClass="SettingsViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="L0H-WQ-Bxs"/>
                         <viewControllerLayoutGuide type="bottom" id="yz0-fK-zrI"/>
@@ -481,7 +482,7 @@
         <!--Trip View Controller-->
         <scene sceneID="CsW-XX-wky">
             <objects>
-                <viewController storyboardIdentifier="TripViewController" id="QaX-H5-Z3p" customClass="TripViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TripViewController" id="QaX-H5-Z3p" customClass="TripViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CD1-TJ-nzS"/>
                         <viewControllerLayoutGuide type="bottom" id="4fw-4a-zq8"/>
@@ -679,7 +680,7 @@
                                             </vibrancyEffect>
                                         </visualEffectView>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="destinationsDatesCollectionViewCell" id="eYf-7P-I45" customClass="destinationsDatesCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="destinationsDatesCollectionViewCell" id="eYf-7P-I45" customClass="destinationsDatesCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="173"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -909,7 +910,7 @@
                                             </vibrancyEffect>
                                         </visualEffectView>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="Jzh-g1-3dl" customClass="contactsCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="Jzh-g1-3dl" customClass="contactsCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="6" width="55" height="55"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -1728,7 +1729,7 @@
         <!--Trip List View Controller-->
         <scene sceneID="iu3-GD-Dwe">
             <objects>
-                <viewController storyboardIdentifier="TripListViewController" id="c7O-w7-no5" customClass="TripListViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TripListViewController" id="c7O-w7-no5" customClass="TripListViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="T0t-SQ-CR4"/>
                         <viewControllerLayoutGuide type="bottom" id="9qd-3O-iZj"/>
@@ -1800,7 +1801,7 @@
                                 <color key="sectionIndexColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="existingTripViewPrototypeCell" rowHeight="100" id="bSd-CL-cDO" customClass="ExistingTripTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="existingTripViewPrototypeCell" rowHeight="100" id="bSd-CL-cDO" customClass="ExistingTripTableViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="355" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bSd-CL-cDO" id="n3M-Kf-esR">
@@ -2031,7 +2032,7 @@
         <!--Budget View Controller-->
         <scene sceneID="Vgz-mF-ryT">
             <objects>
-                <viewController id="64C-0J-to2" customClass="BudgetViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="64C-0J-to2" customClass="BudgetViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="tM9-4M-2r2"/>
                         <viewControllerLayoutGuide type="bottom" id="SF0-Ak-zeG"/>
@@ -2283,7 +2284,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="Ynu-4O-vCP" customClass="contactsCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="Ynu-4O-vCP" customClass="contactsCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="6" width="55" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -2357,7 +2358,7 @@
         <!--Suggest Destination View Controller-->
         <scene sceneID="Tg0-Rq-WCT">
             <objects>
-                <viewController id="Cpd-I2-Ulf" customClass="SuggestDestinationViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Cpd-I2-Ulf" customClass="SuggestDestinationViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Rpj-kz-uyj"/>
                         <viewControllerLayoutGuide type="bottom" id="qr0-M3-rCg"/>
@@ -2503,7 +2504,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="XaZ-hq-AeQ" customClass="contactsCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="XaZ-hq-AeQ" customClass="contactsCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="6" width="55" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -2562,7 +2563,7 @@
         <!--Activities View Controller-->
         <scene sceneID="1uc-8z-bqx">
             <objects>
-                <viewController id="oN0-zx-La3" customClass="ActivitiesViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="oN0-zx-La3" customClass="ActivitiesViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Jin-ez-joX"/>
                         <viewControllerLayoutGuide type="bottom" id="R5M-gC-dfK"/>
@@ -2684,7 +2685,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="activitiesViewPrototypeCell" id="0rY-5Q-cFu" customClass="ActivitiesCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="activitiesViewPrototypeCell" id="0rY-5Q-cFu" customClass="ActivitiesCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="88" height="75"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -2759,7 +2760,7 @@
         <!--Birthday Gender View Controller-->
         <scene sceneID="UlY-Wb-rfk">
             <objects>
-                <viewController id="NSK-oP-NoQ" customClass="BirthdayGenderViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="NSK-oP-NoQ" customClass="BirthdayGenderViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="XBK-8f-J6x"/>
                         <viewControllerLayoutGuide type="bottom" id="7k0-T5-pEc"/>
@@ -2855,7 +2856,7 @@
         <!--Home Aiport View Controller-->
         <scene sceneID="xew-fZ-6zb">
             <objects>
-                <viewController id="k0v-17-yTN" customClass="HomeAiportViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="k0v-17-yTN" customClass="HomeAiportViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="smJ-FN-NyA"/>
                         <viewControllerLayoutGuide type="bottom" id="m6J-Nh-4J4"/>
@@ -2944,7 +2945,7 @@
         <!--New Trip Name View Controller-->
         <scene sceneID="CQB-NJ-4kL">
             <objects>
-                <viewController id="E8d-J0-NPc" customClass="NewTripNameViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="E8d-J0-NPc" customClass="NewTripNameViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gsO-9M-73i"/>
                         <viewControllerLayoutGuide type="bottom" id="np9-fg-8ng"/>
@@ -3010,7 +3011,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="contactsPrototypeCell" rowHeight="55" id="iV9-Ls-h6O" customClass="contactsTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="contactsPrototypeCell" rowHeight="55" id="iV9-Ls-h6O" customClass="contactsTableViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="28" width="292" height="55"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iV9-Ls-h6O" id="K60-G0-uZ0">
@@ -3413,7 +3414,7 @@
         <!--Swiping View Controller-->
         <scene sceneID="2FE-QH-1zd">
             <objects>
-                <viewController id="U3Y-qh-fAI" customClass="SwipingViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="U3Y-qh-fAI" customClass="SwipingViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="6Uk-dq-Pp7"/>
                         <viewControllerLayoutGuide type="bottom" id="Bg8-JJ-9eI"/>
@@ -3519,7 +3520,7 @@
                                     <action selector="addContact:" destination="U3Y-qh-fAI" eventType="touchUpInside" id="L7M-FN-sXC"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q29-x3-ZD2" customClass="ZLSwipeableView" customModule="planit_v0_2" customModuleProvider="target">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q29-x3-ZD2" customClass="ZLSwipeableView" customModule="PLANIT_v1" customModuleProvider="target">
                                 <rect key="frame" x="28" y="69" width="320" height="422"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -3610,7 +3611,7 @@
                                     </vibrancyEffect>
                                 </visualEffectView>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="vU5-5e-Ykf" customClass="contactsCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="vU5-5e-Ykf" customClass="contactsCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="6" width="55" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -3696,7 +3697,7 @@
         <!--Ranking View Controller-->
         <scene sceneID="TXl-Qm-BJI">
             <objects>
-                <viewController id="6Nf-ZD-7fF" customClass="RankingViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="6Nf-ZD-7fF" customClass="RankingViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="i7R-Wb-kQx"/>
                         <viewControllerLayoutGuide type="bottom" id="1SV-OV-f4p"/>
@@ -3758,7 +3759,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="rankedRecommendationsPrototypeCell" rowHeight="169" id="AXU-Vc-GCD" customClass="rankedRecommendationsTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="rankedRecommendationsPrototypeCell" rowHeight="169" id="AXU-Vc-GCD" customClass="rankedRecommendationsTableViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="169"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AXU-Vc-GCD" id="Fu7-Ha-80Y">
@@ -4018,7 +4019,7 @@
         <!--Explore Hotels View Controller-->
         <scene sceneID="TTu-5w-yoA">
             <objects>
-                <viewController storyboardIdentifier="exploreHotelsViewController" id="LVk-lO-4Cs" customClass="exploreHotelsViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="exploreHotelsViewController" id="LVk-lO-4Cs" customClass="exploreHotelsViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="J6c-P2-G6h"/>
                         <viewControllerLayoutGuide type="bottom" id="MVf-gE-59p"/>
@@ -4103,7 +4104,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="hotelResultPrototypeCell" rowHeight="287" id="RLd-tH-86H" customClass="hotelTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="hotelResultPrototypeCell" rowHeight="287" id="RLd-tH-86H" customClass="hotelTableViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="287"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RLd-tH-86H" id="AlF-aA-wVH">
@@ -4238,7 +4239,7 @@
                                                         <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                     </collectionViewFlowLayout>
                                                     <cells>
-                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="hotelPhotosCollectionViewCell" id="yQy-6Z-JTr" customClass="hotelPhotosCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="hotelPhotosCollectionViewCell" id="yQy-6Z-JTr" customClass="hotelPhotosCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="375" height="186"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -4387,7 +4388,7 @@
         <!--Review And Book View Controller-->
         <scene sceneID="oXU-ux-Xys">
             <objects>
-                <viewController storyboardIdentifier="ReviewAndBookViewController" id="9Zf-or-QAX" customClass="ReviewAndBookViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ReviewAndBookViewController" id="9Zf-or-QAX" customClass="ReviewAndBookViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="z2y-dI-4q6"/>
                         <viewControllerLayoutGuide type="bottom" id="nC9-8J-Idg"/>
@@ -4427,7 +4428,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="itemizedItineraryPrototypeCell" rowHeight="72" id="yrW-iH-10A" customClass="itemizedItineraryTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="itemizedItineraryPrototypeCell" rowHeight="72" id="yrW-iH-10A" customClass="itemizedItineraryTableViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="343" height="72"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yrW-iH-10A" id="ghm-85-Goq">
@@ -4667,7 +4668,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="Ei8-Eq-EXT" customClass="contactsCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="Ei8-Eq-EXT" customClass="contactsCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="6" width="55" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -4800,7 +4801,7 @@
         <!--Instructions For User View Controller-->
         <scene sceneID="eE3-wU-7an">
             <objects>
-                <viewController id="PN2-44-dsi" customClass="InstructionsForUserViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="PN2-44-dsi" customClass="InstructionsForUserViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ruo-nH-cZG"/>
                         <viewControllerLayoutGuide type="bottom" id="J9J-S5-8PJ"/>
@@ -4927,7 +4928,7 @@
         <!--International View Controller-->
         <scene sceneID="TbJ-wI-VFb">
             <objects>
-                <viewController id="ATa-9t-GkH" customClass="InternationalViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ATa-9t-GkH" customClass="InternationalViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dZo-Il-4kx"/>
                         <viewControllerLayoutGuide type="bottom" id="91N-Dk-Al0"/>
@@ -5010,7 +5011,7 @@
         <!--Unbooked Trip Summary View Controller-->
         <scene sceneID="4fg-it-HWb">
             <objects>
-                <viewController id="9Q5-Bs-FEW" customClass="UnbookedTripSummaryViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="9Q5-Bs-FEW" customClass="UnbookedTripSummaryViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="moO-1Q-yxg"/>
                         <viewControllerLayoutGuide type="bottom" id="iUI-Tg-5hH"/>
@@ -5172,7 +5173,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="rvq-xG-vOu" customClass="contactsCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="rvq-xG-vOu" customClass="contactsCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="6" width="55" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -5254,7 +5255,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="activitiesViewPrototypeCell" id="qIt-mi-cJ7" customClass="ActivitiesCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="activitiesViewPrototypeCell" id="qIt-mi-cJ7" customClass="ActivitiesCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.5" width="88" height="75"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -5367,7 +5368,7 @@
         <!--Chat View Controller-->
         <scene sceneID="peh-YB-6Fe">
             <objects>
-                <viewController storyboardIdentifier="ChatViewController" id="h7F-f1-4qO" customClass="ChatViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChatViewController" id="h7F-f1-4qO" customClass="ChatViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="lTw-pH-QJ4"/>
                         <viewControllerLayoutGuide type="bottom" id="szH-06-mCz"/>
@@ -5386,7 +5387,7 @@
         <!--Bucket List View Controller-->
         <scene sceneID="h8J-t7-W0G">
             <objects>
-                <viewController storyboardIdentifier="bucketListViewController" id="O1b-cB-8Dj" customClass="bucketListViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="bucketListViewController" id="O1b-cB-8Dj" customClass="bucketListViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="OsU-8e-0yA"/>
                         <viewControllerLayoutGuide type="bottom" id="EIf-g6-SZs"/>
@@ -5638,7 +5639,7 @@
         <!--Flight Search View Controller-->
         <scene sceneID="sQS-QP-WUt">
             <objects>
-                <viewController id="nd6-3o-Pa6" customClass="flightSearchViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="nd6-3o-Pa6" customClass="flightSearchViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="pNq-Vb-McU"/>
                         <viewControllerLayoutGuide type="bottom" id="dFs-IN-azi"/>
@@ -5985,7 +5986,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <prototypes>
-                                <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="timeOfDayPrototypeCell" rowHeight="20" id="L2Z-ws-Ope" customClass="timeOfDayTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="timeOfDayPrototypeCell" rowHeight="20" id="L2Z-ws-Ope" customClass="timeOfDayTableViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="20" width="158" height="20"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="L2Z-ws-Ope" id="lTk-a0-ctB">
@@ -6033,7 +6034,7 @@
         <!--Flight Results View Controller-->
         <scene sceneID="Lvw-sP-N3u">
             <objects>
-                <viewController storyboardIdentifier="flightResultsViewController" id="pop-1B-VO6" customClass="flightResultsViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="flightResultsViewController" id="pop-1B-VO6" customClass="flightResultsViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="iDf-07-d2C"/>
                         <viewControllerLayoutGuide type="bottom" id="1dc-SY-z8t"/>
@@ -6100,7 +6101,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="flightSearchResultTableViewPrototypeCell" rowHeight="104" id="Dku-hn-0lb" customClass="flightSearchResultTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="flightSearchResultTableViewPrototypeCell" rowHeight="104" id="Dku-hn-0lb" customClass="flightSearchResultTableViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="55.5" width="375" height="104"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dku-hn-0lb" id="sSX-bc-j45">
@@ -6364,7 +6365,7 @@
         <!--Car Rental Results View Controller-->
         <scene sceneID="Y8a-ud-nxi">
             <objects>
-                <viewController storyboardIdentifier="carRentalResultsViewController" id="qD1-pD-AyT" customClass="carRentalResultsViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="carRentalResultsViewController" id="qD1-pD-AyT" customClass="carRentalResultsViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="1OG-Lj-Jbg"/>
                         <viewControllerLayoutGuide type="bottom" id="tCo-5D-aV4"/>
@@ -6431,7 +6432,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="carRentalSearchResultTableViewPrototypeCell" rowHeight="104" id="5nr-Iy-LpQ" customClass="carRentalSearchResultTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="carRentalSearchResultTableViewPrototypeCell" rowHeight="104" id="5nr-Iy-LpQ" customClass="carRentalSearchResultTableViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="55.5" width="375" height="104"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5nr-Iy-LpQ" id="0YR-1z-2eQ">
@@ -6695,7 +6696,7 @@
         <!--Hotel Preferences View Controller-->
         <scene sceneID="Boy-fV-DLn">
             <objects>
-                <viewController id="JtR-jW-4x4" customClass="HotelPreferencesViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="JtR-jW-4x4" customClass="HotelPreferencesViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yz2-5M-AhB"/>
                         <viewControllerLayoutGuide type="bottom" id="nmb-Qa-MGM"/>
@@ -6805,7 +6806,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="amenityPrototypeCell" rowHeight="40" id="fac-AD-YCe" customClass="amenityTableViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="amenityPrototypeCell" rowHeight="40" id="fac-AD-YCe" customClass="amenityTableViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="343" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fac-AD-YCe" id="EqN-rM-HgT">
@@ -6877,7 +6878,7 @@
                                     </vibrancyEffect>
                                 </visualEffectView>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="g7t-Vc-OAi" customClass="contactsCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="g7t-Vc-OAi" customClass="contactsCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="6" width="55" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -6943,7 +6944,7 @@
         <!--To Do View Controller-->
         <scene sceneID="PnP-Zs-ai0">
             <objects>
-                <viewController id="82w-9h-a2p" customClass="ToDoViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="82w-9h-a2p" customClass="ToDoViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="GG6-Vg-I1H"/>
                         <viewControllerLayoutGuide type="bottom" id="RZp-qo-ILO"/>
@@ -7053,7 +7054,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="0.94999999999999996" colorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PUV-cd-45Y" customClass="ZLSwipeableView" customModule="planit_v0_2" customModuleProvider="target">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PUV-cd-45Y" customClass="ZLSwipeableView" customModule="PLANIT_v1" customModuleProvider="target">
                                 <rect key="frame" x="28" y="69" width="320" height="422"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -7102,7 +7103,7 @@
                                     </vibrancyEffect>
                                 </visualEffectView>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="YCs-ej-Srm" customClass="contactsCollectionViewCell" customModule="planit_v0_2" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="contactsCollectionPrototypeCell" id="YCs-ej-Srm" customClass="contactsCollectionViewCell" customModule="PLANIT_v1" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="6" width="55" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -7185,7 +7186,7 @@
         <!--Right View Controller-->
         <scene sceneID="Vck-pK-8w6">
             <objects>
-                <viewController storyboardIdentifier="RightViewController" id="pL2-ZS-L2O" customClass="RightViewController" customModule="planit_v0_2" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RightViewController" id="pL2-ZS-L2O" customClass="RightViewController" customModule="PLANIT_v1" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="BVz-dL-r7W"/>
                         <viewControllerLayoutGuide type="bottom" id="Pf4-o0-5sh"/>
@@ -20513,11 +20514,11 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="GNg-b7-XVH"/>
-        <segue reference="1VF-PM-MLD"/>
         <segue reference="5m0-36-R99"/>
-        <segue reference="t9O-2u-fWL"/>
+        <segue reference="1VF-PM-MLD"/>
         <segue reference="IrZ-E3-weH"/>
+        <segue reference="t9O-2u-fWL"/>
+        <segue reference="GNg-b7-XVH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

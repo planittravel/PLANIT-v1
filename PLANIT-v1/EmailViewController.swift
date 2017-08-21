@@ -14,8 +14,46 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var emailAddress: UITextField!
     @IBOutlet weak var pleaseEnterEmail: UILabel!
     
+    var hamburgerArrowButton: Icomation?
+
+
+    func hamburgerArrowButtonTouchedUpInside(sender:Icomation){
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
+        self.view.endEditing(true)
+        hamburgerArrowButton?.close()
+    }
+    
+    func leftViewControllerViewWillDisappear() {
+        if hamburgerArrowButton?.toggleState == false {
+            hamburgerArrowButton?.close()
+            self.view.endEditing(true)
+        }
+    }
+    func leftViewControllerViewWillAppear() {
+        if hamburgerArrowButton?.toggleState == true {
+            hamburgerArrowButton?.close()
+            self.view.endEditing(true)
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // MARK: Register notifications
+        //Drawer
+        NotificationCenter.default.addObserver(self, selector: #selector(leftViewControllerViewWillAppear), name: NSNotification.Name(rawValue: "leftViewControllerViewWillAppear"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(leftViewControllerViewWillDisappear), name: NSNotification.Name(rawValue: "leftViewControllerViewWillDisappear"), object: nil)
+        
+        hamburgerArrowButton = Icomation(frame: CGRect(x: 15, y: 28, width: 24, height: 24))
+        self.view.addSubview(hamburgerArrowButton!)
+        hamburgerArrowButton?.type = IconType.close
+        hamburgerArrowButton?.topShape.strokeColor = UIColor.white.cgColor
+        hamburgerArrowButton?.middleShape.strokeColor = UIColor.white.cgColor
+        hamburgerArrowButton?.bottomShape.strokeColor = UIColor.white.cgColor
+        hamburgerArrowButton?.animationDuration = 0.7
+        hamburgerArrowButton?.numberOfRotations = 2
+        hamburgerArrowButton?.addTarget(self, action: #selector(self.hamburgerArrowButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
+
         self.emailAddress.delegate = self
         
         self.hideKeyboardWhenTappedAround()

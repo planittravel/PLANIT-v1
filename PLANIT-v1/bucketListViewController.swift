@@ -189,9 +189,8 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
 
-        timesViewed = (SavedPreferencesForTrip["timesViewed"] as? [String : Int])!
+        timesViewed = DataContainerSingleton.sharedDataContainer.timesViewedNonTrip as! [String : Int]
         
         if timesViewed["globe"] == nil {
             let when = DispatchTime.now() + 0.3

@@ -806,26 +806,21 @@
 		FA978A981F1C9E1B00ED5EB8 /* vi.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FA978A7D1F1C9E1B00ED5EB8 /* vi.lproj */; };
 		FA97A3721EC530F4006E68EC /* country_json_50m in Resources */ = {isa = PBXBuildFile; fileRef = FA97A3711EC530F4006E68EC /* country_json_50m */; };
 		FA97F84B1EE66A8B008358EF /* chatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97F84A1EE66A8B008358EF /* chatViewController.swift */; };
-		FA9E39811EBBD2A900F6CB0B /* bucketListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */; };
 		FAA677851F1FAD25001BCFC4 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FAA677831F1FAD25001BCFC4 /* Model.xcdatamodeld */; };
 		FAA677891F1FB2DB001BCFC4 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA677881F1FB2DB001BCFC4 /* DataController.swift */; };
 		FAA6778B1F1FB75F001BCFC4 /* TripsMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6778A1F1FB75F001BCFC4 /* TripsMO.swift */; };
 		FAA8F2231E35194100CD7337 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2221E35194100CD7337 /* AppDelegate.swift */; };
 		FAA8F22A1E35194100CD7337 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2291E35194100CD7337 /* Assets.xcassets */; };
 		FAA8F2541E351A2700CD7337 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2501E351A2700CD7337 /* LaunchScreen.storyboard */; };
-		FAA8F2551E351A2700CD7337 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2521E351A2700CD7337 /* Main.storyboard */; };
 		FAA8F2681E351B9500CD7337 /* ActivitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2581E351B9500CD7337 /* ActivitiesViewController.swift */; };
 		FAA8F2691E351B9500CD7337 /* BirthdayGenderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2591E351B9500CD7337 /* BirthdayGenderViewController.swift */; };
 		FAA8F26A1E351B9500CD7337 /* BudgetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F25A1E351B9500CD7337 /* BudgetViewController.swift */; };
-		FAA8F26C1E351B9500CD7337 /* EmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F25C1E351B9500CD7337 /* EmailViewController.swift */; };
 		FAA8F26D1E351B9500CD7337 /* HomeAirportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F25D1E351B9500CD7337 /* HomeAirportViewController.swift */; };
 		FAA8F26E1E351B9500CD7337 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F25E1E351B9500CD7337 /* InstructionsViewController.swift */; };
 		FAA8F26F1E351B9500CD7337 /* InternationalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F25F1E351B9500CD7337 /* InternationalViewController.swift */; };
 		FAA8F2701E351B9500CD7337 /* NewTripNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2601E351B9500CD7337 /* NewTripNameViewController.swift */; };
-		FAA8F2711E351B9500CD7337 /* PasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2611E351B9500CD7337 /* PasswordViewController.swift */; };
 		FAA8F2721E351B9500CD7337 /* RankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2621E351B9500CD7337 /* RankingViewController.swift */; };
 		FAA8F2741E351B9500CD7337 /* ReviewAndBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2641E351B9500CD7337 /* ReviewAndBookViewController.swift */; };
-		FAA8F2751E351B9500CD7337 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2651E351B9500CD7337 /* SettingsViewController.swift */; };
 		FAA8F2761E351B9500CD7337 /* SuggestDestinationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2661E351B9500CD7337 /* SuggestDestinationViewController.swift */; };
 		FAA8F2771E351B9500CD7337 /* TripListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2671E351B9500CD7337 /* TripListViewController.swift */; };
 		FAA8F2831E351D8D00CD7337 /* DataContainerSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2821E351D8D00CD7337 /* DataContainerSingleton.swift */; };
@@ -843,6 +838,7 @@
 		FAA8F29E1E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */; };
 		FAA8F29F1E351DDE00CD7337 /* timeOfDayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F29A1E351DDE00CD7337 /* timeOfDayTableViewCell.swift */; };
 		FAA8F2A11E351DEB00CD7337 /* items.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2A01E351DEB00CD7337 /* items.plist */; };
+		FAAF6EBB1F4B312800345B95 /* PasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAF6EBA1F4B312800345B95 /* PasswordViewController.swift */; };
 		FAB085931F435C54005C2938 /* badgeButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB085921F435C54005C2938 /* badgeButtonType.swift */; };
 		FABEACFC1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABEACFB1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift */; };
 		FABEACFE1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FABEACFD1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib */; };
@@ -886,6 +882,10 @@
 		FAE83F931EF7B2EE0009A020 /* DestinationOptionsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F921EF7B2EE0009A020 /* DestinationOptionsCardView.swift */; };
 		FAE83F951EF7B2F70009A020 /* DestinationOptionsCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F941EF7B2F70009A020 /* DestinationOptionsCardView.xib */; };
 		FAEA195E1F21403600BB2E15 /* ObjCAccessoryMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAEA195D1F21403600BB2E15 /* ObjCAccessoryMethods.swift */; };
+		FAEFAC431F4B2CAD009D152C /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F2651E351B9500CD7337 /* SettingsViewController.swift */; };
+		FAEFAC441F4B2CB5009D152C /* EmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA8F25C1E351B9500CD7337 /* EmailViewController.swift */; };
+		FAEFAC451F4B2CC3009D152C /* bucketListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */; };
+		FAEFAC461F4B2CE7009D152C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAA8F2521E351A2700CD7337 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1959,7 +1959,6 @@
 		FAA8F25E1E351B9500CD7337 /* InstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstructionsViewController.swift; sourceTree = "<group>"; };
 		FAA8F25F1E351B9500CD7337 /* InternationalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternationalViewController.swift; sourceTree = "<group>"; };
 		FAA8F2601E351B9500CD7337 /* NewTripNameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTripNameViewController.swift; sourceTree = "<group>"; };
-		FAA8F2611E351B9500CD7337 /* PasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordViewController.swift; sourceTree = "<group>"; };
 		FAA8F2621E351B9500CD7337 /* RankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingViewController.swift; sourceTree = "<group>"; };
 		FAA8F2641E351B9500CD7337 /* ReviewAndBookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewAndBookViewController.swift; sourceTree = "<group>"; };
 		FAA8F2651E351B9500CD7337 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -1980,6 +1979,7 @@
 		FAA8F2991E351DDE00CD7337 /* rankedRecommendationsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rankedRecommendationsTableViewCell.swift; sourceTree = "<group>"; };
 		FAA8F29A1E351DDE00CD7337 /* timeOfDayTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = timeOfDayTableViewCell.swift; sourceTree = "<group>"; };
 		FAA8F2A01E351DEB00CD7337 /* items.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = items.plist; sourceTree = "<group>"; };
+		FAAF6EBA1F4B312800345B95 /* PasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordViewController.swift; sourceTree = "<group>"; };
 		FAB085921F435C54005C2938 /* badgeButtonType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = badgeButtonType.swift; sourceTree = "<group>"; };
 		FABEACFB1EFE3CCF0075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoYouKnowWhereYouWillBeStayingQuestionView.swift; sourceTree = "<group>"; };
 		FABEACFD1EFE3CD90075EA94 /* DoYouKnowWhereYouWillBeStayingQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DoYouKnowWhereYouWillBeStayingQuestionView.xib; sourceTree = "<group>"; };
@@ -4650,10 +4650,10 @@
 		FAA8F2561E351AB100CD7337 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				FAAF6EBA1F4B312800345B95 /* PasswordViewController.swift */,
 				FAA8F2651E351B9500CD7337 /* SettingsViewController.swift */,
 				FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */,
 				FAA8F25C1E351B9500CD7337 /* EmailViewController.swift */,
-				FAA8F2611E351B9500CD7337 /* PasswordViewController.swift */,
 				FAA8F2671E351B9500CD7337 /* TripListViewController.swift */,
 				FAE83F641EF461500009A020 /* TripViewController.swift */,
 				FA97F84A1EE66A8B008358EF /* chatViewController.swift */,
@@ -5036,7 +5036,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA4EA8D11EE86AA6005FCE91 /* GetTripMessages.graphql in Resources */,
-				FAA8F2551E351A2700CD7337 /* Main.storyboard in Resources */,
 				FA25322A1F1D3B6D002BCE29 /* HLHotelDetailsPriceTableCell.xib in Resources */,
 				FAA8F22A1E35194100CD7337 /* Assets.xcassets in Resources */,
 				FA25324C1F1D3B6D002BCE29 /* HLIpadHotelDetailsVC.xib in Resources */,
@@ -5205,6 +5204,7 @@
 				FA25310B1F1D3B6D002BCE29 /* ASTComplexSearchFormTableViewCellSegment.xib in Resources */,
 				FA978A8E1F1C9E1B00ED5EB8 /* DefaultTheme7 in Resources */,
 				FA2532B81F1D3B6E002BCE29 /* PeekHotelRatingCell.xib in Resources */,
+				FAEFAC461F4B2CE7009D152C /* Main.storyboard in Resources */,
 				FA2531BF1F1D3B6D002BCE29 /* StarsFilterView.xib in Resources */,
 				FA2530DB1F1D3B6D002BCE29 /* JRFilterTravelSegmentCell.xib in Resources */,
 				FA09A3F11EB23894007F64A3 /* CardContentView.xib in Resources */,
@@ -5585,7 +5585,6 @@
 				FA2532AA1F1D3B6E002BCE29 /* HLGate+Hotellook.swift in Sources */,
 				FA2532541F1D3B6D002BCE29 /* HotelGalleryVC.swift in Sources */,
 				FA2532451F1D3B6D002BCE29 /* HLFixedHeaderPositionLayout.m in Sources */,
-				FA9E39811EBBD2A900F6CB0B /* bucketListViewController.swift in Sources */,
 				FA77D1F31EFDD9D600A37A05 /* textfieldUnderline.swift in Sources */,
 				FA2531A41F1D3B6D002BCE29 /* HLPhotoScrollCollectionCell.swift in Sources */,
 				FA2532661F1D3B6E002BCE29 /* MultipleLinesFeatureItem.swift in Sources */,
@@ -5595,11 +5594,9 @@
 				FA2532391F1D3B6D002BCE29 /* ReviewCell.swift in Sources */,
 				FA2531EA1F1D3B6D002BCE29 /* HLFiltersVC.swift in Sources */,
 				FA2532421F1D3B6D002BCE29 /* CellSeparatorView.swift in Sources */,
-				FAA8F26C1E351B9500CD7337 /* EmailViewController.swift in Sources */,
 				FA4887851F01B95A0015F078 /* PlaceForGroupOrJustYouQuestionView.swift in Sources */,
 				FA2530AB1F1D3B6D002BCE29 /* JRVideoAdLoader.m in Sources */,
 				FA2533441F1D3B6E002BCE29 /* JRStringsWidthComputer.m in Sources */,
-				FAA8F2711E351B9500CD7337 /* PasswordViewController.swift in Sources */,
 				FA4EEF201F16A28D00C188BE /* AlreadyHaveFlightsQuestionView.swift in Sources */,
 				FA2532E21F1D3B6E002BCE29 /* WaitingLongSearchCell.swift in Sources */,
 				FA2531F61F1D3B6D002BCE29 /* HLSliderCalculator.m in Sources */,
@@ -5783,6 +5780,7 @@
 				FA2532231F1D3B6D002BCE29 /* HLHotelDetailsMapCell.swift in Sources */,
 				FA2530FA1F1D3B6D002BCE29 /* ASTSearchFormSceneViewController.m in Sources */,
 				FA2530D11F1D3B6D002BCE29 /* JRFilterCellWithTwoThumbsSlider.m in Sources */,
+				FAEFAC431F4B2CAD009D152C /* SettingsViewController.swift in Sources */,
 				FA2532891F1D3B6E002BCE29 /* HLLocationPoints.swift in Sources */,
 				FAA8F2681E351B9500CD7337 /* ActivitiesViewController.swift in Sources */,
 				FA2532CE1F1D3B6E002BCE29 /* HLCityPickerNoResultView.swift in Sources */,
@@ -5815,6 +5813,7 @@
 				FA2532171F1D3B6D002BCE29 /* HLHotelDetailsActivityIndicatorTableCell.swift in Sources */,
 				FAC1BD301EAE7707008AB7C4 /* ViewManager.swift in Sources */,
 				FA4EEF1A1F166C9100C188BE /* InstructionsQuestionView.swift in Sources */,
+				FAAF6EBB1F4B312800345B95 /* PasswordViewController.swift in Sources */,
 				FA2532941F1D3B6E002BCE29 /* HLMapViewConfigurator.swift in Sources */,
 				FA2531261F1D3B6D002BCE29 /* CAAnimation+JRPopup.m in Sources */,
 				FA4E922B1E3526DD00231C72 /* API.swift in Sources */,
@@ -5844,7 +5843,6 @@
 				FA2531341F1D3B6D002BCE29 /* UIButton+States.m in Sources */,
 				FA2531381F1D3B6D002BCE29 /* UINavigationController+Additions.m in Sources */,
 				FA25330E1F1D3B6E002BCE29 /* HLZoomablePhotoView.swift in Sources */,
-				FAA8F2751E351B9500CD7337 /* SettingsViewController.swift in Sources */,
 				FA25332E1F1D3B6E002BCE29 /* Section.swift in Sources */,
 				FAE83F8B1EF7ACB30009A020 /* WhatTypeOfTripQuestionView.swift in Sources */,
 				FA2530CE1F1D3B6D002BCE29 /* JRFilterCellsFactory.m in Sources */,
@@ -6008,6 +6006,7 @@
 				FA2532601F1D3B6D002BCE29 /* DiscountInfoItem.swift in Sources */,
 				FA2CFC0A1E3E57A200527405 /* UnbookedTripSummaryViewController.swift in Sources */,
 				FA2531F11F1D3B6D002BCE29 /* HLUserLocationTableCell.swift in Sources */,
+				FAEFAC441F4B2CB5009D152C /* EmailViewController.swift in Sources */,
 				FA2532A11F1D3B6E002BCE29 /* TBMapViewController.m in Sources */,
 				FA4CD9C81F45FE29002CDE59 /* LeftViewController.swift in Sources */,
 				FA2532FB1F1D3B6E002BCE29 /* HLSearchTicketsCardItem.swift in Sources */,
@@ -6040,6 +6039,7 @@
 				FA2531411F1D3B6D002BCE29 /* UIViewController+ShowAlert.swift in Sources */,
 				FAA8F2941E351DCD00CD7337 /* MWActivityItem.swift in Sources */,
 				FA2530B31F1D3B6D002BCE29 /* ASTGateBrowserViewController.swift in Sources */,
+				FAEFAC451F4B2CC3009D152C /* bucketListViewController.swift in Sources */,
 				FA2531DC1F1D3B6D002BCE29 /* FilterPriceItem.swift in Sources */,
 				FA2532FA1F1D3B6E002BCE29 /* HLRatingFilterCardItem.swift in Sources */,
 				FAE83F931EF7B2EE0009A020 /* DestinationOptionsCardView.swift in Sources */,
