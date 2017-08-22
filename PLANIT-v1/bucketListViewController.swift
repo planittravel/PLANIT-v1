@@ -394,13 +394,13 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             
             // Because this is a remote tile set, we'll want a cache directory
             let baseCacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
-            let tilesCacheDir = "\(baseCacheDir)/toner-hybrid/"
+            let tilesCacheDir = "\(baseCacheDir)/terrain-labels/"
             let maxZoom = Int32(18)
             
             // Stamen Terrain Tiles, courtesy of Stamen Design under the Creative Commons Attribution License.
             // Data by OpenStreetMap under the Open Data Commons Open Database License.
             guard let tileSource = MaplyRemoteTileSource(
-                baseURL: "http://tile.stamen.com/toner-hybrid/",
+                baseURL: "http://tile.stamen.com/terrain-labels/",
                 ext: "png",
                 minZoom: 0,
                 maxZoom: maxZoom) else {
@@ -417,13 +417,40 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             layer?.singleLevelLoading = false
             theViewC!.add(layer!)
             
+            
+            // Because this is a remote tile set, we'll want a cache directory
+            let baseCacheDir3 = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
+            let tilesCacheDir3 = "\(baseCacheDir3)/terrain-lines/"
+            let maxZoom3 = Int32(18)
+            
+            // Stamen Terrain Tiles, courtesy of Stamen Design under the Creative Commons Attribution License.
+            // Data by OpenStreetMap under the Open Data Commons Open Database License.
+            guard let tileSource3 = MaplyRemoteTileSource(
+                baseURL: "http://tile.stamen.com/terrain-lines/",
+                ext: "png",
+                minZoom: 0,
+                maxZoom: maxZoom3) else {
+                    // can't create remote tile source
+                    return
+            }
+            tileSource3.cacheDir = tilesCacheDir3
+            let layer3 = MaplyQuadImageTilesLayer(tileSource: tileSource3)
+            layer3?.handleEdges = (globeViewC != nil)
+            layer3?.coverPoles = (globeViewC != nil)
+            layer3?.requireElev = false
+            layer3?.waitLoad = false
+            layer3?.drawPriority = 0
+            layer3?.singleLevelLoading = false
+            theViewC!.add(layer3!)
+
+            
         }
         
-        // start up over Madrid, center of the old-world
+        // start up over St. Johns Canada
         if let globeViewC = globeViewC {
             globeViewC.height = 1.2
             globeViewC.keepNorthUp = true
-            globeViewC.animate(toPosition: MaplyCoordinateMakeWithDegrees(-96.7970, 32.7767), time: 1)
+            globeViewC.animate(toPosition: MaplyCoordinateMakeWithDegrees(-52.7126, 47.5615), time: 1)
             globeViewC.keepNorthUp = false
             globeViewC.setZoomLimitsMin(0.001, max: 1.2)
         }
