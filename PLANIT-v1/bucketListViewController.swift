@@ -367,14 +367,40 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
         }
         } else {
             // Because this is a remote tile set, we'll want a cache directory
+            let baseCacheDir2 = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
+            let tilesCacheDir2 = "\(baseCacheDir2)/stamentiles/"
+            let maxZoom2 = Int32(18)
+            
+            // Stamen Terrain Tiles, courtesy of Stamen Design under the Creative Commons Attribution License.
+            // Data by OpenStreetMap under the Open Data Commons Open Database License.
+            guard let tileSource2 = MaplyRemoteTileSource(
+                baseURL: "http://tile.stamen.com/watercolor/",
+                ext: "png",
+                minZoom: 0,
+                maxZoom: maxZoom2) else {
+                    // can't create remote tile source
+                    return
+            }
+            tileSource2.cacheDir = tilesCacheDir2
+            let layer2 = MaplyQuadImageTilesLayer(tileSource: tileSource2)
+            layer2?.handleEdges = (globeViewC != nil)
+            layer2?.coverPoles = (globeViewC != nil)
+            layer2?.requireElev = false
+            layer2?.waitLoad = false
+            layer2?.drawPriority = 0
+            layer2?.singleLevelLoading = false
+            theViewC!.add(layer2!)
+            
+            
+            // Because this is a remote tile set, we'll want a cache directory
             let baseCacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
-            let tilesCacheDir = "\(baseCacheDir)/stamentiles/"
+            let tilesCacheDir = "\(baseCacheDir)/toner-hybrid/"
             let maxZoom = Int32(18)
             
             // Stamen Terrain Tiles, courtesy of Stamen Design under the Creative Commons Attribution License.
             // Data by OpenStreetMap under the Open Data Commons Open Database License.
             guard let tileSource = MaplyRemoteTileSource(
-                baseURL: "http://tile.stamen.com/watercolor/",
+                baseURL: "http://tile.stamen.com/toner-hybrid/",
                 ext: "png",
                 minZoom: 0,
                 maxZoom: maxZoom) else {
@@ -390,6 +416,7 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
             layer?.drawPriority = 0
             layer?.singleLevelLoading = false
             theViewC!.add(layer!)
+            
         }
         
         // start up over Madrid, center of the old-world
@@ -823,17 +850,18 @@ class bucketListViewController: UIViewController, WhirlyGlobeViewControllerDeleg
                         wgVecObj.userObject = vecName
                         
                         if (vecName.description.characters.count) > 0 {
-                            let label = MaplyScreenLabel()
-                            label.text = vecName.description
-                            label.loc = wgVecObj.centroid()
-                            label.layoutImportance = 10.0
-                            self.theViewC?.addScreenLabels([label],
-                                                           desc: [
-                                                            kMaplyFont: UIFont.boldSystemFont(ofSize: 14.0),
-                                                            kMaplyTextColor: UIColor.darkGray,
-                                                            kMaplyMinVis: 0.005,
-                                                            kMaplyMaxVis: 0.6
-                                ])
+                            //Turn off labels
+//                            let label = MaplyScreenLabel()
+//                            label.text = vecName.description
+//                            label.loc = wgVecObj.centroid()
+//                            label.layoutImportance = 10.0
+//                            self.theViewC?.addScreenLabels([label],
+//                                                           desc: [
+//                                                            kMaplyFont: UIFont.boldSystemFont(ofSize: 14.0),
+//                                                            kMaplyTextColor: UIColor.darkGray,
+//                                                            kMaplyMinVis: 0.005,
+//                                                            kMaplyMaxVis: 0.6
+//                                ])
                         }
                         attrs.setValue("tbd", forKey: "selectionStatus")
                         self.theViewC?.addVectors([wgVecObj], desc: self.vectorDict)

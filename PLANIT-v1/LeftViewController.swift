@@ -67,7 +67,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
         var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
+
         
         //Color current center view cell
         if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: TripViewController.self)) {
@@ -79,12 +79,16 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     cell.backgroundColor = UIColor.gray
                 }
             }
+            
+            appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
         } else if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: bucketListViewController.self)) {
             let cell = menuTableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ExistingTripTableViewCell
             cell.backgroundColor = UIColor.gray
+            appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.bezelPanningCenterView
         } else if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: SettingsViewController.self)) || ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) || ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: PasswordViewController.self)) {
             let cell = menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell
             cell.backgroundColor = UIColor.gray
+            appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
         }
 
     }

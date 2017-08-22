@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DrawerController
 
 class EmailViewController: UIViewController, UITextFieldDelegate {
     
@@ -79,6 +80,8 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
         
         //Install the value into the text field.
         self.emailAddress.text =  "\(emailAddressValue)"
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
     }
 
     override func didReceiveMemoryWarning() {

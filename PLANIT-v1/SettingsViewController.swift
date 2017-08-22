@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DrawerController
 
 class SettingsViewController: UIViewController, UITextFieldDelegate {
 
@@ -194,6 +195,11 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         self.knownTravelerNumberSettingsField.text =  "\(knownTravelerNumberValue)"
         self.redressNumberSettingsField.text =  "\(redressNumberValue)"
         self.birthdateSettingsField.text =  "\(birthdateValue)"
+        
+        
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
+        
     }
     
     override func didReceiveMemoryWarning() {

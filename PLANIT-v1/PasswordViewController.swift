@@ -10,6 +10,7 @@ import UIKit
 import Apollo
 import Firebase
 import PasswordTextField
+import DrawerController
 
 class PasswordViewController: UIViewController, UITextFieldDelegate {
 
@@ -43,6 +44,11 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
             hamburgerArrowButton?.close()
             self.view.endEditing(true)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
     }
     override func viewDidLoad() {
         super.viewDidLoad()

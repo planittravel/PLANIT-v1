@@ -635,6 +635,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
+
+        
         if instructionsQuestionView != nil {
             if (instructionsQuestionView?.frame.intersects(scrollView.bounds))! {
                 hamburgerArrowButton?.isHidden = false
@@ -4752,7 +4756,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             addInviteeButton.layer.borderColor = UIColor.white.cgColor
             addInviteeButton.layer.cornerRadius = (addInviteeButton.frame.height) / 2
             addInviteeButton_badge.layer.frame.origin = CGPoint(x: addInviteeButton.layer.frame.maxX - 54, y: addInviteeButton.layer.frame.minY + 1)
-            addInviteeButton_badge.badgeString = "Add from contacts!"
+            addInviteeButton_badge.badgeString = "Add from\ncontacts!"
             addInviteeButton_badge.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
             addInviteeButton_badge.badgeTextColor = UIColor.white
             addInviteeButton_badge.badgeBackgroundColor = UIColor.red
