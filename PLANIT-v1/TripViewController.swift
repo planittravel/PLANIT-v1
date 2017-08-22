@@ -91,7 +91,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var contactIDs: [NSString]?
     var contactPhoneNumbers = [NSString]()
     var editModeEnabled = false
-    var editItineraryModeEnabled = false
+//    var editItineraryModeEnabled = false
     var showContactsTutorial = false
     //Messaging var
     let messageComposer = MessageComposer()
@@ -200,8 +200,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     @IBOutlet weak var infoButton: UIButton!
     @IBOutlet weak var popupBackgroundFilterViewVisualEffectView: UIVisualEffectView!
     @IBOutlet weak var popupBackgroundFilterViewCloseButton: UIButton!
-    @IBOutlet weak var editSwitch: UISwitch!
-    @IBOutlet weak var editSwitchLabel: UILabel!
+//    @IBOutlet weak var editSwitch: UISwitch!
+//    @IBOutlet weak var editSwitchLabel: UILabel!
     @IBOutlet weak var searchSummaryLabelTopView: UILabel!
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var sortButton: UIButton!
@@ -225,11 +225,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let SavedPreferencesForTrip3 = fetchSavedPreferencesForTrip()
-        let subviewTags2 = SavedPreferencesForTrip3["progress"] as! [Int]
-
-        
         self.scrollUpButton.alpha = 0
         self.scrollDownButton.alpha = 0
 
@@ -252,7 +247,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.addUpButtonPointedUpOneSubview()
         self.backButton?.isHidden = true
 
-//        self.addBackButtonPointedAtTripList()
         hamburgerArrowButton = Icomation(frame: CGRect(x: 15, y: 28, width: 24, height: 24))
         topView.addSubview(hamburgerArrowButton!)
         hamburgerArrowButton?.type = IconType.close
@@ -1305,7 +1299,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         SavedPreferencesForTrip["currentAssistantSubview"] = currentSubview as NSNumber
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
-    func checkInitiatorProgress() -> String {
+    func checkInitiatorProgress() -> InitiatorProgress {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let currentSubviewsInScrollContentView = SavedPreferencesForTrip["progress"] as! [Int]
 
@@ -1316,26 +1310,26 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         let placeToStaySubviews = [18,22,23,24,25,26,27,28,30,31]
         let otherSubviews = [29,33,34]
         
-        var initiatorProgress = ""
+        var initiatorProgress = InitiatorProgress.instructions
         
         for dateSubview in datesSubviews {
             if currentSubviewsInScrollContentView.contains(dateSubview) {
-                initiatorProgress = "dates"
+                initiatorProgress = InitiatorProgress.dates
             }
         }
         for destinationSubview in destinationSubviews {
             if currentSubviewsInScrollContentView.contains(destinationSubview) {
-                initiatorProgress = "destination"
+                initiatorProgress = InitiatorProgress.destination
             }
         }
         for travelSubview in travelSubviews {
             if currentSubviewsInScrollContentView.contains(travelSubview) {
-                initiatorProgress = "travel"
+                initiatorProgress = InitiatorProgress.travel
             }
         }
         for placeToStaySubview in placeToStaySubviews {
             if currentSubviewsInScrollContentView.contains(placeToStaySubview) {
-                initiatorProgress = "placeToStay"
+                initiatorProgress = InitiatorProgress.placeToStay
             }
         }
 
@@ -4692,11 +4686,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         retrieveContactsWithStore(store: addressBookStore)
         contactsCollectionView.reloadData()
         handleAddInviteesButton()
-        editItineraryModeEnabled = false
-        editSwitch.isOn = false
-        for visibleCell in (self.destinationsDatesCollectionView!.visibleCells as! [destinationsDatesCollectionViewCell]) {
-            visibleCell.stopShakingIcons()
-        }
+//        editItineraryModeEnabled = false
+//        editSwitch.isOn = false
+//        for visibleCell in (self.destinationsDatesCollectionView!.visibleCells as! [destinationsDatesCollectionViewCell]) {
+//            visibleCell.stopShakingIcons()
+//        }
         destinationsDatesCollectionView.reloadData()
         handleSendInvitesButton()
         chatView.isHidden = true
@@ -4967,16 +4961,16 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.backButton?.isHidden = true
     }
     func handleSendInvitesButton() {
-        if editItineraryModeEnabled == true {
-            itineraryButton2?.isHidden = true
-            itineraryButton2?.stopPulseEffect()
-        } else {
+//        if editItineraryModeEnabled == true {
+//            itineraryButton2?.isHidden = true
+//            itineraryButton2?.stopPulseEffect()
+//        } else {
             var itinerarySendable = false
             if contacts != nil {
                 if (contacts?.count)! > 0 {
                     itinerarySendable = true
-                    editSwitchLabel.frame.origin.x = 80
-                    editSwitch.frame.origin.x = 187
+//                    editSwitchLabel.frame.origin.x = 80
+//                    editSwitch.frame.origin.x = 187
                 }
             }
             if itinerarySendable {
@@ -4987,7 +4981,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 itineraryButton2?.stopPulseEffect()
             }
 
-        }
+//        }
     }
     
     // MARK: Actions
@@ -5054,14 +5048,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         handleItineraryTutorial()
     }
     @IBAction func editSwitchValueChanged(_ sender: Any) {
-        if editSwitch.isOn {
-            editItineraryModeEnabled = true
-            turnOnItineraryEditing()
-        } else {
-            editItineraryModeEnabled = false
-            dismissEditItineraryMode()
-        }
-        handleSendInvitesButton()
+//        if editSwitch.isOn {
+//            editItineraryModeEnabled = true
+//            turnOnItineraryEditing()
+//        } else {
+//            editItineraryModeEnabled = false
+//            dismissEditItineraryMode()
+//        }
+//        handleSendInvitesButton()
     }
     @IBAction func infoViewCloseButtonTouchedUpInside(_ sender: Any) {
         animateOutBackgroundFilterView()
@@ -6058,13 +6052,13 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             destinationsDatesCell.travelDateButton.addTarget(self, action: #selector(self.travelDateButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
             destinationsDatesCell.destinationButton.addTarget(self, action: #selector(self.destinationButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
             
-            //Editing
-            let tapDeadSpaceInItineraryCollectionViewCell = UITapGestureRecognizer(target: self, action: #selector(self.dismissEditItineraryMode))
-            tapDeadSpaceInItineraryCollectionViewCell.numberOfTapsRequired = 1
-            tapDeadSpaceInItineraryCollectionViewCell.delegate = self
-            destinationsDatesCell.popupBackgroundViewEditItineraryWithinCell.addGestureRecognizer(tapDeadSpaceInItineraryCollectionViewCell)
+//            //Editing
+//            let tapDeadSpaceInItineraryCollectionViewCell = UITapGestureRecognizer(target: self, action: #selector(self.dismissEditItineraryMode))
+//            tapDeadSpaceInItineraryCollectionViewCell.numberOfTapsRequired = 1
+//            tapDeadSpaceInItineraryCollectionViewCell.delegate = self
+//            destinationsDatesCell.popupBackgroundViewEditItineraryWithinCell.addGestureRecognizer(tapDeadSpaceInItineraryCollectionViewCell)
             destinationsDatesCell.popupBackgroundViewEditItineraryWithinCell.isHidden = true
-            destinationsDatesCell.popupBackgroundViewEditItineraryWithinCell.isUserInteractionEnabled = true
+//            destinationsDatesCell.popupBackgroundViewEditItineraryWithinCell.isUserInteractionEnabled = true
 
             
             let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -6573,17 +6567,17 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return contactsCell
     }
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if collectionView == destinationsDatesCollectionView {
-            let visibleCells = self.destinationsDatesCollectionView.visibleCells
-            if editItineraryModeEnabled == true {
-                for cell in visibleCells {
-                    let visibleCellIndexPath = destinationsDatesCollectionView.indexPath(for: cell)
-                    let visibleCell = destinationsDatesCollectionView.cellForItem(at: visibleCellIndexPath!) as! destinationsDatesCollectionViewCell
-                    // Shake all of the collection view cells
-                    visibleCell.shakeIcons()
-                }
-            }
-        }
+//        if collectionView == destinationsDatesCollectionView {
+//            let visibleCells = self.destinationsDatesCollectionView.visibleCells
+//            if editItineraryModeEnabled == true {
+//                for cell in visibleCells {
+//                    let visibleCellIndexPath = destinationsDatesCollectionView.indexPath(for: cell)
+//                    let visibleCell = destinationsDatesCollectionView.cellForItem(at: visibleCellIndexPath!) as! destinationsDatesCollectionViewCell
+//                    // Shake all of the collection view cells
+//                    visibleCell.shakeIcons()
+//                }
+//            }
+//        }
         
         if collectionView == contactsCollectionView {
             let visibleCells = self.contactsCollectionView.visibleCells
@@ -6600,18 +6594,18 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     // This function is fired when the collection view stop scrolling
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if collectionView == destinationsDatesCollectionView {
-            let visibleCells = self.destinationsDatesCollectionView.visibleCells
-            
-            if editItineraryModeEnabled == true {
-                for cell in visibleCells {
-                    let visibleCellIndexPath = destinationsDatesCollectionView.indexPath(for: cell)
-                    let visibleCell = destinationsDatesCollectionView.cellForItem(at: visibleCellIndexPath!) as! destinationsDatesCollectionViewCell
-                    // Shake all of the collection view cells
-                    visibleCell.shakeIcons()
-                }
-            }
-        }
+//        if collectionView == destinationsDatesCollectionView {
+//            let visibleCells = self.destinationsDatesCollectionView.visibleCells
+//            
+//            if editItineraryModeEnabled == true {
+//                for cell in visibleCells {
+//                    let visibleCellIndexPath = destinationsDatesCollectionView.indexPath(for: cell)
+//                    let visibleCell = destinationsDatesCollectionView.cellForItem(at: visibleCellIndexPath!) as! destinationsDatesCollectionViewCell
+//                    // Shake all of the collection view cells
+//                    visibleCell.shakeIcons()
+//                }
+//            }
+//        }
         if collectionView == contactsCollectionView {
             
             let visibleCells = self.contactsCollectionView.visibleCells
@@ -6712,20 +6706,20 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
     }
     
-    func handleLongPressItinerary(gestureReconizer: UILongPressGestureRecognizer) {
-        if gestureReconizer.state == UIGestureRecognizerState.began {
-            editItineraryModeEnabled = true
-            turnOnItineraryEditing()
-            editSwitch.setOn(true, animated: true)
-        }
-    }
+//    func handleLongPressItinerary(gestureReconizer: UILongPressGestureRecognizer) {
+//        if gestureReconizer.state == UIGestureRecognizerState.began {
+//            editItineraryModeEnabled = true
+//            turnOnItineraryEditing()
+//            editSwitch.setOn(true, animated: true)
+//        }
+//    }
     func turnOnItineraryEditing() {
         popupBackgroundViewEditItineraryWithinCollectionView.isHidden = false
         for item in self.destinationsDatesCollectionView!.visibleCells as! [destinationsDatesCollectionViewCell] {
             let indexPath: IndexPath = self.destinationsDatesCollectionView!.indexPath(for: item as destinationsDatesCollectionViewCell)!
             let cell: destinationsDatesCollectionViewCell = self.destinationsDatesCollectionView!.cellForItem(at: indexPath) as! destinationsDatesCollectionViewCell!
             cell.shakeIcons()
-            cell.popupBackgroundViewEditItineraryWithinCell.isHidden = false
+//            cell.popupBackgroundViewEditItineraryWithinCell.isHidden = false
         }
     }
     
@@ -6801,12 +6795,12 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
         for item in self.destinationsDatesCollectionView!.visibleCells as! [destinationsDatesCollectionViewCell] {
             let indexPath: IndexPath = self.destinationsDatesCollectionView!.indexPath(for: item as destinationsDatesCollectionViewCell)!
             let cell: destinationsDatesCollectionViewCell = self.destinationsDatesCollectionView!.cellForItem(at: indexPath) as! destinationsDatesCollectionViewCell!
-            cell.popupBackgroundViewEditItineraryWithinCell.isHidden = true
+//            cell.popupBackgroundViewEditItineraryWithinCell.isHidden = true
 
             cell.stopShakingIcons()
         }
-        editItineraryModeEnabled = false
-        editSwitch.setOn(false, animated: true)
+//        editItineraryModeEnabled = false
+//        editSwitch.setOn(false, animated: true)
     }
 
 }
@@ -7362,6 +7356,10 @@ extension TripViewController {
         }
     }
     func JRFilterVC_viewWillAppear() {
+        
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.bezelPanningCenterView
+
         self.filterButton?.isHidden = true
         
         self.backButton?.removeFromSuperview()
@@ -7659,6 +7657,10 @@ extension TripViewController {
         asyncUpdateProgress()
     }
     func HLFiltersVC_viewWillAppear() {
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.bezelPanningCenterView
+
+        
         self.segmentedControl?.isHidden = true
         self.searchSummaryLabelTopView.isHidden = false
         self.filterButton.isHidden = true
@@ -7815,18 +7817,18 @@ extension TripViewController {
         contactsCollectionView.delegate = self
         self.contactsCollectionView.addGestureRecognizer(lpgr)
         //
-        let lpgrItinerary = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongPressItinerary(gestureReconizer:)))
-        lpgrItinerary.minimumPressDuration = 0.5
-        lpgrItinerary.delaysTouchesBegan = true
-        lpgrItinerary.delegate = self
-        self.destinationsDatesCollectionView.addGestureRecognizer(lpgrItinerary)
+//        let lpgrItinerary = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongPressItinerary(gestureReconizer:)))
+//        lpgrItinerary.minimumPressDuration = 0.5
+//        lpgrItinerary.delaysTouchesBegan = true
+//        lpgrItinerary.delegate = self
+//        self.destinationsDatesCollectionView.addGestureRecognizer(lpgrItinerary)
         //
-        let tapDeadSpaceInItineraryCollectionView = UITapGestureRecognizer(target: self, action: #selector(self.dismissEditItineraryMode))
-        tapDeadSpaceInItineraryCollectionView.numberOfTapsRequired = 1
-        tapDeadSpaceInItineraryCollectionView.delegate = self
-        self.popupBackgroundViewEditItineraryWithinCollectionView.addGestureRecognizer(tapDeadSpaceInItineraryCollectionView)
-        popupBackgroundViewEditItineraryWithinCollectionView.isHidden = true
-        popupBackgroundViewEditItineraryWithinCollectionView.isUserInteractionEnabled = true
+//        let tapDeadSpaceInItineraryCollectionView = UITapGestureRecognizer(target: self, action: #selector(self.dismissEditItineraryMode))
+//        tapDeadSpaceInItineraryCollectionView.numberOfTapsRequired = 1
+//        tapDeadSpaceInItineraryCollectionView.delegate = self
+//        self.popupBackgroundViewEditItineraryWithinCollectionView.addGestureRecognizer(tapDeadSpaceInItineraryCollectionView)
+//        popupBackgroundViewEditItineraryWithinCollectionView.isHidden = true
+//        popupBackgroundViewEditItineraryWithinCollectionView.isUserInteractionEnabled = true
 
         //
         let tapOutsideContacts = UITapGestureRecognizer(target: self, action: #selector(self.dismissDeleteContactsMode))
@@ -8037,16 +8039,23 @@ extension TripViewController {
         destinationButtonTouchedUpInside(sender:sender)
     }
     
+    func checkPlaceToStayProgress() -> PlaceToStayProgress {
+        
+    }
+    
     func placeToStayButtonTouchedUpInside(sender:UIButton) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let assistantMode = SavedPreferencesForTrip["assistantMode"] as! String
+        let initiatorProgress = checkInitiatorProgress()
+        let placeToStayProgress = checkPlaceToStayProgress()
         let bounds = UIScreen.main.bounds
         
         //Go back to assistant where user left off if still building itinerary
-        if isAssistantEnabled == true && assistantMode == "initialItineraryBuilding" {
-            showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        } else if assistantMode == "travel" {
+//        if isAssistantEnabled == true && assistantMode == "initialItineraryBuilding" {
+//            showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            return
+//        } else
+        if assistantMode == "travel" {
             showFinishPlanningTripAlert(title: "Let's finish changing your travel first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
             return
         } else if assistantMode == "dates" {
@@ -8061,13 +8070,32 @@ extension TripViewController {
         } else if assistantMode == "endingPoint" {
             showFinishPlanningTripAlert(title: "Let's finish updating your ending point first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
             return
-        }
-        //
-        if editItineraryModeEnabled {
-//            let initiatorProgress = checkInitiatorProgress()
+        } else if assistantMode == "placeToStay" {
+            showFinishPlanningTripAlert(title: "Let's finish changing your place to stay!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+        } else if assistantMode == "initialItineraryBuilding" && isAssistantEnabled == true {
+            switch initiatorProgress {
+            case .instructions:
+                //Spawn alert "Great, let's find a place to stay. First let's select dates and destination"
+            case .dates:
+                //Spawn alert "Great, let's find a place to stay. First let's select a destatination"
+            case .destination:
+                //Spawn alert "Great, let's find a place to stay."
+
+            case .travel:
+                //Spawn alert "Great, let's find a place to stay."
+            case .placeToStay:
+                showFinishPlanningTripAlert(title: "Let's finish planning your place to stay!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+            default:
+                break
+            }
+        } else if assistantMode == "disabled" {
+            switch PlaceToStayProgress {
+            case <#pattern#>:
+                <#code#>
+            default:
+                <#code#>
+            }
             
-            //Edit place to stay
-            if assistantMode == "disabled" {
                 let alertController = UIAlertController(title: "Change place to stay?", message: "Are you sure you want to change your place to stay?", preferredStyle: .alert)
                 let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
                 }
@@ -8086,14 +8114,7 @@ extension TripViewController {
                 alertController.addAction(cancelAction)
                 alertController.addAction(okAction)
                 self.present(alertController, animated: true, completion: nil)
-            } else if assistantMode == "placeToStay" {
-                showFinishPlanningTripAlert(title: "Let's finish changing your place to stay!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            }
-        } else if !editItineraryModeEnabled {
-            if assistantMode == "placeToStay" {
-                showFinishPlanningTripAlert(title: "Let's finish changing your place to stay!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            }
-            if sender.tag <= (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]).count  {
+        }             if sender.tag <= (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]).count  {
                 var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
                 if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "hotel" {
                     if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["placeToStayBookedOnPlanit"] != nil {
@@ -8252,7 +8273,6 @@ extension TripViewController {
                 alertController.addAction(okAction)
                 self.present(alertController, animated: true, completion: nil)
             }
-        }
     }
     func travelButtonTouchedUpInside(sender:UIButton) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -8951,28 +8971,30 @@ extension TripViewController {
             var calloutRect: CGRect = CGRect.zero
             calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(295))
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
-            
-            smCalloutViewMode = "itineraryTutorial3"
-            return
-        } else if smCalloutViewMode == "itineraryTutorial3" {
-            self.smCalloutView.dismissCallout(animated: true)
-            
-            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
-            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
-            self.itineraryView.bringSubview(toFront: editSwitch)
-            self.itineraryView.bringSubview(toFront: editSwitchLabel)
-            
-            self.smCalloutView.contentView = itineraryTutorialView3
-            self.smCalloutView.isHidden = false
-            self.smCalloutView.animation(withType: .stretch, presenting: true)
-            self.smCalloutView.permittedArrowDirection = .up
-            var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: editSwitch.frame.midX, y: topView.frame.height + editSwitch.frame.maxY)
-            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
-            
+            //Skip 3 go to 4
             smCalloutViewMode = "itineraryTutorial4"
             return
-        } else if smCalloutViewMode == "itineraryTutorial4" {
+        }
+//        else if smCalloutViewMode == "itineraryTutorial3" {
+//            self.smCalloutView.dismissCallout(animated: true)
+//            
+//            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
+//            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
+//            self.itineraryView.bringSubview(toFront: editSwitch)
+//            self.itineraryView.bringSubview(toFront: editSwitchLabel)
+//            
+//            self.smCalloutView.contentView = itineraryTutorialView3
+//            self.smCalloutView.isHidden = false
+//            self.smCalloutView.animation(withType: .stretch, presenting: true)
+//            self.smCalloutView.permittedArrowDirection = .up
+//            var calloutRect: CGRect = CGRect.zero
+//            calloutRect.origin = CGPoint(x: editSwitch.frame.midX, y: topView.frame.height + editSwitch.frame.maxY)
+//            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+//            
+//            smCalloutViewMode = "itineraryTutorial4"
+//            return
+//        }
+    else if smCalloutViewMode == "itineraryTutorial4" {
             self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
             self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
             self.itineraryView.bringSubview(toFront: contactsCollectionView)

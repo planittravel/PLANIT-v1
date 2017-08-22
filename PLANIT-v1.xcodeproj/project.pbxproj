@@ -827,6 +827,8 @@
 		FAD50DD81EE9BFEA0006C3AA /* instructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD50DD71EE9BFEA0006C3AA /* instructionsView.swift */; };
 		FADEF0EC1EF9F32C0005D147 /* AddAnotherDestinationQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADEF0EB1EF9F32B0005D147 /* AddAnotherDestinationQuestionView.swift */; };
 		FADEF0EE1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FADEF0ED1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib */; };
+		FAE779641F4C849F002D2FAC /* InitiatorProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE779631F4C849F002D2FAC /* InitiatorProgress.swift */; };
+		FAE779681F4C9212002D2FAC /* PlaceToStayProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE779671F4C9212002D2FAC /* PlaceToStayProgress.swift */; };
 		FAE83F651EF461500009A020 /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F641EF461500009A020 /* TripViewController.swift */; };
 		FAE83F6B1EF46A700009A020 /* UserNameQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE83F6A1EF46A700009A020 /* UserNameQuestionView.swift */; };
 		FAE83F6D1EF4853B0009A020 /* UserNameQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE83F6C1EF4853B0009A020 /* UserNameQuestionView.xib */; };
@@ -1940,6 +1942,8 @@
 		FAD50DD71EE9BFEA0006C3AA /* instructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = instructionsView.swift; sourceTree = "<group>"; };
 		FADEF0EB1EF9F32B0005D147 /* AddAnotherDestinationQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAnotherDestinationQuestionView.swift; sourceTree = "<group>"; };
 		FADEF0ED1EF9F36A0005D147 /* AddAnotherDestinationQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddAnotherDestinationQuestionView.xib; sourceTree = "<group>"; };
+		FAE779631F4C849F002D2FAC /* InitiatorProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitiatorProgress.swift; sourceTree = "<group>"; };
+		FAE779671F4C9212002D2FAC /* PlaceToStayProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceToStayProgress.swift; sourceTree = "<group>"; };
 		FAE83F641EF461500009A020 /* TripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
 		FAE83F6A1EF46A700009A020 /* UserNameQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNameQuestionView.swift; sourceTree = "<group>"; };
 		FAE83F6C1EF4853B0009A020 /* UserNameQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserNameQuestionView.xib; sourceTree = "<group>"; };
@@ -4699,6 +4703,8 @@
 			isa = PBXGroup;
 			children = (
 				FAB085921F435C54005C2938 /* badgeButtonType.swift */,
+				FAE779631F4C849F002D2FAC /* InitiatorProgress.swift */,
+				FAE779671F4C9212002D2FAC /* PlaceToStayProgress.swift */,
 			);
 			name = Enums;
 			sourceTree = "<group>";
@@ -5757,6 +5763,7 @@
 				FA2532151F1D3B6D002BCE29 /* ExpandCell.swift in Sources */,
 				FA4CD9C41F45FDF9002CDE59 /* CenterViewController.swift in Sources */,
 				FA25330F1F1D3B6E002BCE29 /* HLPlaceholderView.m in Sources */,
+				FAE779681F4C9212002D2FAC /* PlaceToStayProgress.swift in Sources */,
 				FA2531421F1D3B6D002BCE29 /* UIViewController+UIScrollView.m in Sources */,
 				FA25328F1F1D3B6E002BCE29 /* ImportantPointsMapVC.swift in Sources */,
 				FA25332C1F1D3B6E002BCE29 /* SortItemsFactory.swift in Sources */,
@@ -5798,6 +5805,7 @@
 				FA25320D1F1D3B6D002BCE29 /* HLHotelDetailsCellFactory.swift in Sources */,
 				FA25318A1F1D3B6D002BCE29 /* HLWebBrowser.m in Sources */,
 				FA2532FF1F1D3B6E002BCE29 /* HLSearchInfoNavBarView.swift in Sources */,
+				FAE779641F4C849F002D2FAC /* InitiatorProgress.swift in Sources */,
 				FA2532411F1D3B6D002BCE29 /* HotelDetailsReviewHighlightQuoteView.swift in Sources */,
 				FA2531B21F1D3B6D002BCE29 /* CancelableFilterView.swift in Sources */,
 				FA2532A41F1D3B6E002BCE29 /* HLMapGroupDetailsVC.m in Sources */,
