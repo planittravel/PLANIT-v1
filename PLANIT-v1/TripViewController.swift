@@ -397,7 +397,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                         }
                         if countTripsMadeToday != 0 {
                             tripNameValue = "Trip #\(countTripsMadeToday + 1) \(tripNameValue.substring(from: 5))"
+                        
+                            for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
+                                if (DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String)! == tripNameValue {
+                                    countTripsMadeToday += 1
+                                    tripNameValue = "Trip #\(countTripsMadeToday + 1) \(tripNameValue.substring(from: 8))"
+                                }
+                            }
                         }
+                        
                     }
                     
                     //                tripNameQuestionView?.tripNameQuestionTextfield?.text = tripNameValue
@@ -427,6 +435,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     
                     //Create new firebase channel
                     if let name = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String {
+                        let test = DataContainerSingleton.sharedDataContainer.token
                         if DataContainerSingleton.sharedDataContainer.token != nil {
                             //                        FIREBASEDISABLED
                             newChannelRef = channelsRef.childByAutoId()
@@ -485,6 +494,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //Drawer
         NotificationCenter.default.addObserver(self, selector: #selector(leftViewControllerViewWillAppear), name: NSNotification.Name(rawValue: "leftViewControllerViewWillAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(leftViewControllerViewWillDisappear), name: NSNotification.Name(rawValue: "leftViewControllerViewWillDisappear"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(loginSuccessfulAddChatVC), name: NSNotification.Name(rawValue: "loginSuccessfulAddChatVC"), object: nil)
+        
         
         
         //Link outs
@@ -543,6 +554,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(spawnMessageComposeVC), name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(delete), name: NSNotification.Name(rawValue: "deleteInvitee"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reviewItinerary), name: NSNotification.Name(rawValue: "reviewItinerary"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showContactsTutorialIfFirstContactAdded_fromMessageVC), name: NSNotification.Name(rawValue: "showContactsTutorialIfFirstContactAdded_fromMessageVC"), object: nil)
         
         //Flight Nav
         NotificationCenter.default.addObserver(self, selector: #selector(flightSearchResultsSceneViewController_ViewDidAppear), name: NSNotification.Name(rawValue: "flightSearchResultsSceneViewController_ViewDidAppear"), object: nil)
@@ -628,6 +640,26 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 backButton?.isHidden = true
             }
         }
+        
+        if let name = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String {
+            if DataContainerSingleton.sharedDataContainer.token != nil {
+                
+                //                        FIREBASEDISABLED
+                newChannelRef = channelsRef.childByAutoId()
+                let channelItem = [
+                    "name": name
+                ]
+                newChannelRef?.setValue(channelItem)
+                let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+                SavedPreferencesForTrip["firebaseChannelKey"] = newChannelRef?.key as! NSString
+                //Save
+                saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
+                //FIREBASEDISABLED
+                addChatViewController()
+            }
+        }
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -660,6 +692,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        
 //    }
     
+
     func destinationChosenUpdateDatesDestinationsDict() {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
@@ -996,24 +1029,52 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     
     func showContactsTutorialIfFirstContactAdded() {
         if showContactsTutorial {
-            //Show instructions for first contact added
-            self.focusBackgroundViewWithinTopView.isHidden = false
-            self.focusBackgroundViewWithinItineraryView.isHidden = false
-            self.topView.bringSubview(toFront: focusBackgroundViewWithinTopView)
-            self.itineraryView.bringSubview(toFront: focusBackgroundViewWithinItineraryView)
-            self.itineraryView.bringSubview(toFront: itineraryButton2!)
-            
-            self.smCalloutView.contentView = contactsTutorialView0
-            self.smCalloutView.isHidden = false
-            self.smCalloutView.animation(withType: .stretch, presenting: true)
-            self.smCalloutView.permittedArrowDirection = .up
-            var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: (itineraryButton2?.layer.frame.midX)!, y: topView.frame.height + (itineraryButton2?.layer.frame.maxY)! - 7)
-            self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
-            
-            showContactsTutorial = false
+            let when = DispatchTime.now() + 1
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                //Show instructions for first contact added
+                self.focusBackgroundViewWithinTopView.isHidden = false
+                self.focusBackgroundViewWithinItineraryView.isHidden = false
+                self.topView.bringSubview(toFront: self.self.focusBackgroundViewWithinTopView)
+                self.itineraryView.bringSubview(toFront: self.focusBackgroundViewWithinItineraryView)
+                self.itineraryView.bringSubview(toFront: self.itineraryButton2!)
+                
+                self.smCalloutView.contentView = self.contactsTutorialView0
+                self.smCalloutView.isHidden = false
+                self.smCalloutView.animation(withType: .stretch, presenting: true)
+                self.smCalloutView.permittedArrowDirection = .up
+                var calloutRect: CGRect = CGRect.zero
+                calloutRect.origin = CGPoint(x: (self.itineraryButton2?.layer.frame.midX)!, y: self.topView.frame.height + (self.itineraryButton2?.layer.frame.maxY)! - 7)
+                self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+                
+                self.showContactsTutorial = false
+            }
         }
     }
+    
+    func showContactsTutorialIfFirstContactAdded_fromMessageVC() {
+        if showContactsTutorial {
+            let when = DispatchTime.now() + 0.6
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                //Show instructions for first contact added
+                self.focusBackgroundViewWithinTopView.isHidden = false
+                self.focusBackgroundViewWithinItineraryView.isHidden = false
+                self.topView.bringSubview(toFront: self.focusBackgroundViewWithinTopView)
+                self.itineraryView.bringSubview(toFront: self.focusBackgroundViewWithinItineraryView)
+                self.itineraryView.bringSubview(toFront: self.contactsCollectionView!)
+                
+                self.smCalloutView.contentView = self.contactsTutorialView1
+                self.smCalloutView.isHidden = false
+                self.smCalloutView.animation(withType: .stretch, presenting: true)
+                self.smCalloutView.permittedArrowDirection = .up
+                var calloutRect: CGRect = CGRect.zero
+                calloutRect.origin = CGPoint(x: self.contactsCollectionView.layer.frame.midX - 46, y: self.topView.frame.height + self.contactsCollectionView.layer.frame.maxY - 10)
+                self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
+                
+                self.showContactsTutorial = false
+            }
+        }
+    }
+
 
     func sendInvites(){
         let when = DispatchTime.now() + 0.4
@@ -1030,7 +1091,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 let okAction = UIAlertAction(title: "Send now!", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
                     self.itineraryButton2?.stopPulseEffect()
-                    self.showContactsTutorialIfFirstContactAdded()
+//                    self.showContactsTutorialIfFirstContactAdded()
                 }
                 alertController.addAction(cancelAction)
                 alertController.addAction(okAction)
@@ -2780,6 +2841,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func newTripCalendarRangeSelected_updateParseDatesCalendarView() {
         if parseDatesForMultipleDestinationsCalendarView != nil {
             self.parseDatesForMultipleDestinationsCalendarView?.calendarView.reloadData()
+            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+            let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date]
+            self.parseDatesForMultipleDestinationsCalendarView?.questionLabel?.text = "How many nights in each\ndestination (\((selectedDatesValue?.count)! - 1) total)?"
             self.parseDatesForMultipleDestinationsCalendarView?.scrollToDate()
         }
     }
@@ -3919,6 +3983,13 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             scrollToSubviewWithTag(tag: 32)
             parseDatesForMultipleDestinationsCalendarView?.button1?.buttonClicked(sender: (parseDatesForMultipleDestinationsCalendarView?.button1)!)
             parseDatesForMultipleDestinationsCalendarView?.loadDates()
+            
+//            if parseDatesForMultipleDestinationsCalendarView != nil {
+//                if (parseDatesForMultipleDestinationsCalendarView?.frame.intersects(scrollView.bounds))! {
+//                    //                parseDatesForMultipleDestinationsCalendarView?.loadDates()
+//                }
+//            }
+
         }
     }
     func comeBackToPlanHotelLater() {
@@ -4321,7 +4392,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //        handleFloatyBasedOnProgressOfInitiator()
         if parseDatesForMultipleDestinationsCalendarView != nil {
             if (parseDatesForMultipleDestinationsCalendarView?.frame.intersects(scrollView.bounds))! {
-                parseDatesForMultipleDestinationsCalendarView?.loadDates()
+//                parseDatesForMultipleDestinationsCalendarView?.loadDates()
+                var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningNavigationBar
+
             }
         }
         
@@ -4676,7 +4750,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             addInviteeButton.layer.borderColor = UIColor.white.cgColor
             addInviteeButton.layer.cornerRadius = (addInviteeButton.frame.height) / 2
             addInviteeButton_badge.layer.frame.origin = CGPoint(x: addInviteeButton.layer.frame.maxX - 54, y: addInviteeButton.layer.frame.minY + 1)
-            addInviteeButton_badge.badgeString = "!"
+            addInviteeButton_badge.badgeString = "Add from contacts!"
             addInviteeButton_badge.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
             addInviteeButton_badge.badgeTextColor = UIColor.white
             addInviteeButton_badge.badgeBackgroundColor = UIColor.red
@@ -5433,16 +5507,16 @@ extension TripViewController {
     fileprivate func requestContactsAccess() {
         addressBookStore.requestAccess(for: .contacts) {granted, error in
             if granted {
-                DispatchQueue.main.async {
-                    let addInviteesAlert = UIAlertController(title: "Great! We won't send them the itinerary until you say so!", message: "", preferredStyle: UIAlertControllerStyle.alert)
-                    let continueAction = UIAlertAction(title: "Sounds good", style: UIAlertActionStyle.default) {
-                        (result : UIAlertAction) -> Void in
+//                DispatchQueue.main.async {
+//                    let addInviteesAlert = UIAlertController(title: "Great! We won't send them the itinerary until you say so!", message: "", preferredStyle: UIAlertControllerStyle.alert)
+//                    let continueAction = UIAlertAction(title: "Sounds good", style: UIAlertActionStyle.default) {
+//                        (result : UIAlertAction) -> Void in
                         self.showContactsPicker()
-                    }
-                    addInviteesAlert.addAction(continueAction)
-                    self.present(addInviteesAlert, animated: true, completion: nil)
-                    return
-                }
+//                    }
+//                    addInviteesAlert.addAction(continueAction)
+//                    self.present(addInviteesAlert, animated: true, completion: nil)
+//                    return
+//                }
             }
         }
     }
@@ -5737,6 +5811,9 @@ extension TripViewController {
                 contactsCollectionView.insertItems(at: addedRowIndexPathCollectionView)
             }
             else {
+                showContactsTutorial = true
+
+                
                 self.contacts = [contact]
                 contactIDs = [contact.identifier as NSString]
                 let phoneNumberToAdd = contact.phoneNumbers[0].value.value(forKey: "digits") as! NSString
@@ -6026,7 +6103,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 destinationsDatesCell.destinationButton_badge.isHidden = false
                 
                 if DataContainerSingleton.sharedDataContainer.homeAirport == nil || DataContainerSingleton.sharedDataContainer.homeAirport == "" {
-                    destinationsDatesCell.destinationButton_badge.badgeString = "!"
+                    destinationsDatesCell.destinationButton_badge.badgeString = "Add city"
                     destinationsDatesCell.destinationButton_badge.badgeBackgroundColor = UIColor.red
                     destinationsDatesCell.destinationButton.titleLabel?.font = UIFont.italicSystemFont(ofSize: 22)
                 } else {
@@ -6105,7 +6182,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         formatter.dateFormat = "MMM\nd"
                         let rightDateAsString = formatter.string(from: rightDatesDestinations[destinationsForTrip[indexPath.row - 2]]!)
                         destinationsDatesCell.travelDateButton.setTitle(rightDateAsString, for: .normal)
-                        destinationsDatesCell.travelDateButton_badge.badgeString = "!"
+                        destinationsDatesCell.travelDateButton_badge.badgeString = "Group to review dates"
                         destinationsDatesCell.travelDateButton_badge.badgeBackgroundColor = UIColor.orange
                         destinationsDatesCell.travelDateButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
                     }

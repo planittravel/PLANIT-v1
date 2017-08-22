@@ -455,10 +455,17 @@ class ParseDatesForMultipleDestinationsCalendarView: UIView, JTAppleCalendarView
     func configureCalendar(_ calendar: JTAppleCalendarView) -> ConfigurationParameters {
         formatter.dateFormat = "yyyy MM dd"
         
-        let startDate = Date()
-        let endDate = formatter.date(from: "2018 12 31")
+//        let startDate = Date()
+//        let endDate = formatter.date(from: "2018 12 31")
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let selectedDatesValue = SavedPreferencesForTrip["selected_dates"] as? [Date]
+
+        
+        let startDate = selectedDatesValue?[0]
+        let endDate = selectedDatesValue?[(selectedDatesValue?.count)! - 1]
         let parameters = ConfigurationParameters(
-            startDate: startDate,
+            startDate: startDate!,
             endDate: endDate!,
             numberOfRows: 6, // Only 1, 2, 3, & 6 are allowed
             calendar: Calendar.current,

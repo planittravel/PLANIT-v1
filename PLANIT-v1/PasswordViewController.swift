@@ -231,7 +231,8 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
             appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
         }
 
-
+        
+//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "loginSuccessfulAddChatVC"), object: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

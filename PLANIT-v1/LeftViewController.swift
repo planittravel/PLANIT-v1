@@ -59,7 +59,7 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }        
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "leftViewControllerViewWillAppear"), object: nil)
-        let when = DispatchTime.now() + 0.1
+        let when = DispatchTime.now() + 0.2
         DispatchQueue.main.asyncAfter(deadline: when) {
             UIApplication.shared.sendAction("resignFirstResponder", to:nil, from:nil, for:nil)
             self.view.endEditing(true)
@@ -293,162 +293,170 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     //MARK: TableView Delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-        
-        switch indexPath.section {
-        case 0:
-            //Increment current trip
-            if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil {
-                if (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! > 0 {
-                    DataContainerSingleton.sharedDataContainer.currenttrip = (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)!
+        if tableView == menuTableView {
+            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+            
+            switch indexPath.section {
+            case 0:
+                //Increment current trip
+                if DataContainerSingleton.sharedDataContainer.usertrippreferences != nil {
+                    if (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! > 0 {
+                        DataContainerSingleton.sharedDataContainer.currenttrip = (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)!
+                    } else {
+                        DataContainerSingleton.sharedDataContainer.currenttrip = 0
+                    }
                 } else {
                     DataContainerSingleton.sharedDataContainer.currenttrip = 0
                 }
-            } else {
-                DataContainerSingleton.sharedDataContainer.currenttrip = 0
-            }
-            
-
-            var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
-            centerViewController.NewOrAddedTripFromSegue = 1
-            //FIREBASEDISABLED
-            //            centerViewController?.newChannelRef = channelRef
-            centerViewController.isTripSpawnedFromBucketList = 0
-
-            var centerNavController = UINavigationController(rootViewController: centerViewController)
-            centerNavController.navigationController?.isNavigationBarHidden = true
-            centerViewController.navigationController?.isNavigationBarHidden = true
-            appDelegate.centerContainer!.centerViewController = centerNavController
-            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-            return
-        case 1:
-            
-            //FIREBASEDISABLED
-            
-            if DataContainerSingleton.sharedDataContainer.token != nil && indexPath.row > channels.count - 1 {
-                //PLANNED: Activity indicator
-                return
-            } else {
-                let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
-                let searchForTitle = cell.existingTripTableViewLabel.text
-                
-                //FIREBASEDISABLED
-                let channel = channels[(indexPath as NSIndexPath).row]
-                channelRef = channelRef.child(channel.id)
-                
-                let startingCurrentTrip = DataContainerSingleton.sharedDataContainer.currenttrip
-                for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
-                    if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
-                        DataContainerSingleton.sharedDataContainer.currenttrip = trip
-                    }
-                }
-                
-                if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: TripViewController.self)) && startingCurrentTrip == DataContainerSingleton.sharedDataContainer.currenttrip {
-                    appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-                    return
-                }
                 
                 
-                //FIREBASEDISABLED
-                //            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
                 var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
-                
-                centerViewController.NewOrAddedTripFromSegue = 0
+                centerViewController.NewOrAddedTripFromSegue = 1
                 //FIREBASEDISABLED
-                centerViewController.newChannelRef = channelRef
+                //            centerViewController?.newChannelRef = channelRef
                 centerViewController.isTripSpawnedFromBucketList = 0
                 
                 var centerNavController = UINavigationController(rootViewController: centerViewController)
+                centerNavController.navigationController?.isNavigationBarHidden = true
                 centerViewController.navigationController?.isNavigationBarHidden = true
                 appDelegate.centerContainer!.centerViewController = centerNavController
-                appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-                
-            }
-        case 2:
-            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: bucketListViewController.self)) {
                 appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
                 return
-            }
-            var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "bucketListViewController") as! bucketListViewController
-            var centerNavController = UINavigationController(rootViewController: centerViewController)
-            centerViewController.navigationController?.isNavigationBarHidden = true
-            appDelegate.centerContainer!.centerViewController = centerNavController
-            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-        case 3:
-            if DataContainerSingleton.sharedDataContainer.token == nil {
-                if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) {
+            case 1:
+                
+                //FIREBASEDISABLED
+                
+                if DataContainerSingleton.sharedDataContainer.token != nil && indexPath.row > channels.count - 1 {
+                    //PLANNED: Activity indicator
+                    return
+                } else {
+                    let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
+                    let searchForTitle = cell.existingTripTableViewLabel.text
+                    
+                    //FIREBASEDISABLED
+                    let channel = channels[(indexPath as NSIndexPath).row]
+                    channelRef = channelRef.child(channel.id)
+                    
+                    let startingCurrentTrip = DataContainerSingleton.sharedDataContainer.currenttrip
+                    for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
+                        if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
+                            DataContainerSingleton.sharedDataContainer.currenttrip = trip
+                        }
+                    }
+                    
+                    if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: TripViewController.self)) && startingCurrentTrip == DataContainerSingleton.sharedDataContainer.currenttrip {
+                        appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                        return
+                    }
+                    
+                    
+                    //FIREBASEDISABLED
+                    //            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
+                    var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
+                    
+                    centerViewController.NewOrAddedTripFromSegue = 0
+                    //FIREBASEDISABLED
+                    centerViewController.newChannelRef = channelRef
+                    centerViewController.isTripSpawnedFromBucketList = 0
+                    
+                    var centerNavController = UINavigationController(rootViewController: centerViewController)
+                    centerViewController.navigationController?.isNavigationBarHidden = true
+                    appDelegate.centerContainer!.centerViewController = centerNavController
+                    appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                    
+                }
+            case 2:
+                if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: bucketListViewController.self)) {
                     appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
                     return
                 }
-                var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "EmailViewController") as! EmailViewController
+                var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "bucketListViewController") as! bucketListViewController
                 var centerNavController = UINavigationController(rootViewController: centerViewController)
                 centerViewController.navigationController?.isNavigationBarHidden = true
                 appDelegate.centerContainer!.centerViewController = centerNavController
                 appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-            } else {
-                if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: SettingsViewController.self)) {
+            case 3:
+                if DataContainerSingleton.sharedDataContainer.token == nil {
+                    if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: EmailViewController.self)) {
+                        appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                        return
+                    }
+                    var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "EmailViewController") as! EmailViewController
+                    var centerNavController = UINavigationController(rootViewController: centerViewController)
+                    centerViewController.navigationController?.isNavigationBarHidden = true
+                    appDelegate.centerContainer!.centerViewController = centerNavController
                     appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-                    return
+                } else {
+                    if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: SettingsViewController.self)) {
+                        appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                        return
+                    }
+                    var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+                    var centerNavController = UINavigationController(rootViewController: centerViewController)
+                    centerViewController.navigationController?.isNavigationBarHidden = true
+                    appDelegate.centerContainer!.centerViewController = centerNavController
+                    appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
                 }
-                var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
-                var centerNavController = UINavigationController(rootViewController: centerViewController)
-                centerViewController.navigationController?.isNavigationBarHidden = true
-                appDelegate.centerContainer!.centerViewController = centerNavController
-                appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+            default:
+                break
             }
-        default:
-            break
         }
         
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 1 {
-            return true
+        if tableView == menuTableView {
+            if indexPath.section == 1 {
+                return true
+            }
         }
         return false
     }
     
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        
-        if (editingStyle == UITableViewCellEditingStyle.delete) {
-            
-            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
-            let searchForTitle = cell.existingTripTableViewLabel.text
-            
-            for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
-                if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
-                    
-                    //Remove from data model
-                    DataContainerSingleton.sharedDataContainer.usertrippreferences?.remove(at: trip)
-                    
-                    //Remove from table
-                    menuTableView.beginUpdates()
-                    menuTableView.deleteRows(at: [indexPath], with: .left)
-                    
-                    menuTableView.endUpdates()
-                    
-                    if (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! == 0 {
-                        var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "bucketListViewController") as! bucketListViewController
-                        var centerNavController = UINavigationController(rootViewController: centerViewController)
-                        centerNavController.navigationController?.isNavigationBarHidden = true
-                        centerViewController.navigationController?.isNavigationBarHidden = true
-                        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-                        appDelegate.centerContainer!.centerViewController = centerNavController
+        if tableView == menuTableView {
+            if (editingStyle == UITableViewCellEditingStyle.delete) {
+                
+                let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
+                let searchForTitle = cell.existingTripTableViewLabel.text
+                
+                for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
+                    if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
+                        
+                        //Remove from data model
+                        DataContainerSingleton.sharedDataContainer.usertrippreferences?.remove(at: trip)
+                        
+                        //Remove from table
+                        menuTableView.beginUpdates()
+                        menuTableView.deleteRows(at: [indexPath], with: .left)
+                        
+                        menuTableView.endUpdates()
+                        
+                        if (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! == 0 {
+                            var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "bucketListViewController") as! bucketListViewController
+                            var centerNavController = UINavigationController(rootViewController: centerViewController)
+                            centerNavController.navigationController?.isNavigationBarHidden = true
+                            centerViewController.navigationController?.isNavigationBarHidden = true
+                            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+                            appDelegate.centerContainer!.centerViewController = centerNavController
+                            appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                        }
+                        //Return if delete cell trip name found
+                        
+                        updateMenuTableHeight()
+                        return
                     }
-                    //Return if delete cell trip name found
-                    
-                    updateMenuTableHeight()
-                    return
                 }
+                
             }
-            
         }
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return "Leave trip"
+        if indexPath.section == 1 {
+            return "Leave trip"
+        }
+        return "error"
     }
     
     //MARK: Custom functions

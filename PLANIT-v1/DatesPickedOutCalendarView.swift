@@ -57,15 +57,15 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         super.layoutSubviews()
         let bounds = UIScreen.main.bounds
         
-        questionLabel?.frame = CGRect(x: 10, y: 15, width: bounds.size.width - 20, height: 50)
-        calendarView?.frame = CGRect(x: 13, y: 100, width: 350, height: 400)
+        questionLabel?.frame = CGRect(x: 10, y: 15, width: bounds.size.width - 20, height: 70)
+        calendarView?.frame = CGRect(x: 13, y: 120, width: 350, height: 390)
         calendarView?.cellSize = 50
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 520
+        button1?.frame.origin.y = 540
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         button1?.isHidden = true
         
@@ -73,7 +73,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
-        button2?.frame.origin.y = 520
+        button2?.frame.origin.y = 540
         button2?.layer.cornerRadius = (button2?.frame.height)! / 2
         
         loadDates()
@@ -153,7 +153,7 @@ class DatesPickedOutCalendarView: UIView, JTAppleCalendarViewDataSource, JTApple
         questionLabel?.font = UIFont.boldSystemFont(ofSize: 25)
         questionLabel?.textColor = UIColor.white
         questionLabel?.adjustsFontSizeToFitWidth = true
-        questionLabel?.text = "Select dates for your trip!"
+        questionLabel?.text = "Select a start date and an\nend date for your trip!"
         self.addSubview(questionLabel!)
         
         // Calendar header setup

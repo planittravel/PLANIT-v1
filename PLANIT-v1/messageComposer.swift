@@ -83,6 +83,9 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
     
     // MFMessageComposeViewControllerDelegate callback - dismisses the view controller when the user is finished with it
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-        controller.dismiss(animated: true, completion: nil)        
+        controller.dismiss(animated: true, completion: nil)
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showContactsTutorialIfFirstContactAdded_fromMessageVC"), object: nil)
+
     }
 }
