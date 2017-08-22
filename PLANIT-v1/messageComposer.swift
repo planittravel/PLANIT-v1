@@ -85,7 +85,14 @@ class MessageComposer: NSObject, MFMessageComposeViewControllerDelegate {
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         controller.dismiss(animated: true, completion: nil)
         
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showContactsTutorialIfFirstContactAdded_fromMessageVC"), object: nil)
+        switch result {
+        case .sent:
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showContactsTutorialIfFirstContactAdded_SentFromMessageVC"), object: nil)
+        default:
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showContactsTutorialIfFirstContactAdded_NotSentFromMessageVC"), object: nil)
+        }
+        
+        
 
     }
 }

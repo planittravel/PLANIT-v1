@@ -75,6 +75,7 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         //Load the values from our shared data container singleton
         let emailAddressValue = DataContainerSingleton.sharedDataContainer.emailAddress ?? ""
+        emailAddress.becomeFirstResponder()
         
         //Install the value into the text field.
         self.emailAddress.text =  "\(emailAddressValue)"

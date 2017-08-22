@@ -554,7 +554,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         NotificationCenter.default.addObserver(self, selector: #selector(spawnMessageComposeVC), name: NSNotification.Name(rawValue: "messageComposeVC"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(delete), name: NSNotification.Name(rawValue: "deleteInvitee"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reviewItinerary), name: NSNotification.Name(rawValue: "reviewItinerary"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(showContactsTutorialIfFirstContactAdded_fromMessageVC), name: NSNotification.Name(rawValue: "showContactsTutorialIfFirstContactAdded_fromMessageVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showContactsTutorialIfFirstContactAdded_fromMessageVC), name: NSNotification.Name(rawValue: "showContactsTutorialIfFirstContactAdded_SentFromMessageVC"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showContactsTutorialIfFirstContactAdded), name: NSNotification.Name(rawValue: "showContactsTutorialIfFirstContactAdded_NotSentFromMessageVC"), object: nil)
         
         //Flight Nav
         NotificationCenter.default.addObserver(self, selector: #selector(flightSearchResultsSceneViewController_ViewDidAppear), name: NSNotification.Name(rawValue: "flightSearchResultsSceneViewController_ViewDidAppear"), object: nil)
@@ -4391,11 +4392,12 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         getCurrentSubview()
 //        handleFloatyBasedOnProgressOfInitiator()
         if parseDatesForMultipleDestinationsCalendarView != nil {
+            let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
             if (parseDatesForMultipleDestinationsCalendarView?.frame.intersects(scrollView.bounds))! {
 //                parseDatesForMultipleDestinationsCalendarView?.loadDates()
-                var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
                 appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningNavigationBar
-
+            } else {
+                appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
             }
         }
         
@@ -7131,7 +7133,6 @@ extension TripViewController {
 //                            return
 //                        }
                         appDelegate.centerContainer!.centerViewController = centerNavController
-                        appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
                         (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
                         (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
                         let when = DispatchTime.now() + 5
@@ -7160,7 +7161,6 @@ extension TripViewController {
 //                            return
 //                        }
                         appDelegate.centerContainer!.centerViewController = centerNavController
-                        appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
                         (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
                         (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
                         let when = DispatchTime.now() + 5

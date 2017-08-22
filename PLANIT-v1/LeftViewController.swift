@@ -508,9 +508,9 @@ class LeftViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let userTripPreferences = DataContainerSingleton.sharedDataContainer.usertrippreferences
         if userTripPreferences != nil {
             let countTripsTotal = userTripPreferences?.count
-            tableHeight = CGFloat(220 + 70 * countTripsTotal!)
+            tableHeight = CGFloat(235 + 70 * countTripsTotal!)
         } else {
-            tableHeight = 220
+            tableHeight = 235
         }
         
         if (tableHeight + menuTableView.frame.origin.y) > UIScreen.main.bounds.height {
