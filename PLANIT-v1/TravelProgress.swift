@@ -21,4 +21,5 @@ enum TravelProgress {
     case typeChosenBusTrainOtherAndDetailsProvided
     case typeChosenFlyAndPlanitFlightFavorited
     case typeChosenFlyAndPlanitFlightBooked
+    case typeChoseIllAlreadyBeThere
 }

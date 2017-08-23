@@ -201,6 +201,10 @@ import AviasalesSDK
         var leftDatesDestinations = [String:Date]()
         var rightDatesDestinations = [String:Date]()
         
+        if destinationsForTrip.count == 0 {
+            return Date()
+        }
+        
         if indexOfDestinationBeingPlanned < destinationsForTrip.count {
             if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {
                 leftDatesDestinations[destinationsForTrip[indexOfDestinationBeingPlanned]] = datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]]?[0]
@@ -227,6 +231,10 @@ import AviasalesSDK
         
         var leftDatesDestinations = [String:Date]()
         var rightDatesDestinations = [String:Date]()
+        
+        if destinationsForTrip.count == 0 {
+            return Date()
+        }
         
         if indexOfDestinationBeingPlanned < destinationsForTrip.count {
             if datesDestinationsDictionary[destinationsForTrip[indexOfDestinationBeingPlanned]] != nil {

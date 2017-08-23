@@ -65,14 +65,15 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         button4?.frame.size.height = 30
         button4?.frame.size.width += 20
         button4?.frame.origin.x = (bounds.size.width - (button4?.frame.width)!) / 2
-        button4?.frame.origin.y = 365
+        button4?.frame.origin.y = 315
         button4?.layer.cornerRadius = (button4?.frame.height)! / 2
+        button4?.isHidden = true
         
         button5?.sizeToFit()
         button5?.frame.size.height = 30
         button5?.frame.size.width += 20
         button5?.frame.origin.x = (bounds.size.width - (button5?.frame.width)!) / 2
-        button5?.frame.origin.y = 315
+        button5?.frame.origin.y = 365
         button5?.layer.cornerRadius = (button5?.frame.height)! / 2
 
         button6?.sizeToFit()
@@ -144,7 +145,7 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         button3?.layer.masksToBounds = true
         button3?.titleLabel?.numberOfLines = 0
         button3?.titleLabel?.textAlignment = .center
-        button3?.setTitle("Train, Bus, other", for: .normal)
+        button3?.setTitle("Train or Bus", for: .normal)
         button3?.translatesAutoresizingMaskIntoConstraints = false
         button3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button3!)
@@ -174,7 +175,7 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         button5?.layer.masksToBounds = true
         button5?.titleLabel?.numberOfLines = 0
         button5?.titleLabel?.textAlignment = .center
-        button5?.setTitle("I'll already be there", for: .normal)
+        button5?.setTitle("Come back to this later", for: .normal)
         button5?.translatesAutoresizingMaskIntoConstraints = false
         button5?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button5!)

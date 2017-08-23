@@ -123,7 +123,7 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         button3?.layer.masksToBounds = true
         button3?.titleLabel?.numberOfLines = 0
         button3?.titleLabel?.textAlignment = .center
-        button3?.setTitle("Figure it out later", for: .normal)
+        button3?.setTitle("Come back to this later", for: .normal)
         button3?.translatesAutoresizingMaskIntoConstraints = false
         button3?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button3!)
