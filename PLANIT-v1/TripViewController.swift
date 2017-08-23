@@ -2378,6 +2378,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             } else if yesIKnowWhereImStayingQuestionView != nil {
                 self.scrollContentView.insertSubview(shortTermRentalSearchQuestionView!, aboveSubview: yesIKnowWhereImStayingQuestionView!)
                 self.shortTermRentalSearchQuestionView!.frame = CGRect(x: 0, y: (yesIKnowWhereImStayingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            } else {
+                self.scrollContentView.addSubview(shortTermRentalSearchQuestionView!)
+                self.shortTermRentalSearchQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             }
             shortTermRentalSearchQuestionView?.tag = 24
             shortTermRentalSearchQuestionView?.button1?.addTarget(self, action: #selector(self.shortTermRentalSearchQuestionView_done(sender:)), for: UIControlEvents.touchUpInside)
@@ -2400,6 +2403,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             } else if yesIKnowWhereImStayingQuestionView != nil {
                 self.scrollContentView.insertSubview(stayWithSomeoneIKnowQuestionView!, aboveSubview: yesIKnowWhereImStayingQuestionView!)
                 self.stayWithSomeoneIKnowQuestionView!.frame = CGRect(x: 0, y: (yesIKnowWhereImStayingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
+            } else {
+                self.scrollContentView.addSubview(stayWithSomeoneIKnowQuestionView!)
+                self.stayWithSomeoneIKnowQuestionView!.frame = CGRect(x: 0, y: 0, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             }
             stayWithSomeoneIKnowQuestionView?.tag = 25
             stayWithSomeoneIKnowQuestionView?.button1?.addTarget(self, action: #selector(self.stayWithSomeoneIKnowQuestionView_done(sender:)), for: UIControlEvents.touchUpInside)
@@ -8039,22 +8045,50 @@ extension TripViewController {
         destinationButtonTouchedUpInside(sender:sender)
     }
     
-    func checkPlaceToStayProgress() -> PlaceToStayProgress {
-        
+    func checkPlaceToStayProgress(senderTag: Int) -> PlaceToStayProgress {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+
+        if senderTag <= (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]).count  {
+            var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+            if placeToStayDictionaryArray[senderTag - 1]["typeOfPlaceToStay"] as! String == "hotel" {
+                if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[senderTag - 1]["placeToStayBookedOnPlanit"] != nil {
+                    return PlaceToStayProgress.typeChosenHotelAndPlanitHotelBooked
+                } else if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[senderTag - 1]["hotelsSavedOnPlanit"] != nil {
+                    return PlaceToStayProgress.typeChosenHotelAndPlanitHotelFavorited
+                } else {
+                    return PlaceToStayProgress.onlyTypeChosenHotel
+                }
+            } else if placeToStayDictionaryArray[senderTag - 1]["typeOfPlaceToStay"] as! String == "hotelText" {
+                if placeToStayDictionaryArray[senderTag - 1]["hotelText"] as! String != "" {
+                    return PlaceToStayProgress.typeChosenHotelAndDetailsProvided
+                } else {
+                    return PlaceToStayProgress.onlyTypeChosenHotel
+                }
+            } else if placeToStayDictionaryArray[senderTag - 1]["typeOfPlaceToStay"] as! String == "shortTermRental" {
+                if placeToStayDictionaryArray[senderTag - 1]["shortTermRentalText"] as! String != "" {
+                    return PlaceToStayProgress.typeChosenShortTermRentalAndDetailsProvided
+                } else {
+                    return PlaceToStayProgress.onlyTypeChosenShortTermRental
+                }
+            } else if placeToStayDictionaryArray[senderTag - 1]["typeOfPlaceToStay"] as! String == "stayWithSomeoneIKnow" {
+                if placeToStayDictionaryArray[senderTag - 1]["stayWithSomeoneIKnowText"] as! String != "" {
+                    return PlaceToStayProgress.typeChosenStayWithSomeoneIKnowAndDetailsProvided
+                } else {
+                    return PlaceToStayProgress.onlyTypeChosenStayWithSomeoneIKnow
+                }
+            }
+        }
+        return PlaceToStayProgress.noProgress
     }
     
     func placeToStayButtonTouchedUpInside(sender:UIButton) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let assistantMode = SavedPreferencesForTrip["assistantMode"] as! String
         let initiatorProgress = checkInitiatorProgress()
-        let placeToStayProgress = checkPlaceToStayProgress()
+        let placeToStayProgress = checkPlaceToStayProgress(senderTag: sender.tag)
+        var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
         let bounds = UIScreen.main.bounds
         
-        //Go back to assistant where user left off if still building itinerary
-//        if isAssistantEnabled == true && assistantMode == "initialItineraryBuilding" {
-//            showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-//            return
-//        } else
         if assistantMode == "travel" {
             showFinishPlanningTripAlert(title: "Let's finish changing your travel first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
             return
@@ -8073,512 +8107,589 @@ extension TripViewController {
         } else if assistantMode == "placeToStay" {
             showFinishPlanningTripAlert(title: "Let's finish changing your place to stay!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
         } else if assistantMode == "initialItineraryBuilding" && isAssistantEnabled == true {
-            switch initiatorProgress {
-            case .instructions:
-                //Spawn alert "Great, let's find a place to stay. First let's select dates and destination"
-            case .dates:
-                //Spawn alert "Great, let's find a place to stay. First let's select a destatination"
-            case .destination:
-                //Spawn alert "Great, let's find a place to stay."
-
-            case .travel:
-                //Spawn alert "Great, let's find a place to stay."
-            case .placeToStay:
+            if initiatorProgress == InitiatorProgress.placeToStay {
                 showFinishPlanningTripAlert(title: "Let's finish planning your place to stay!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+            } else {
+                //Spawn alert "Great, let's find a place to stay. First let's select dates and destination"
+                let alertController = UIAlertController(title: "Plan place to stay?", message: "This will skip Planit's comprehensive trip planning process", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Nevermind, continue planning", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+                }
+                let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                    self.disableAndResetAssistant_moveToItinerary()
+                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
+                    self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+                    
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+                }
+                alertController.addAction(cancelAction)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+
+            }
+        } else if assistantMode == "disabled" {
+            switch placeToStayProgress {
+            case .noProgress:
+                //Spawn alert "Great, let's find a place to stay."
+                let alertController = UIAlertController(title: "Great, let's find a place to stay!", message: "", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                }
+                let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
+                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
+                    self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+                    
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+                }
+                alertController.addAction(cancelAction)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+
+            case .onlyTypeChosenHotel:
+                //Spawn alert "Great, let's find a place to stay."
+                let alertController = UIAlertController(title: "Great, let's find a hotel.", message: "", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                }
+                let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                    //No hotel booked, no saved hotels, should hotel search in Assistant
+                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as! NSString
+                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
+                    self.spawnHotelSearchQuestionView()
+                    
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+                }
+                let changeAction = UIAlertAction(title: "Find an Airbnb or stay with someone you know", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
+                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
+                    self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+                    
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+                }
+                
+                alertController.addAction(cancelAction)
+                alertController.addAction(okAction)
+                alertController.addAction(changeAction)
+                self.present(alertController, animated: true, completion: nil)
+
+            case .onlyTypeChosenShortTermRental:
+                //Spawn alert "Great, let's find a place to stay."
+                let alertController = UIAlertController(title: "Airbnb", message: "Let's add details about your place to stay.", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                }
+                let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                    //No hotel booked, no saved hotels, should hotel search in Assistant
+                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as! NSString
+                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
+                    self.spawnShortTermRentalSearchQuestionView()
+                    
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+                }
+                let changeAction = UIAlertAction(title: "Find a hotel or stay with someone you know", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
+                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
+                    self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+                    
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+                }
+                
+                alertController.addAction(cancelAction)
+                alertController.addAction(okAction)
+                alertController.addAction(changeAction)
+
+                self.present(alertController, animated: true, completion: nil)
+
+            case .onlyTypeChosenStayWithSomeoneIKnow:
+                //Spawn alert "Great, let's find a place to stay."
+                let alertController = UIAlertController(title: "Staying with someone you know", message: "Let's add details about your place to stay.", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                }
+                let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                    //No hotel booked, no saved hotels, should hotel search in Assistant
+                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as! NSString
+                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
+                    self.spawnStayWithSomeoneIKnowQuestionView()
+                    
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+                }
+                let changeAction = UIAlertAction(title: "Find a hotel or Airbnb", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
+                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
+                    self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+                    
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+                }
+
+                alertController.addAction(cancelAction)
+                alertController.addAction(okAction)
+                alertController.addAction(changeAction)
+                self.present(alertController, animated: true, completion: nil)
+                
+            case .typeChosenHotelAndPlanitHotelFavorited:
+                //Show favorites and option to book
+                let alertController = UIAlertController(title: "Choose a place to stay!", message: "See how your favorites stack up in the refreshed results.", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                }
+                let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                    
+                    //SHOW SAVED HOTELS in Assistant
+                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as! NSString
+                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                    
+                    self.spawnHotelSearchQuestionView()
+                    
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+                    
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelSearchSpawnedFromItinerary"), object: nil)
+                    
+                }
+                alertController.addAction(cancelAction)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            case .typeChosenHotelAndPlanitHotelBooked:
+                //Show booked hotel
+                for subview in itineraryView.subviews {
+                    subview.isHidden = true
+                }
+                
+                let variantAsData = (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["placeToStayBookedOnPlanit"] as! Data
+                let variant = NSKeyedUnarchiver.unarchiveObject(with: variantAsData) as? HLResultVariant
+                let filter = Filter()
+                
+                let decorator = HLHotelDetailsDecorator(variant: variant, photoIndex: 0, photoIndexUpdater: nil, filter: filter)
+                hotelBookedOnPlanitController = JRNavigationController(rootViewController: decorator.detailsVC)
+                hotelBookedOnPlanitController?.isNavigationBarHidden = true
+                hotelBookedOnPlanitController?.willMove(toParentViewController: self)
+                self.addChildViewController(hotelBookedOnPlanitController!)
+                hotelBookedOnPlanitController?.loadView()
+                hotelBookedOnPlanitController?.viewDidLoad()
+                
+                animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+                let bounds = UIScreen.main.bounds
+                setupDetailedInformationView(size: CGSize(width: bounds.width-6, height: 650), withTextView:false,withDoneButton:false)
+                button1?.frame.origin.y = 610
+                self.detailedInformationSubview.addSubview((hotelBookedOnPlanitController?.view)!)
+                hotelBookedOnPlanitController?.view.frame = CGRect(x: 10, y: 100, width: bounds.width-20, height: bounds.height - 150)
+                hotelBookedOnPlanitController?.view.layer.cornerRadius = 5
+                self.popupBackgroundFilterView?.addSubview((hotelBookedOnPlanitController?.view)!)
+                hotelBookedOnPlanitController?.didMove(toParentViewController: self)
+                
+                doneButton = UIButton(type: .custom)
+                doneButton?.frame = CGRect.zero
+                doneButton?.setTitleColor(UIColor.white, for: .normal)
+                doneButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+                doneButton?.layer.borderWidth = 1
+                doneButton?.layer.borderColor = UIColor.white.cgColor
+                doneButton?.titleLabel?.numberOfLines = 0
+                doneButton?.titleLabel?.textAlignment = .center
+                doneButton?.setTitle("Done", for: .normal)
+                doneButton?.addTarget(self, action: #selector(bookedHotelDetailsBackToItinerary), for: UIControlEvents.touchUpInside)
+                popupBackgroundFilterView.addSubview(doneButton!)
+                doneButton?.sizeToFit()
+                doneButton?.frame.size.height = 30
+                doneButton?.frame.size.width += 20
+                doneButton?.frame.origin.x = ((bounds.width) - (doneButton?.frame.width)!) / 2 - itineraryView.frame.minX
+                doneButton?.frame.origin.y = 600
+                doneButton?.layer.cornerRadius = (doneButton?.frame.height)! / 2
+
+            case .typeChosenHotelAndDetailsProvided:
+                //Show booked hotel details
+                detailedInformationSubviewMode = "hotel"
+                //Show texted entered
+                animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+                setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
+                textView?.text = placeToStayDictionaryArray[sender.tag - 1]["hotelText"] as! String
+                var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+                topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+                textView?.contentOffset = CGPoint()
+                textView?.contentOffset.x = 0
+                textView?.contentOffset.y = -topCorrect!
+                textView?.resignFirstResponder()
+                self.view.addSubview(detailedInformationSubview)
+            case .typeChosenShortTermRentalAndDetailsProvided:
+                //Show short term rental details
+                detailedInformationSubviewMode = "shortTermRental"
+                //Show texted entered, with clickable links
+                animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+                setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
+                textView?.text = placeToStayDictionaryArray[sender.tag - 1]["shortTermRentalText"] as! String
+                var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+                topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+                textView?.contentOffset = CGPoint()
+                textView?.contentOffset.x = 0
+                textView?.contentOffset.y = -topCorrect!
+                textView?.resignFirstResponder()
+                self.view.addSubview(detailedInformationSubview)
+            case .typeChosenStayWithSomeoneIKnowAndDetailsProvided:
+                //Show stay with someone I know details
+                detailedInformationSubviewMode = "stayWithSomeoneIKnow"
+                //Show texted entered
+                animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+                setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
+                textView?.text = placeToStayDictionaryArray[sender.tag - 1]["stayWithSomeoneIKnowText"] as! String
+                var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+                topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+                textView?.contentOffset = CGPoint()
+                textView?.contentOffset.x = 0
+                textView?.contentOffset.y = -topCorrect!
+                textView?.resignFirstResponder()
+                self.view.addSubview(detailedInformationSubview)
             default:
                 break
             }
-        } else if assistantMode == "disabled" {
-            switch PlaceToStayProgress {
-            case <#pattern#>:
-                <#code#>
-            default:
-                <#code#>
-            }
-            
-                let alertController = UIAlertController(title: "Change place to stay?", message: "Are you sure you want to change your place to stay?", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                }
-                let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
-                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                    
-                    self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
-                    
-                    self.isAssistantEnabled = true
-                    self.handleTwicketSegmentedControl()
-                    self.segmentedControl?.move(to: 0)
-                    self.assistant()
-                }
-                alertController.addAction(cancelAction)
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
-        }             if sender.tag <= (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]).count  {
-                var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
-                if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "hotel" {
-                    if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["placeToStayBookedOnPlanit"] != nil {
-                        //TRAVELPAYOUTS
-                        for subview in itineraryView.subviews {
-                            subview.isHidden = true
-                        }
-                        
-                        let variantAsData = (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["placeToStayBookedOnPlanit"] as! Data
-                        let variant = NSKeyedUnarchiver.unarchiveObject(with: variantAsData) as? HLResultVariant
-                        let filter = Filter()
-                        
-                        let decorator = HLHotelDetailsDecorator(variant: variant, photoIndex: 0, photoIndexUpdater: nil, filter: filter)
-                        hotelBookedOnPlanitController = JRNavigationController(rootViewController: decorator.detailsVC)
-                        hotelBookedOnPlanitController?.isNavigationBarHidden = true
-                        hotelBookedOnPlanitController?.willMove(toParentViewController: self)
-                        self.addChildViewController(hotelBookedOnPlanitController!)
-                        hotelBookedOnPlanitController?.loadView()
-                        hotelBookedOnPlanitController?.viewDidLoad()
-                        
-                        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                        let bounds = UIScreen.main.bounds
-                        setupDetailedInformationView(size: CGSize(width: bounds.width-6, height: 650), withTextView:false,withDoneButton:false)
-                        button1?.frame.origin.y = 610
-                        self.detailedInformationSubview.addSubview((hotelBookedOnPlanitController?.view)!)
-                        hotelBookedOnPlanitController?.view.frame = CGRect(x: 10, y: 100, width: bounds.width-20, height: bounds.height - 150)
-                        hotelBookedOnPlanitController?.view.layer.cornerRadius = 5
-                        self.popupBackgroundFilterView?.addSubview((hotelBookedOnPlanitController?.view)!)
-                        hotelBookedOnPlanitController?.didMove(toParentViewController: self)
-                        
-                        doneButton = UIButton(type: .custom)
-                        doneButton?.frame = CGRect.zero
-                        doneButton?.setTitleColor(UIColor.white, for: .normal)
-                        doneButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-                        doneButton?.layer.borderWidth = 1
-                        doneButton?.layer.borderColor = UIColor.white.cgColor
-                        doneButton?.titleLabel?.numberOfLines = 0
-                        doneButton?.titleLabel?.textAlignment = .center
-                        doneButton?.setTitle("Done", for: .normal)
-                        doneButton?.addTarget(self, action: #selector(bookedHotelDetailsBackToItinerary), for: UIControlEvents.touchUpInside)
-                        popupBackgroundFilterView.addSubview(doneButton!)
-                        doneButton?.sizeToFit()
-                        doneButton?.frame.size.height = 30
-                        doneButton?.frame.size.width += 20
-                        doneButton?.frame.origin.x = ((bounds.width) - (doneButton?.frame.width)!) / 2 - itineraryView.frame.minX
-                        doneButton?.frame.origin.y = 600
-                        doneButton?.layer.cornerRadius = (doneButton?.frame.height)! / 2
-                    } else if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["hotelsSavedOnPlanit"] != nil {
-                        let alertController = UIAlertController(title: "Choose a place to stay!", message: "See how your favorites stack up in the refreshed results.", preferredStyle: .alert)
-                        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                        }
-                        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                            
-                            //SHOW SAVED HOTELS in Assistant
-                            SavedPreferencesForTrip["assistantMode"] = "placeToStay" as! NSString
-                            SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                            self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                            
-                            self.spawnHotelSearchQuestionView()
-                            
-                            self.isAssistantEnabled = true
-                            self.handleTwicketSegmentedControl()
-                            self.segmentedControl?.move(to: 0)
-                            self.assistant()
-                            
-                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hotelSearchSpawnedFromItinerary"), object: nil)                                                    
-                            
-                        }
-                        alertController.addAction(cancelAction)
-                        alertController.addAction(okAction)
-                        self.present(alertController, animated: true, completion: nil)
-                    } else {
-                        let alertController = UIAlertController(title: "Check out hotels!", message: "", preferredStyle: .alert)
-                        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                        }
-                        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                            //No hotel booked, no saved hotels, should hotel search in Assistant
-                            SavedPreferencesForTrip["assistantMode"] = "placeToStay" as! NSString
-                            SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                            self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                            
-                            self.spawnHotelSearchQuestionView()
-                            
-                            self.isAssistantEnabled = true
-                            self.handleTwicketSegmentedControl()
-                            self.segmentedControl?.move(to: 0)
-                            self.assistant()
-                        }
-                        alertController.addAction(cancelAction)
-                        alertController.addAction(okAction)
-                        self.present(alertController, animated: true, completion: nil)
-                    }
-                } else if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "hotelText"{
-                    if (SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]])[sender.tag - 1]["hotelText"] != nil {
-                        detailedInformationSubviewMode = "hotel"
-                        //Show texted entered
-                        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                        setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
-                        textView?.text = placeToStayDictionaryArray[sender.tag - 1]["hotelText"] as! String
-                        var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
-                        topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
-                        textView?.contentOffset = CGPoint()
-                        textView?.contentOffset.x = 0
-                        textView?.contentOffset.y = -topCorrect!
-                        textView?.resignFirstResponder()
-                        self.view.addSubview(detailedInformationSubview)
-                    }
-                }
-                else if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "shortTermRental"{
-                    detailedInformationSubviewMode = "shortTermRental"
-                    //Show texted entered, with clickable links
-                    animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                    setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
-                    textView?.text = placeToStayDictionaryArray[sender.tag - 1]["shortTermRentalText"] as! String
-                    var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
-                    topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
-                    textView?.contentOffset = CGPoint()
-                    textView?.contentOffset.x = 0
-                    textView?.contentOffset.y = -topCorrect!
-                    textView?.resignFirstResponder()
-                    self.view.addSubview(detailedInformationSubview)
-                    
-                } else if placeToStayDictionaryArray[sender.tag - 1]["typeOfPlaceToStay"] as! String == "stayWithSomeoneIKnow"{
-                    detailedInformationSubviewMode = "stayWithSomeoneIKnow"
-                    //Show texted entered
-                    animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                    setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
-                    textView?.text = placeToStayDictionaryArray[sender.tag - 1]["stayWithSomeoneIKnowText"] as! String
-                    var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
-                    topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
-                    textView?.contentOffset = CGPoint()
-                    textView?.contentOffset.x = 0
-                    textView?.contentOffset.y = -topCorrect!
-                    textView?.resignFirstResponder()
-                    self.view.addSubview(detailedInformationSubview)
-                } else {
-                    showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-                }
-            } else if assistantMode == "disabled" {
-                let alertController = UIAlertController(title: "Plan a place to stay!", message: "", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                }
-                let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
-                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                    
-                    self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
-                    
-                    self.isAssistantEnabled = true
-                    self.handleTwicketSegmentedControl()
-                    self.segmentedControl?.move(to: 0)
-                    self.assistant()
-                }
-                alertController.addAction(cancelAction)
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
-            }
+        }
     }
+    
+    
+    
     func travelButtonTouchedUpInside(sender:UIButton) {
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-
-        var isRoundtripTravelPlanned = false
-        var indexOfRoundtripTravel = -1
-        if destinationsForTrip.count > 0 {
-            for i in 0 ... destinationsForTrip.count - 1 {
-                var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
-                if i < travelDictionaryArray.count {
-                    if travelDictionaryArray[i]["isRoundtrip"] as? Bool != nil {
-                        if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
-                            if travelDictionaryArray[i]["modeOfTransportation"] as! String == "fly" {
-                                if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightNotFromPlanitDict"] != nil {
-
-                                    isRoundtripTravelPlanned = true
-                                    indexOfRoundtripTravel = i
-                                }
-                            } else {
-                                isRoundtripTravelPlanned = true
-                                indexOfRoundtripTravel = i
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        
-        let assistantMode = SavedPreferencesForTrip["assistantMode"] as! String
-//        let bounds = UIScreen.main.bounds
-        
-        //Go back to assistant where user left off if still building itinerary
-        if isAssistantEnabled == true && assistantMode == "initialItineraryBuilding" {
-            showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        } else if assistantMode == "placeToStay" {
-            showFinishPlanningTripAlert(title: "Let's finish changing your place to stay!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        } else if assistantMode == "dates" {
-            showFinishPlanningTripAlert(title: "Let's finish updating your dates first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        } else if assistantMode == "destination" {
-            showFinishPlanningTripAlert(title: "Let's finish updating your destination first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        } else if assistantMode == "startingPoint" {
-            showFinishPlanningTripAlert(title: "Let's finish updating your starting point first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        } else if assistantMode == "endingPoint" {
-            showFinishPlanningTripAlert(title: "Let's finish updating your ending point first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        }
-        //
-        if editItineraryModeEnabled {
-//            let initiatorProgress = checkInitiatorProgress()
-            
-            //Edit travel plan
-            if assistantMode == "disabled" {
-                let alertController = UIAlertController(title: "Change travel?", message: "Are you sure you want to change your travel?", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                }
-                let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                    SavedPreferencesForTrip["assistantMode"] = "travel" as NSString
-                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                    
-                    self.spawnHowDoYouWantToGetThereQuestionView()
-                    self.howDoYouWantToGetThereQuestionView?.questionLabel?.isHidden = false
-                    
-                    self.isAssistantEnabled = true
-                    self.handleTwicketSegmentedControl()
-                    self.segmentedControl?.move(to: 0)
-                    self.assistant()
-                }
-                alertController.addAction(cancelAction)
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
-            } else if assistantMode == "travel" {
-                showFinishPlanningTripAlert(title: "Let's finish changing your travel!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            }
-        } else if !editItineraryModeEnabled {
-            if assistantMode == "travel" {
-                showFinishPlanningTripAlert(title: "Let's finish changing your travel!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            }
-//            if sender.tag == (destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1) && isRoundtripTravelPlanned {
-//                detailedInformationSubviewMode = "roundTripTravelComments"
-//                
-//                //PLANNED: Show travel plan for indexOfDestinationBeingPlanned with roundtrip travel
-//                animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-//                setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
-//                textView?.text = "Roundtrip travel planned - see other travel segments for details."
-//                var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
-//                topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
-//                textView?.contentOffset = CGPoint()
-//                textView?.contentOffset.x = 0
-//                textView?.contentOffset.y = -topCorrect!
-//                textView?.resignFirstResponder()
-//                self.view.addSubview(detailedInformationSubview)
-//                return
-//            }
-            var index = -1
-            if sender.tag == (destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1) && isRoundtripTravelPlanned {
-                index = indexOfRoundtripTravel
-            }
-            else if sender.tag <= (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]).count  {
-                index = sender.tag - 1
-            }
-            if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]).count > 0 && index != -1{
-                var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
-                if travelDictionaryArray[index]["modeOfTransportation"] as! String == "fly" {
-                    if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightBookedOnPlanit"] != nil {
-                        //TRAVELPAYOUTS
-                        for subview in itineraryView.subviews {
-                            subview.isHidden = true
-                        }
-                        
-                        let ticketAsData = (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightBookedOnPlanit"] as! Data
-                        let ticket = NSKeyedUnarchiver.unarchiveObject(with: ticketAsData) as? JRSDKTicket
-//                        let ticketVC = JRTicketVC(searchInfo: searchInfo, search: response.searchResultInfo.searchID)
-                        let ticketVC = JRTicketVC(searchInfo: (ticket?.searchResultInfo.searchInfo)!, searchID: (ticket?.searchResultInfo.searchID)!)
-                        ticketVC?.setTicket(ticket)
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hideJRTicketBuyButton"), object: nil)
-                        
-                        flightBookedOnPlanitController = JRNavigationController(rootViewController: ticketVC!)
-                        flightBookedOnPlanitController?.isNavigationBarHidden = true
-                        flightBookedOnPlanitController?.willMove(toParentViewController: self)
-                        self.addChildViewController(flightBookedOnPlanitController!)
-                        flightBookedOnPlanitController?.loadView()
-                        flightBookedOnPlanitController?.viewDidLoad()
-                        
-                        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                        let bounds = UIScreen.main.bounds
-                        setupDetailedInformationView(size: CGSize(width: bounds.width-6, height: 650), withTextView:false,withDoneButton:false)
-                        button1?.frame.origin.y = 610
-                        self.detailedInformationSubview.addSubview((flightBookedOnPlanitController?.view)!)
-                        flightBookedOnPlanitController?.view.frame = CGRect(x: 10, y: 100, width: bounds.width-20, height: bounds.height - 150)
-                        flightBookedOnPlanitController?.view.layer.cornerRadius = 5
-                        self.popupBackgroundFilterView?.addSubview((flightBookedOnPlanitController?.view)!)
-                        flightBookedOnPlanitController?.didMove(toParentViewController: self)
-                        
-                        doneButton = UIButton(type: .custom)
-                        doneButton?.frame = CGRect.zero
-                        doneButton?.setTitleColor(UIColor.white, for: .normal)
-                        doneButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
-                        doneButton?.layer.borderWidth = 1
-                        doneButton?.layer.borderColor = UIColor.white.cgColor
-                        doneButton?.titleLabel?.numberOfLines = 0
-                        doneButton?.titleLabel?.textAlignment = .center
-                        doneButton?.setTitle("Done", for: .normal)
-                        doneButton?.addTarget(self, action: #selector(bookedFlightDetailsBackToItinerary), for: UIControlEvents.touchUpInside)
-                        popupBackgroundFilterView.addSubview(doneButton!)
-                        doneButton?.sizeToFit()
-                        doneButton?.frame.size.height = 30
-                        doneButton?.frame.size.width += 20
-                        doneButton?.frame.origin.x = ((bounds.width) - (doneButton?.frame.width)!) / 2 - itineraryView.frame.minX
-                        doneButton?.frame.origin.y = 600
-                        doneButton?.layer.cornerRadius = (doneButton?.frame.height)! / 2
-                        
-                        self.searchSummaryLabelTopView.isHidden = true
-                        self.segmentedControl?.isHidden = false
-                        
-                    } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightsSavedOnPlanit"] != nil {
-                        let alertController = UIAlertController(title: "Choose a flight!", message: "Search and see how your favorites stack up in the refreshed results.", preferredStyle: .alert)
-                        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                        }
-                        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                            
-                            //PLANNED: SHOW SAVED Flights in Assistant
-                            SavedPreferencesForTrip["assistantMode"] = "travel" as! NSString
-                            SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                            self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                            
-                            self.spawnFlightSearchQuestionView()
-                            
-                            self.isAssistantEnabled = true
-                            self.handleTwicketSegmentedControl()
-                            self.segmentedControl?.move(to: 0)
-                            self.assistant()
-                            
-//                            let when = DispatchTime.now() + 0.4
-//                            DispatchQueue.main.asyncAfter(deadline: when) {
-                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightSearchSpawnedFromItinerary"), object: nil)
+//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+//
+//        var isRoundtripTravelPlanned = false
+//        var indexOfRoundtripTravel = -1
+//        if destinationsForTrip.count > 0 {
+//            for i in 0 ... destinationsForTrip.count - 1 {
+//                var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+//                if i < travelDictionaryArray.count {
+//                    if travelDictionaryArray[i]["isRoundtrip"] as? Bool != nil {
+//                        if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
+//                            if travelDictionaryArray[i]["modeOfTransportation"] as! String == "fly" {
+//                                if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightNotFromPlanitDict"] != nil {
+//
+//                                    isRoundtripTravelPlanned = true
+//                                    indexOfRoundtripTravel = i
+//                                }
+//                            } else {
+//                                isRoundtripTravelPlanned = true
+//                                indexOfRoundtripTravel = i
 //                            }
-                        }
-                        alertController.addAction(cancelAction)
-                        alertController.addAction(okAction)
-                        self.present(alertController, animated: true, completion: nil)
-                        
-                    } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightNotFromPlanitDict"] != nil {
-                        //PLANNED: ADD DETAILED INFORMATION VIEW WITH SPACES FOR FLIGHTS BOUGHT ALREADY
-                    } else {
-                        let alertController = UIAlertController(title: "Check out flights!", message: "", preferredStyle: .alert)
-                        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                        }
-                        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                            //No flight booked, no saved flights, should flight search in Assistant
-                            SavedPreferencesForTrip["assistantMode"] = "travel" as! NSString
-                            SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                            self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                            
-                            self.spawnFlightSearchQuestionView()
-                            
-                            self.isAssistantEnabled = true
-                            self.handleTwicketSegmentedControl()
-                            self.segmentedControl?.move(to: 0)
-                            self.assistant()
-                        }
-                        alertController.addAction(cancelAction)
-                        alertController.addAction(okAction)
-                        self.present(alertController, animated: true, completion: nil)
-                    }
-                } else if travelDictionaryArray[index]["modeOfTransportation"] as! String == "busTrainOther"{
-                    if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["busTrainOtherText"] != nil {
-                        detailedInformationSubviewMode = "busTrainOther"
-                        //Show text entered
-                        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                        setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
-                        textView?.text = travelDictionaryArray[index]["busTrainOtherText"] as! String
-                        var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
-                        topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
-                        textView?.contentOffset = CGPoint()
-                        textView?.contentOffset.x = 0
-                        textView?.contentOffset.y = -topCorrect!
-                        textView?.resignFirstResponder()
-                        self.view.addSubview(detailedInformationSubview)
-                    }
-                } else if travelDictionaryArray[index]["modeOfTransportation"] as! String == "illAlreadyBeThere"{
-                    detailedInformationSubviewMode = "illAlreadyBeThere"
-                    // Show text "I'll already be there"
-                    animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                    setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
-                    textView?.text = travelDictionaryArray[index]["illAlreadyBeThereText"] as! String
-                    var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
-                    topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
-                    textView?.contentOffset = CGPoint()
-                    textView?.contentOffset.x = 0
-                    textView?.contentOffset.y = -topCorrect!
-                    textView?.resignFirstResponder()
-                    self.view.addSubview(detailedInformationSubview)
-                    
-                } else if travelDictionaryArray[index]["modeOfTransportation"] as! String == "drive"{
-                    if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["rentalCar"] != nil {
-                        //PLANNED: FETCH DETAILS FROM PRICELINE
-                    } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["personalCar"] != nil {
-                        detailedInformationSubviewMode = "stayWithSomeoneIKnow"
-                        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                        setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:false,withDoneButton:true)
-                        
-                        //PLANNED: SHOW "Driving" title and time leaving selector
-                        
-                        
-                        //                        textView?.text = placeToStayDictionaryArray[sender.tag - 1]["stayWithSomeoneIKnowText"] as! String
-                        //                        var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
-                        //                        topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
-                        //                        textView?.contentOffset = CGPoint()
-                        //                        textView?.contentOffset.x = 0
-                        //                        textView?.contentOffset.y = -topCorrect!
-                        //                        textView?.resignFirstResponder()
-                        self.view.addSubview(detailedInformationSubview)
-                    }
-                    
-                } else {
-                    showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-                }
-            } else {
-                
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        
+//        
+//        let assistantMode = SavedPreferencesForTrip["assistantMode"] as! String
+////        let bounds = UIScreen.main.bounds
+//        
+//        //Go back to assistant where user left off if still building itinerary
+//        if isAssistantEnabled == true && assistantMode == "initialItineraryBuilding" {
+//            showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            return
+//        } else if assistantMode == "placeToStay" {
+//            showFinishPlanningTripAlert(title: "Let's finish changing your place to stay!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            return
+//        } else if assistantMode == "dates" {
+//            showFinishPlanningTripAlert(title: "Let's finish updating your dates first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            return
+//        } else if assistantMode == "destination" {
+//            showFinishPlanningTripAlert(title: "Let's finish updating your destination first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            return
+//        } else if assistantMode == "startingPoint" {
+//            showFinishPlanningTripAlert(title: "Let's finish updating your starting point first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            return
+//        } else if assistantMode == "endingPoint" {
+//            showFinishPlanningTripAlert(title: "Let's finish updating your ending point first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            return
+//        }
+//        //
+//        if editItineraryModeEnabled {
+////            let initiatorProgress = checkInitiatorProgress()
+//            
+//            //Edit travel plan
 //            if assistantMode == "disabled" {
-                let alertController = UIAlertController(title: "Plan your travel!", message: "", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                }
-                let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                    SavedPreferencesForTrip["assistantMode"] = "travel" as NSString
-                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                    
-                    self.spawnHowDoYouWantToGetThereQuestionView()
-                    self.howDoYouWantToGetThereQuestionView?.questionLabel?.isHidden = false
-                    
-                    if sender.tag == (self.destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1)  {
-                        self.howDoYouWantToGetThereQuestionView?.questionLabel?.text = "How do you want to get back?"
-                        self.howDoYouWantToGetThereQuestionView?.questionLabel?.textColor = UIColor.white
-                    }
-
-                    
-                    self.isAssistantEnabled = true
-                    self.handleTwicketSegmentedControl()
-                    self.segmentedControl?.move(to: 0)
-                    self.assistant()
-                }
-                alertController.addAction(cancelAction)
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
-            }
-        }
+//                let alertController = UIAlertController(title: "Change travel?", message: "Are you sure you want to change your travel?", preferredStyle: .alert)
+//                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+//                }
+//                let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+//                    SavedPreferencesForTrip["assistantMode"] = "travel" as NSString
+//                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+//                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//                    
+//                    self.spawnHowDoYouWantToGetThereQuestionView()
+//                    self.howDoYouWantToGetThereQuestionView?.questionLabel?.isHidden = false
+//                    
+//                    self.isAssistantEnabled = true
+//                    self.handleTwicketSegmentedControl()
+//                    self.segmentedControl?.move(to: 0)
+//                    self.assistant()
+//                }
+//                alertController.addAction(cancelAction)
+//                alertController.addAction(okAction)
+//                self.present(alertController, animated: true, completion: nil)
+//            } else if assistantMode == "travel" {
+//                showFinishPlanningTripAlert(title: "Let's finish changing your travel!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            }
+//        } else if !editItineraryModeEnabled {
+//            if assistantMode == "travel" {
+//                showFinishPlanningTripAlert(title: "Let's finish changing your travel!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            }
+////            if sender.tag == (destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1) && isRoundtripTravelPlanned {
+////                detailedInformationSubviewMode = "roundTripTravelComments"
+////                
+////                //PLANNED: Show travel plan for indexOfDestinationBeingPlanned with roundtrip travel
+////                animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+////                setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
+////                textView?.text = "Roundtrip travel planned - see other travel segments for details."
+////                var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+////                topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+////                textView?.contentOffset = CGPoint()
+////                textView?.contentOffset.x = 0
+////                textView?.contentOffset.y = -topCorrect!
+////                textView?.resignFirstResponder()
+////                self.view.addSubview(detailedInformationSubview)
+////                return
+////            }
+//            var index = -1
+//            if sender.tag == (destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1) && isRoundtripTravelPlanned {
+//                index = indexOfRoundtripTravel
+//            }
+//            else if sender.tag <= (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]).count  {
+//                index = sender.tag - 1
+//            }
+//            if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]).count > 0 && index != -1{
+//                var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+//                if travelDictionaryArray[index]["modeOfTransportation"] as! String == "fly" {
+//                    if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightBookedOnPlanit"] != nil {
+//                        //TRAVELPAYOUTS
+//                        for subview in itineraryView.subviews {
+//                            subview.isHidden = true
+//                        }
+//                        
+//                        let ticketAsData = (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightBookedOnPlanit"] as! Data
+//                        let ticket = NSKeyedUnarchiver.unarchiveObject(with: ticketAsData) as? JRSDKTicket
+////                        let ticketVC = JRTicketVC(searchInfo: searchInfo, search: response.searchResultInfo.searchID)
+//                        let ticketVC = JRTicketVC(searchInfo: (ticket?.searchResultInfo.searchInfo)!, searchID: (ticket?.searchResultInfo.searchID)!)
+//                        ticketVC?.setTicket(ticket)
+//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "hideJRTicketBuyButton"), object: nil)
+//                        
+//                        flightBookedOnPlanitController = JRNavigationController(rootViewController: ticketVC!)
+//                        flightBookedOnPlanitController?.isNavigationBarHidden = true
+//                        flightBookedOnPlanitController?.willMove(toParentViewController: self)
+//                        self.addChildViewController(flightBookedOnPlanitController!)
+//                        flightBookedOnPlanitController?.loadView()
+//                        flightBookedOnPlanitController?.viewDidLoad()
+//                        
+//                        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+//                        let bounds = UIScreen.main.bounds
+//                        setupDetailedInformationView(size: CGSize(width: bounds.width-6, height: 650), withTextView:false,withDoneButton:false)
+//                        button1?.frame.origin.y = 610
+//                        self.detailedInformationSubview.addSubview((flightBookedOnPlanitController?.view)!)
+//                        flightBookedOnPlanitController?.view.frame = CGRect(x: 10, y: 100, width: bounds.width-20, height: bounds.height - 150)
+//                        flightBookedOnPlanitController?.view.layer.cornerRadius = 5
+//                        self.popupBackgroundFilterView?.addSubview((flightBookedOnPlanitController?.view)!)
+//                        flightBookedOnPlanitController?.didMove(toParentViewController: self)
+//                        
+//                        doneButton = UIButton(type: .custom)
+//                        doneButton?.frame = CGRect.zero
+//                        doneButton?.setTitleColor(UIColor.white, for: .normal)
+//                        doneButton?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+//                        doneButton?.layer.borderWidth = 1
+//                        doneButton?.layer.borderColor = UIColor.white.cgColor
+//                        doneButton?.titleLabel?.numberOfLines = 0
+//                        doneButton?.titleLabel?.textAlignment = .center
+//                        doneButton?.setTitle("Done", for: .normal)
+//                        doneButton?.addTarget(self, action: #selector(bookedFlightDetailsBackToItinerary), for: UIControlEvents.touchUpInside)
+//                        popupBackgroundFilterView.addSubview(doneButton!)
+//                        doneButton?.sizeToFit()
+//                        doneButton?.frame.size.height = 30
+//                        doneButton?.frame.size.width += 20
+//                        doneButton?.frame.origin.x = ((bounds.width) - (doneButton?.frame.width)!) / 2 - itineraryView.frame.minX
+//                        doneButton?.frame.origin.y = 600
+//                        doneButton?.layer.cornerRadius = (doneButton?.frame.height)! / 2
+//                        
+//                        self.searchSummaryLabelTopView.isHidden = true
+//                        self.segmentedControl?.isHidden = false
+//                        
+//                    } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightsSavedOnPlanit"] != nil {
+//                        let alertController = UIAlertController(title: "Choose a flight!", message: "Search and see how your favorites stack up in the refreshed results.", preferredStyle: .alert)
+//                        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+//                        }
+//                        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+//                            
+//                            //PLANNED: SHOW SAVED Flights in Assistant
+//                            SavedPreferencesForTrip["assistantMode"] = "travel" as! NSString
+//                            SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+//                            self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//                            
+//                            self.spawnFlightSearchQuestionView()
+//                            
+//                            self.isAssistantEnabled = true
+//                            self.handleTwicketSegmentedControl()
+//                            self.segmentedControl?.move(to: 0)
+//                            self.assistant()
+//                            
+////                            let when = DispatchTime.now() + 0.4
+////                            DispatchQueue.main.asyncAfter(deadline: when) {
+//                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "flightSearchSpawnedFromItinerary"), object: nil)
+////                            }
+//                        }
+//                        alertController.addAction(cancelAction)
+//                        alertController.addAction(okAction)
+//                        self.present(alertController, animated: true, completion: nil)
+//                        
+//                    } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightNotFromPlanitDict"] != nil {
+//                        //PLANNED: ADD DETAILED INFORMATION VIEW WITH SPACES FOR FLIGHTS BOUGHT ALREADY
+//                    } else {
+//                        let alertController = UIAlertController(title: "Check out flights!", message: "", preferredStyle: .alert)
+//                        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+//                        }
+//                        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+//                            //No flight booked, no saved flights, should flight search in Assistant
+//                            SavedPreferencesForTrip["assistantMode"] = "travel" as! NSString
+//                            SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+//                            self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//                            
+//                            self.spawnFlightSearchQuestionView()
+//                            
+//                            self.isAssistantEnabled = true
+//                            self.handleTwicketSegmentedControl()
+//                            self.segmentedControl?.move(to: 0)
+//                            self.assistant()
+//                        }
+//                        alertController.addAction(cancelAction)
+//                        alertController.addAction(okAction)
+//                        self.present(alertController, animated: true, completion: nil)
+//                    }
+//                } else if travelDictionaryArray[index]["modeOfTransportation"] as! String == "busTrainOther"{
+//                    if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["busTrainOtherText"] != nil {
+//                        detailedInformationSubviewMode = "busTrainOther"
+//                        //Show text entered
+//                        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+//                        setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
+//                        textView?.text = travelDictionaryArray[index]["busTrainOtherText"] as! String
+//                        var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+//                        topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+//                        textView?.contentOffset = CGPoint()
+//                        textView?.contentOffset.x = 0
+//                        textView?.contentOffset.y = -topCorrect!
+//                        textView?.resignFirstResponder()
+//                        self.view.addSubview(detailedInformationSubview)
+//                    }
+//                } else if travelDictionaryArray[index]["modeOfTransportation"] as! String == "illAlreadyBeThere"{
+//                    detailedInformationSubviewMode = "illAlreadyBeThere"
+//                    // Show text "I'll already be there"
+//                    animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+//                    setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true)
+//                    textView?.text = travelDictionaryArray[index]["illAlreadyBeThereText"] as! String
+//                    var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+//                    topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+//                    textView?.contentOffset = CGPoint()
+//                    textView?.contentOffset.x = 0
+//                    textView?.contentOffset.y = -topCorrect!
+//                    textView?.resignFirstResponder()
+//                    self.view.addSubview(detailedInformationSubview)
+//                    
+//                } else if travelDictionaryArray[index]["modeOfTransportation"] as! String == "drive"{
+//                    if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["rentalCar"] != nil {
+//                        //PLANNED: FETCH DETAILS FROM PRICELINE
+//                    } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["personalCar"] != nil {
+//                        detailedInformationSubviewMode = "stayWithSomeoneIKnow"
+//                        animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+//                        setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:false,withDoneButton:true)
+//                        
+//                        //PLANNED: SHOW "Driving" title and time leaving selector
+//                        
+//                        
+//                        //                        textView?.text = placeToStayDictionaryArray[sender.tag - 1]["stayWithSomeoneIKnowText"] as! String
+//                        //                        var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+//                        //                        topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+//                        //                        textView?.contentOffset = CGPoint()
+//                        //                        textView?.contentOffset.x = 0
+//                        //                        textView?.contentOffset.y = -topCorrect!
+//                        //                        textView?.resignFirstResponder()
+//                        self.view.addSubview(detailedInformationSubview)
+//                    }
+//                    
+//                } else {
+//                    showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//                }
+//            } else {
+//                
+////            if assistantMode == "disabled" {
+//                let alertController = UIAlertController(title: "Plan your travel!", message: "", preferredStyle: .alert)
+//                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+//                }
+//                let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+//                    SavedPreferencesForTrip["assistantMode"] = "travel" as NSString
+//                    SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+//                    self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//                    
+//                    self.spawnHowDoYouWantToGetThereQuestionView()
+//                    self.howDoYouWantToGetThereQuestionView?.questionLabel?.isHidden = false
+//                    
+//                    if sender.tag == (self.destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1)  {
+//                        self.howDoYouWantToGetThereQuestionView?.questionLabel?.text = "How do you want to get back?"
+//                        self.howDoYouWantToGetThereQuestionView?.questionLabel?.textColor = UIColor.white
+//                    }
+//
+//                    
+//                    self.isAssistantEnabled = true
+//                    self.handleTwicketSegmentedControl()
+//                    self.segmentedControl?.move(to: 0)
+//                    self.assistant()
+//                }
+//                alertController.addAction(cancelAction)
+//                alertController.addAction(okAction)
+//                self.present(alertController, animated: true, completion: nil)
+//            }
+//        }
     }
     func travelDateButtonTouchedUpInside(sender:UIButton) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         let assistantMode = SavedPreferencesForTrip["assistantMode"] as! String
-//        let bounds = UIScreen.main.bounds
+        let initiatorProgress = checkInitiatorProgress()
         
-        //Go back to assistant where user left off if still building itinerary
-        if isAssistantEnabled == true && assistantMode == "initialItineraryBuilding" {
-            showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        } else if assistantMode == "placeToStay" {
+        if assistantMode == "placeToStay" {
             showFinishPlanningTripAlert(title: "Let's finish changing your place to stay!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
             return
         } else if assistantMode == "travel" {
@@ -8593,116 +8704,127 @@ extension TripViewController {
         } else if assistantMode == "endingPoint" {
             showFinishPlanningTripAlert(title: "Let's finish updating your ending point first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
             return
-        }
-        //
-//        if editItineraryModeEnabled {
-//            let initiatorProgress = checkInitiatorProgress()
-            
-            //Edit dates
-            if assistantMode == "disabled" {
-//                if destinationsDatesCollectionView.numberOfItems(inSection: 0) > 3 {
-//                    let alertController = UIAlertController(title: "Change your travel dates?", message: "", preferredStyle: .alert)
-//                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-//                    }
-//                    let tripDatesAction = UIAlertAction(title: "Departure and return dates", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-//                        SavedPreferencesForTrip["assistantMode"] = "dates" as NSString
-////                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-//                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-//                        
-//                        self.spawnDatesPickedOutCalendarView()
-//                        
-//                        self.isAssistantEnabled = true
-//                        self.handleTwicketSegmentedControl()
-//                        self.segmentedControl?.move(to: 0)
-//                        self.assistant()
-//                    }
-//                    let travelDatesAction = UIAlertAction(title: "Number of nights in each destination", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-//                        SavedPreferencesForTrip["assistantMode"] = "dates" as NSString
-////                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-//                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-//                        
-//                        self.spawnParseDatesForMultipleDestinationsCalendarView()
-//                        
-//                        self.isAssistantEnabled = true
-//                        self.handleTwicketSegmentedControl()
-//                        self.segmentedControl?.move(to: 0)
-//                        self.assistant()
-//                    }
-//                    alertController.addAction(cancelAction)
-//                    alertController.addAction(tripDatesAction)
-//                    alertController.addAction(travelDatesAction)
-//                    self.present(alertController, animated: true, completion: nil)
-//                } else {
-                    //Single destination trip
-                    let alertController = UIAlertController(title: "Change your travel dates?", message: "", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                    }
-                    let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                        SavedPreferencesForTrip["assistantMode"] = "dates" as NSString
-//                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                        
-                        self.spawnDatesPickedOutCalendarView()
+        } else if assistantMode == "initialItineraryBuilding" && isAssistantEnabled == true {
+            if initiatorProgress == InitiatorProgress.instructions {
+                if tripNameQuestionView != nil {
+
+                    self.spawnDatesPickedOutCalendarView()
+                    
+                    self.isAssistantEnabled = true
+                    self.handleTwicketSegmentedControl()
+                    self.segmentedControl?.move(to: 0)
+                    self.assistant()
+
+                } else if instructionsQuestionView != nil {
+                    let alertController = UIAlertController(title: "Name your trip then select dates.", message: "", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                        self.spawnTripNameQuestionView()
                         
                         self.isAssistantEnabled = true
                         self.handleTwicketSegmentedControl()
                         self.segmentedControl?.move(to: 0)
                         self.assistant()
                     }
-                    alertController.addAction(cancelAction)
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
 
-//                }
-            } else if assistantMode == "dates" {
-                showFinishPlanningTripAlert(title: "Let's finish updating your dates!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+                } else {
+                    let alertController = UIAlertController(title: "Name your trip then select dates.", message: "", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "Okay", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                        self.spawnInstructionsQuestionView()
+                        self.spawnTripNameQuestionView()
+                        
+                        self.isAssistantEnabled = true
+                        self.handleTwicketSegmentedControl()
+                        self.segmentedControl?.move(to: 0)
+                        self.assistant()
+                    }
+                    alertController.addAction(okAction)
+                    self.present(alertController, animated: true, completion: nil)
+
+                }
+                
+            } else if initiatorProgress == InitiatorProgress.dates {
+                showFinishPlanningTripAlert(title: "Let's finish planning your travel dates!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+            } else {
+                
+                self.isAssistantEnabled = true
+                self.handleTwicketSegmentedControl()
+                self.segmentedControl?.move(to: 0)
+                self.assistant()
+                
+                self.spawnDatesPickedOutCalendarView()
             }
-//        } else if !editItineraryModeEnabled {
-//            //Edit dates
-//            if assistantMode == "disabled" {
-//                if destinationsDatesCollectionView.numberOfItems(inSection: 0) > 3 {
-//                    let alertController = UIAlertController(title: "Dates", message: "Which do you want to review?", preferredStyle: .alert)
-//                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-//                    }
-//                    let tripDatesAction = UIAlertAction(title: "Departure and return dates", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-//                        SavedPreferencesForTrip["assistantMode"] = "dates" as NSString
-//                        //                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-//                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-//                        
-//                        self.spawnDatesPickedOutCalendarView()
-//                        
-//                        self.isAssistantEnabled = true
-//                        self.handleTwicketSegmentedControl()
-//                        self.segmentedControl?.move(to: 0)
-//                        self.assistant()
-//                    }
-//                    let travelDatesAction = UIAlertAction(title: "Number of nights in each destination", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-//                        SavedPreferencesForTrip["assistantMode"] = "dates" as NSString
-//                        //                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-//                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-//                        
-//                        self.spawnParseDatesForMultipleDestinationsCalendarView()
-//                        
-//                        self.isAssistantEnabled = true
-//                        self.handleTwicketSegmentedControl()
-//                        self.segmentedControl?.move(to: 0)
-//                        self.assistant()
-//                    }
-//                    alertController.addAction(cancelAction)
-//                    alertController.addAction(tripDatesAction)
-//                    alertController.addAction(travelDatesAction)
-//                    self.present(alertController, animated: true, completion: nil)
-//                } else {
-//                    //Single destination trip
-//                    let alertController = UIAlertController(title: "Review your dates?", message: "", preferredStyle: .alert)
+        } else if assistantMode == "disabled" {
+            let alertController = UIAlertController(title: "View or change travel dates?", message: "", preferredStyle: .alert)
+            let viewAction = UIAlertAction(title: "View", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                SavedPreferencesForTrip["assistantMode"] = "dates" as NSString
+                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
+                self.spawnDatesPickedOutCalendarView()
+                
+                self.isAssistantEnabled = true
+                self.handleTwicketSegmentedControl()
+                self.segmentedControl?.move(to: 0)
+                self.assistant()
+                
+            }
+            let changeAction = UIAlertAction(title: "Change", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                SavedPreferencesForTrip["assistantMode"] = "dates" as NSString
+                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
+                self.spawnDatesPickedOutCalendarView()
+                
+                self.isAssistantEnabled = true
+                self.handleTwicketSegmentedControl()
+                self.segmentedControl?.move(to: 0)
+                self.assistant()
+            }
+            alertController.addAction(viewAction)
+            alertController.addAction(changeAction)
+            self.present(alertController, animated: true, completion: nil)
+            
+        } else if assistantMode == "dates" {
+            showFinishPlanningTripAlert(title: "Let's finish updating your dates!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+        }
+    }
+    
+    func destinationButtonTouchedUpInside(sender:UIButton) {
+//        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//        let assistantMode = SavedPreferencesForTrip["assistantMode"] as! String
+//        //        let bounds = UIScreen.main.bounds
+////        
+////        //Go back to assistant where user left off if still building itinerary
+//        if isAssistantEnabled == true && assistantMode == "initialItineraryBuilding" {
+//            showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            return
+//        } else if assistantMode == "placeToStay" {
+//            showFinishPlanningTripAlert(title: "Let's finish changing your place to stay!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            return
+//        } else if assistantMode == "travel" {
+//            showFinishPlanningTripAlert(title: "Let's finish changing your travel first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            return
+//        } else if assistantMode == "dates" {
+//            showFinishPlanningTripAlert(title: "Let's finish updating your dates first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            return
+//        }
+//        
+//        if editItineraryModeEnabled {
+////            //            let initiatorProgress = checkInitiatorProgress()
+//            var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+//
+//            if sender.tag == 0 {
+//                //Edit starting point
+//                if assistantMode == "disabled" {
+//                    let alertController = UIAlertController(title: "Change your starting point?", message: "", preferredStyle: .alert)
 //                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
 //                    }
 //                    let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-//                        SavedPreferencesForTrip["assistantMode"] = "dates" as NSString
-//                        //                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+//                        SavedPreferencesForTrip["assistantMode"] = "startingPoint" as NSString
+//                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
 //                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
 //                        
-//                        self.spawnDatesPickedOutCalendarView()
+//                        self.spawnWhereTravellingFromQuestionView()
 //                        
 //                        self.isAssistantEnabled = true
 //                        self.handleTwicketSegmentedControl()
@@ -8713,121 +8835,69 @@ extension TripViewController {
 //                    alertController.addAction(okAction)
 //                    self.present(alertController, animated: true, completion: nil)
 //                    
+//                    
+//                } else if assistantMode == "startingPoint" {
+//                    showFinishPlanningTripAlert(title: "Let's finish updating your starting point!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
 //                }
-//            } else if assistantMode == "dates" {
-//                showFinishPlanningTripAlert(title: "Dates", message: "Let's finish updating your dates!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//            
+//            } else if sender.tag == destinationsForTrip.count + 1 {
+//                //Edit final destination
+//                if assistantMode == "disabled" {
+//                    let alertController = UIAlertController(title: "Change your ending point?", message: "", preferredStyle: .alert)
+//                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+//                    }
+//                    let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+//                        SavedPreferencesForTrip["assistantMode"] = "endingPoint" as NSString
+//                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+//                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//                        
+//                        self.spawnWhereTravellingFromQuestionView()
+//                        
+//                        self.isAssistantEnabled = true
+//                        self.handleTwicketSegmentedControl()
+//                        self.segmentedControl?.move(to: 0)
+//                        self.assistant()
+//                    }
+//                    alertController.addAction(cancelAction)
+//                    alertController.addAction(okAction)
+//                    self.present(alertController, animated: true, completion: nil)
+//                    
+//                    
+//                } else if assistantMode == "endingPoint" {
+//                    showFinishPlanningTripAlert(title: "Let's finish updating your ending point!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//                }
+//                
+//            } else {
+//                //Edit destination
+//                if assistantMode == "disabled" {
+//                    let alertController = UIAlertController(title: "Change your destination?", message: "", preferredStyle: .alert)
+//                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+//                    }
+//                    let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+//                        SavedPreferencesForTrip["assistantMode"] = "destination" as NSString
+//                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+//                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//                        
+//                        self.spawnYesCityDecidedQuestionView()
+//                        
+//                        self.isAssistantEnabled = true
+//                        self.handleTwicketSegmentedControl()
+//                        self.segmentedControl?.move(to: 0)
+//                        self.assistant()
+//                    }
+//                    alertController.addAction(cancelAction)
+//                    alertController.addAction(okAction)
+//                    self.present(alertController, animated: true, completion: nil)
+//                    
+//                    //                }
+//                } else if assistantMode == "destination" {
+//                    showFinishPlanningTripAlert(title: "Let's finish updating your destination!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
+//                }
 //            }
+//        } else if !editItineraryModeEnabled {
+//            //PLANNED: Show map
 //        }
-    }
-    func destinationButtonTouchedUpInside(sender:UIButton) {
-        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        let assistantMode = SavedPreferencesForTrip["assistantMode"] as! String
-        //        let bounds = UIScreen.main.bounds
-//        
-//        //Go back to assistant where user left off if still building itinerary
-        if isAssistantEnabled == true && assistantMode == "initialItineraryBuilding" {
-            showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        } else if assistantMode == "placeToStay" {
-            showFinishPlanningTripAlert(title: "Let's finish changing your place to stay!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        } else if assistantMode == "travel" {
-            showFinishPlanningTripAlert(title: "Let's finish changing your travel first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        } else if assistantMode == "dates" {
-            showFinishPlanningTripAlert(title: "Let's finish updating your dates first!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-            return
-        }
-        
-        if editItineraryModeEnabled {
-//            //            let initiatorProgress = checkInitiatorProgress()
-            var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-
-            if sender.tag == 0 {
-                //Edit starting point
-                if assistantMode == "disabled" {
-                    let alertController = UIAlertController(title: "Change your starting point?", message: "", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                    }
-                    let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                        SavedPreferencesForTrip["assistantMode"] = "startingPoint" as NSString
-                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                        
-                        self.spawnWhereTravellingFromQuestionView()
-                        
-                        self.isAssistantEnabled = true
-                        self.handleTwicketSegmentedControl()
-                        self.segmentedControl?.move(to: 0)
-                        self.assistant()
-                    }
-                    alertController.addAction(cancelAction)
-                    alertController.addAction(okAction)
-                    self.present(alertController, animated: true, completion: nil)
-                    
-                    
-                } else if assistantMode == "startingPoint" {
-                    showFinishPlanningTripAlert(title: "Let's finish updating your starting point!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-                }
-            
-            } else if sender.tag == destinationsForTrip.count + 1 {
-                //Edit final destination
-                if assistantMode == "disabled" {
-                    let alertController = UIAlertController(title: "Change your ending point?", message: "", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                    }
-                    let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                        SavedPreferencesForTrip["assistantMode"] = "endingPoint" as NSString
-                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                        
-                        self.spawnWhereTravellingFromQuestionView()
-                        
-                        self.isAssistantEnabled = true
-                        self.handleTwicketSegmentedControl()
-                        self.segmentedControl?.move(to: 0)
-                        self.assistant()
-                    }
-                    alertController.addAction(cancelAction)
-                    alertController.addAction(okAction)
-                    self.present(alertController, animated: true, completion: nil)
-                    
-                    
-                } else if assistantMode == "endingPoint" {
-                    showFinishPlanningTripAlert(title: "Let's finish updating your ending point!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-                }
-                
-            } else {
-                //Edit destination
-                if assistantMode == "disabled" {
-                    let alertController = UIAlertController(title: "Change your destination?", message: "", preferredStyle: .alert)
-                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                    }
-                    let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                        SavedPreferencesForTrip["assistantMode"] = "destination" as NSString
-                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                        
-                        self.spawnYesCityDecidedQuestionView()
-                        
-                        self.isAssistantEnabled = true
-                        self.handleTwicketSegmentedControl()
-                        self.segmentedControl?.move(to: 0)
-                        self.assistant()
-                    }
-                    alertController.addAction(cancelAction)
-                    alertController.addAction(okAction)
-                    self.present(alertController, animated: true, completion: nil)
-                    
-                    //                }
-                } else if assistantMode == "destination" {
-                    showFinishPlanningTripAlert(title: "Let's finish updating your destination!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-                }
-            }
-        } else if !editItineraryModeEnabled {
-            //PLANNED: Show map
-        }
-    
+//    
     }
     func setupDetailedInformationView(size: CGSize, withTextView: Bool, withDoneButton: Bool) {
         let bounds = UIScreen.main.bounds

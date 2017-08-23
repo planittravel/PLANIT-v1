@@ -61,6 +61,8 @@ class DoYouKnowWhereYouWillBeStayingQuestionView: UIView {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        
+        questionLabel?.text = "Do you know where you'll be staying?"
         if indexOfDestinationBeingPlanned < destinationsForTrip.count {
             questionLabel?.text = "Do you know where you'll be staying in \(destinationsForTrip[indexOfDestinationBeingPlanned])?"
         }

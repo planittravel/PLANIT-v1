@@ -965,9 +965,6 @@
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lO4-vI-lbw">
                                         <rect key="frame" x="217" y="127" width="51" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <connections>
-                                            <action selector="editSwitchValueChanged:" destination="QaX-H5-Z3p" eventType="valueChanged" id="ic3-3z-ebI"/>
-                                        </connections>
                                     </switch>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit itinerary" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mzu-lJ-IMg">
                                         <rect key="frame" x="110" y="132" width="100" height="21"/>
@@ -1052,8 +1049,6 @@
                         <outlet property="datePickingSubviewDoneButton" destination="l8q-yz-42V" id="os9-ls-1Md"/>
                         <outlet property="destinationsDatesCollectionView" destination="DwN-9V-djF" id="0x1-bN-As8"/>
                         <outlet property="detailedInformationSubview" destination="lCk-vD-rWU" id="ObK-hg-ROM"/>
-                        <outlet property="editSwitch" destination="lO4-vI-lbw" id="TnB-qW-llZ"/>
-                        <outlet property="editSwitchLabel" destination="mzu-lJ-IMg" id="NHF-gU-lW4"/>
                         <outlet property="filterButton" destination="Pg3-ud-ZeT" id="qZe-Lz-DOr"/>
                         <outlet property="flightFavoriteTutorialView" destination="ruM-le-4Hn" id="U3B-8y-lU1"/>
                         <outlet property="focusBackgroundViewWithinItineraryView" destination="Q0t-x5-ggY" id="Sw3-wE-E8I"/>
