@@ -210,7 +210,7 @@ extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerD
         //Travelpayouts airport search
         geoLoader = AviasalesAirportsGeoSearchPerformer(delegate: self)
         if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" || SavedPreferencesForTrip["assistantMode"] as! String == "startingPoint" {
-            var startingPointDict = SavedPreferencesForTrip["startingPointDict"] as! [String:Any]
+            var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
             startingPointDict["latitude"] = place.coordinate.latitude as NSNumber
             startingPointDict["longitude"] = place.coordinate.longitude as NSNumber
             DataContainerSingleton.sharedDataContainer.startingPointDict = startingPointDict as NSDictionary
@@ -264,9 +264,9 @@ extension WhereTravellingFromQuestionView: AviasalesAirportsGeoSearchPerformerDe
         if let airport = location as? JRSDKAirport {
             let airportAsData = NSKeyedArchiver.archivedData(withRootObject: airport)
             if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" || SavedPreferencesForTrip["assistantMode"] as! String == "startingPoint" {
-                var startingPointDict = SavedPreferencesForTrip["startingPointDict"] as! [String:Any]
+                var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
                 startingPointDict["JRSDKAirport"] = airportAsData
-                DataContainerSingleton.sharedDataContainer.startingPointDict = startingPointDict  as NSDictionary
+                DataContainerSingleton.sharedDataContainer.startingPointDict = startingPointDict as NSDictionary
             } else if SavedPreferencesForTrip["assistantMode"] as! String == "endingPoint" {
                 var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
                 endingPointDict["JRSDKAirport"] = airportAsData
@@ -274,7 +274,7 @@ extension WhereTravellingFromQuestionView: AviasalesAirportsGeoSearchPerformerDe
             }
         } else {
             if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" || SavedPreferencesForTrip["assistantMode"] as! String == "startingPoint" {
-                var startingPointDict = SavedPreferencesForTrip["startingPointDict"] as! [String:Any]
+                var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
                 startingPointDict["JRSDKAirport"] = "noAirportFound"
                 SavedPreferencesForTrip["startingPointDict"] = startingPointDict
             } else if SavedPreferencesForTrip["assistantMode"] as! String == "endingPoint" {

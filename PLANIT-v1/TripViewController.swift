@@ -8742,10 +8742,11 @@ extension TripViewController {
     
     
     // For Google Map view
-    func showLocationOnMap(latitude:Double, longitude:Double, frame: CGRect) {
+    func showLocationOnMap(latitude: Double, longitude: Double, frame: CGRect) {
         
         let camera = GMSCameraPosition.camera(withLatitude: latitude, longitude: longitude, zoom: 12.0)
         self.googleMaps = GMSMapView.map(withFrame: frame, camera: camera)
+        self.googleMaps.layer.cornerRadius = 5
         // Creates a marker in the center of the map.
         let marker = GMSMarker()
         marker.position = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -8793,13 +8794,13 @@ extension TripViewController {
             if sender.tag == 0 && DataContainerSingleton.sharedDataContainer.homeAirport != nil {
                 detailedInformationSubviewMode = "startingPointMap"
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:false,withDoneButton:true)
+                setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true)
                 self.view.addSubview(detailedInformationSubview)
                 
-                var startingPointMap = SavedPreferencesForTrip["startingPointMap"] as! [String:Any]
-                let latitude = startingPointMap["latitude"] as! Double
-                let longitude = startingPointMap["longitude"] as! Double
-                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 10,y: 75, width: 230, height: 200))
+                var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
+                let latitude = startingPointDict["latitude"] as! Double
+                let longitude = startingPointDict["longitude"] as! Double
+                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
                 
                 //PLANNED LINK BUTTON TO EDIT
                 //                //Edit starting point
@@ -8829,19 +8830,19 @@ extension TripViewController {
             } else if sender.tag == destinationsForTrip.count + 1 && (DataContainerSingleton.sharedDataContainer.homeAirport != nil || SavedPreferencesForTrip["endingPoint"] as! String != "") {
                 detailedInformationSubviewMode = "endingPointMap"
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:false,withDoneButton:true)
+                setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true)
                 self.view.addSubview(detailedInformationSubview)
                 
                 var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
                 if let latitude = endingPointDict["latitude"] as? Double {
                     if let longitude = endingPointDict["longitude"] as? Double {
-                        self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 10,y: 75, width: 230, height: 200))
+                        self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
                     }
                 } else {
-                    var startingPointMap = SavedPreferencesForTrip["startingPointMap"] as! [String:Any]
-                    let latitude = startingPointMap["latitude"] as! Double
-                    let longitude = startingPointMap["longitude"] as! Double
-                    self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 10,y: 75, width: 230, height: 200))
+                    var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
+                    let latitude = startingPointDict["latitude"] as! Double
+                    let longitude = startingPointDict["longitude"] as! Double
+                    self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
                 }
                 
                 
@@ -8874,13 +8875,13 @@ extension TripViewController {
                 self.detailedInformationSubviewMode = "destinationMap"
                 // Show text "I'll already be there"
                 self.animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                self.setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:false,withDoneButton:true)
+                self.setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true)
                 self.view.addSubview(self.detailedInformationSubview)
                 
                 var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
                 let latitude = destinationsForTripDictArray[sender.tag - 1]["latitude"] as! Double
                 let longitude = destinationsForTripDictArray[sender.tag - 1]["longitude"] as! Double
-                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 10,y: 75, width: 230, height: 200))
+                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
                 
                 
                 //                //PLANNED: LINK TO BUTTON Edit destination
@@ -8918,13 +8919,13 @@ extension TripViewController {
             if sender.tag == 0 {
                 detailedInformationSubviewMode = "startingPointMap"
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:false,withDoneButton:true)
+                setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true)
                 self.view.addSubview(detailedInformationSubview)
                 
-                var startingPointMap = SavedPreferencesForTrip["startingPointMap"] as! [String:Any]
-                let latitude = startingPointMap["latitude"] as! Double
-                let longitude = startingPointMap["longitude"] as! Double
-                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 10,y: 75, width: 230, height: 200))
+                var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
+                let latitude = startingPointDict["latitude"] as! Double
+                let longitude = startingPointDict["longitude"] as! Double
+                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
 
                 //PLANNED LINK BUTTON TO EDIT
 //                //Edit starting point
@@ -8954,19 +8955,19 @@ extension TripViewController {
             } else if sender.tag == destinationsForTrip.count + 1 {
                 detailedInformationSubviewMode = "endingPointMap"
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:false,withDoneButton:true)
+                setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true)
                 self.view.addSubview(detailedInformationSubview)
                 
                 var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
                 if let latitude = endingPointDict["latitude"] as? Double {
                     if let longitude = endingPointDict["longitude"] as? Double {
-                        self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 10,y: 75, width: 230, height: 200))
+                        self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
                     }
                 } else {
-                    var startingPointMap = SavedPreferencesForTrip["startingPointMap"] as! [String:Any]
-                    let latitude = startingPointMap["latitude"] as! Double
-                    let longitude = startingPointMap["longitude"] as! Double
-                    self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 10,y: 75, width: 230, height: 200))
+                    var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
+                    let latitude = startingPointDict["latitude"] as! Double
+                    let longitude = startingPointDict["longitude"] as! Double
+                    self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
                 }
 
                 
@@ -8999,13 +9000,13 @@ extension TripViewController {
                 detailedInformationSubviewMode = "destinationMap"
                 // Show text "I'll already be there"
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:false,withDoneButton:true)
+                setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true)
                 self.view.addSubview(detailedInformationSubview)
                 
                 var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
                 let latitude = destinationsForTripDictArray[sender.tag - 1]["latitude"] as! Double
                 let longitude = destinationsForTripDictArray[sender.tag - 1]["longitude"] as! Double
-                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 10,y: 75, width: 230, height: 200))
+                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
 
                 
 //                //PLANNED: LINK TO BUTTON Edit destination
