@@ -12,6 +12,7 @@
 		DA9E5E61C45567EBD9D84335 /* Pods_PLANIT_v1UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B22AB208594BAF160B71C5E /* Pods_PLANIT_v1UITests.framework */; };
 		FA09A3EE1EB23694007F64A3 /* ToDoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA09A3EC1EB23694007F64A3 /* ToDoCardView.swift */; };
 		FA09A3F11EB23894007F64A3 /* CardContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA09A3EF1EB23893007F64A3 /* CardContentView.xib */; };
+		FA0B88FD1F4D14EA0077186C /* TravelProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B88FC1F4D14EA0077186C /* TravelProgress.swift */; };
 		FA14B2241EFAE5F9004E0E29 /* savingToSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA14B2231EFAE5F9004E0E29 /* savingToSingleton.swift */; };
 		FA14B2261EFB1073004E0E29 /* YesCityDecidedQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA14B2251EFB1073004E0E29 /* YesCityDecidedQuestionView.swift */; };
 		FA14B2281EFB107C004E0E29 /* YesCityDecidedQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA14B2271EFB107C004E0E29 /* YesCityDecidedQuestionView.xib */; };
@@ -905,6 +906,7 @@
 		EBCE1EACDC4A4AAD6C8C546C /* Pods-PLANIT-v1UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PLANIT-v1UITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PLANIT-v1UITests/Pods-PLANIT-v1UITests.debug.xcconfig"; sourceTree = "<group>"; };
 		FA09A3EC1EB23694007F64A3 /* ToDoCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDoCardView.swift; sourceTree = "<group>"; };
 		FA09A3EF1EB23893007F64A3 /* CardContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardContentView.xib; sourceTree = "<group>"; };
+		FA0B88FC1F4D14EA0077186C /* TravelProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TravelProgress.swift; sourceTree = "<group>"; };
 		FA14B2231EFAE5F9004E0E29 /* savingToSingleton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = savingToSingleton.swift; sourceTree = "<group>"; };
 		FA14B2251EFB1073004E0E29 /* YesCityDecidedQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YesCityDecidedQuestionView.swift; sourceTree = "<group>"; };
 		FA14B2271EFB107C004E0E29 /* YesCityDecidedQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YesCityDecidedQuestionView.xib; sourceTree = "<group>"; };
@@ -4705,6 +4707,7 @@
 				FAB085921F435C54005C2938 /* badgeButtonType.swift */,
 				FAE779631F4C849F002D2FAC /* InitiatorProgress.swift */,
 				FAE779671F4C9212002D2FAC /* PlaceToStayProgress.swift */,
+				FA0B88FC1F4D14EA0077186C /* TravelProgress.swift */,
 			);
 			name = Enums;
 			sourceTree = "<group>";
@@ -5526,6 +5529,7 @@
 				FA2531321F1D3B6D002BCE29 /* UIViewCell+ReuseIdentifier.m in Sources */,
 				FA2531DA1F1D3B6D002BCE29 /* FilterMultiAmenitiesItem.swift in Sources */,
 				FAC1BD311EAE7707008AB7C4 /* ZLSwipeableView.swift in Sources */,
+				FA0B88FD1F4D14EA0077186C /* TravelProgress.swift in Sources */,
 				FA2532D21F1D3B6E002BCE29 /* HLIpadSearchVC.m in Sources */,
 				FA2532931F1D3B6E002BCE29 /* HLMapView.m in Sources */,
 				FA2532271F1D3B6D002BCE29 /* HLHotelDetailsPriceCTACell.swift in Sources */,
