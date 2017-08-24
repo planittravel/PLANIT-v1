@@ -6174,7 +6174,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     
                     //set badge
                     if travelDictionaryArray[indexOfRoundtripTravel]["modeOfTransportation"] as! String == "fly" {
-                        if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexOfRoundtripTravel]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexOfRoundtripTravel]["flightNotFromPlanitDict"] != nil {
+                        if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexOfRoundtripTravel]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexOfRoundtripTravel]["flightNotFromPlanit"] != nil {
                             destinationsDatesCell.travelButton_badge.badgeString = "✓"
                             destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
                         } else {
@@ -6204,7 +6204,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                     
                     //set badge
                     if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "fly" {
-                        if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightNotFromPlanitDict"] != nil {
+                        if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightNotFromPlanit"] != nil {
                             destinationsDatesCell.travelButton_badge.badgeString = "✓"
                             destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
                         } else {
@@ -6284,7 +6284,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
             } else {
                 if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "fly" {
-                    if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightNotFromPlanitDict"] != nil {
+                    if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[indexPath.row - 1]["flightNotFromPlanit"] != nil {
                         destinationsDatesCell.travelButton_badge.badgeString = "✓"
                         destinationsDatesCell.travelButton_badge.badgeBackgroundColor = UIColor(red: 0, green: 149/255, blue: 0, alpha: 1)
                     } else {
@@ -8354,8 +8354,7 @@ extension TripViewController {
                     return TravelProgress.typeChosenFlyAndPlanitFlightBooked
                 } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightsSavedOnPlanit"] != nil {
                     return TravelProgress.typeChosenFlyAndPlanitFlightFavorited
-                } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightNotFromPlanitDict"] != nil {
-                    //PLANNED: ADD DETAILED INFORMATION VIEW WITH SPACES FOR FLIGHTS BOUGHT ALREADY
+                } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightNotFromPlanit"] as! Bool == true {
                     return TravelProgress.typeChosenFlyAndDetailsProvided
                 } else {
                     return TravelProgress.onlyTypeChosenFly
@@ -8372,7 +8371,7 @@ extension TripViewController {
                 if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["rentalCar"] != nil {
                     //PLANNED: FETCH DETAILS FROM PRICELINE
                     return TravelProgress.typeChosenDriveRentalCar
-                } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["personalCar"] != nil {
+                } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["personalCar"] as! Bool == true {
                     return TravelProgress.typeChosenDriveAlreadyHaveCar
                 } else {
                     return TravelProgress.onlyTypeChosenDrive
@@ -8461,7 +8460,7 @@ extension TripViewController {
                         if travelDictionaryArray[i]["isRoundtrip"] as? Bool != nil {
                             if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
                                 if travelDictionaryArray[i]["modeOfTransportation"] as! String == "fly" {
-                                    if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightNotFromPlanitDict"] != nil {
+                                    if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightNotFromPlanit"] != nil {
                                         
                                         isRoundtripTravelPlanned = true
                                         indexOfRoundtripTravel = i
@@ -8571,7 +8570,7 @@ extension TripViewController {
                 //Show text entered
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                 setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true, withEditButtonText: "Change travel", withEditButtonTag: sender.tag - 1)
-                var textViewText = "Arriving on \(travelDictionaryArray[index]["departureFlightNumber"]) on \(travelDictionaryArray[index]["departureDate"]) returning on \(travelDictionaryArray[index]["returnFlightNumber"]) on \(travelDictionaryArray[index]["returnDate"])"
+                var textViewText = "Arriving on \((travelDictionaryArray[index]["departureFlightNumber"])!) on \((travelDictionaryArray[index]["departureDate"])!) returning on \((travelDictionaryArray[index]["returnFlightNumber"])!) on \((travelDictionaryArray[index]["returnDate"])!)"
                 textView?.text = textViewText
                 var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
                 topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
@@ -8670,9 +8669,9 @@ extension TripViewController {
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                 setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:false,withDoneButton:true, withEditButtonText: "Change travel", withEditButtonTag: sender.tag - 1)
                 if let chosenTimeStartDriving = travelDictionaryArray[index]["timeStartDriving"] as? String {
-                    textView?.text = "Driving from \(DataContainerSingleton.sharedDataContainer.homeAirport) and planning to leave at\(chosenTimeStartDriving)."
+                    textView?.text = "Driving from \((DataContainerSingleton.sharedDataContainer.homeAirport)!) and planning to leave at\(chosenTimeStartDriving)."
                 } else {
-                    textView?.text = "Driving from \(DataContainerSingleton.sharedDataContainer.homeAirport)."
+                    textView?.text = "Driving from \((DataContainerSingleton.sharedDataContainer.homeAirport)!)."
                 }
                 var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
                 topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)

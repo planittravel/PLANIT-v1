@@ -130,7 +130,11 @@ class AboutWhatTimeWillYouStartDrivingQuestionView: UIView {
         let timeChosen = formatter.string(from: timePicker.date)
         travelDictionaryArray[indexOfDestinationBeingPlanned]["timeStartDriving"] = timeChosen
         
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["personalCar"] = true
         
+        SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
+        
+        saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
     }
 
 }
