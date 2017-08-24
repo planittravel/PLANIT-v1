@@ -12,6 +12,7 @@ import Cartography
 class CenterViewController: UIViewController {
     
     var tripViewController: TripViewController?
+    var rowOfLastTripOpen: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()

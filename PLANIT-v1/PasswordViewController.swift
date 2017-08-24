@@ -11,11 +11,19 @@ import Apollo
 import Firebase
 import PasswordTextField
 import DrawerController
+import Firebase
 
 class PasswordViewController: UIViewController, UITextFieldDelegate {
 
     // *** Add code to update whether existingUser = true
     var existingUser = false
+    
+    //FIREBASEDISABLED
+    //Firebase channels
+    private var channelRefHandle: DatabaseHandle?
+    private var channels: [Channel] = []
+    private lazy var channelRef: DatabaseReference = Database.database().reference().child("channels")
+
 
     // MARK: Outlets
     @IBOutlet weak var Password: PasswordTextField!
@@ -52,6 +60,8 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.observeChannels()
         
         // MARK: Register notifications
         //Drawer
@@ -225,16 +235,77 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         
         self.Password.isHidden = true
         if self.createPasswordLabel.isHidden == true {
-            self.enterPasswordLabel.text = "Login successful"
+            self.enterPasswordLabel.text = "Login successful!"
         } else {
             self.createPasswordLabel.text = "Sign up successful!"
         }
         
-        let when = DispatchTime.now() + 0.7
-        DispatchQueue.main.asyncAfter(deadline: when) {
-            
-            var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
+        if (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! == 0 || DataContainerSingleton.sharedDataContainer.currenttrip! > ((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
+            let when = DispatchTime.now() + 0.7
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
+            }
+        } else {
+            let when = DispatchTime.now() + 0.7
+            DispatchQueue.main.asyncAfter(deadline: when) {
+                
+                var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+                //            appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
+                
+                
+                
+                
+                
+                //            let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
+                //            var leftViewController = self.storyboard?.instantiateViewController(withIdentifier: "LeftViewController") as! LeftViewController
+                //            let currentTrip
+                //            for row in 0 ... leftViewController.menuTableView.numberOfRows(inSection: 1) - 1 {
+                //                let cell = leftViewController.menuTableView.cellForRow(at: IndexPath(row: row, section: 1)) as! ExistingTripTableViewCell
+                //                if cell.existingTripTableViewLabel.text == tripNameValue {
+                //                    cell.backgroundColor = UIColor.gray
+                //                }
+                //            }
+                //
+                //
+                //
+                //
+                //
+                //
+                //            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
+                //            let searchForTitle = cell.existingTripTableViewLabel.text
+                
+                //FIREBASEDISABLED
+                let channel = self.channels[DataContainerSingleton.sharedDataContainer.currenttrip!]
+                self.channelRef = self.channelRef.child(channel.id)
+                
+                //            let startingCurrentTrip = DataContainerSingleton.sharedDataContainer.currenttrip
+                //            for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
+                //                if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
+                //                    DataContainerSingleton.sharedDataContainer.currenttrip = trip
+                //                }
+                //            }
+                
+                //            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: TripViewController.self)) && startingCurrentTrip == DataContainerSingleton.sharedDataContainer.currenttrip {
+                //                appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
+                //                return
+                //            }
+                //
+                
+                //FIREBASEDISABLED
+                //            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
+                var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
+                
+                centerViewController.NewOrAddedTripFromSegue = 0
+                //FIREBASEDISABLED
+                centerViewController.newChannelRef = self.channelRef
+                centerViewController.isTripSpawnedFromBucketList = 0
+                
+                var centerNavController = UINavigationController(rootViewController: centerViewController)
+                centerViewController.navigationController?.isNavigationBarHidden = true
+                appDelegate.centerContainer!.centerViewController = centerNavController
+                centerViewController.chat()
+            }
         }
 
         
@@ -272,4 +343,19 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         
         return true
     }
+    
+    private func observeChannels() {
+        // We can use the observe method to listen for new
+        // channels being written to the Firebase DB
+        channelRefHandle = channelRef.observe(.childAdded, with: { (snapshot) -> Void in
+            let channelData = snapshot.value as! Dictionary<String, AnyObject>
+            let id = snapshot.key
+            if let name = channelData["name"] as! String!, name.characters.count > 0 {
+                self.channels.append(Channel(id: id, name: name))
+            } else {
+                print("Error! Could not decode channel data")
+            }
+        })
+    }
+
 }
