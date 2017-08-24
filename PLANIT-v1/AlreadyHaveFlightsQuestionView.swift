@@ -156,6 +156,17 @@ class AlreadyHaveFlightsQuestionView: UIView, UITextFieldDelegate {
         alreadyHaveFlightsDepartureDate?.resignFirstResponder()
         alreadyHaveFlightsDepartureFlightNumber?.resignFirstResponder()
         
+        
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
+        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["departureDate"] = alreadyHaveFlightsDepartureDate?.text
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["departureFlightNumber"] = alreadyHaveFlightsDepartureFlightNumber?.text
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["returnDate"] = alreadyHaveFlightsReturnDate?.text
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["returnFlightNumber"] = alreadyHaveFlightsReturnFlightNumber?.text
+        
         return true
     }
     
