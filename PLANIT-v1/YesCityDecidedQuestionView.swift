@@ -16,6 +16,8 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
     var questionLabel: UILabel?
     var button: UIButton?
     var button1: UIButton?
+    var button2: UIButton?
+
     //GOOGLE PLACES SEARCH
     var resultsViewController: GMSAutocompleteResultsViewController?
     var searchController: UISearchController?
@@ -53,17 +55,25 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         button?.frame.size.height = 30
         button?.frame.size.width += 20
         button?.frame.origin.x = (bounds.size.width - (button?.frame.width)!) / 2
-        button?.frame.origin.y = 230
+        button?.frame.origin.y = 220
         button?.layer.cornerRadius = (button?.frame.height)! / 2
         
         button1?.sizeToFit()
         button1?.frame.size.height = 30
         button1?.frame.size.width += 20
         button1?.frame.origin.x = (bounds.size.width - (button1?.frame.width)!) / 2
-        button1?.frame.origin.y = 170
+        button1?.frame.origin.y = 270
         button1?.layer.cornerRadius = (button1?.frame.height)! / 2
         button1?.isHidden = true
 
+        button2?.sizeToFit()
+        button2?.frame.size.height = 60
+        button2?.frame.size.width += 20
+        button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
+        button2?.frame.origin.y = 170
+        button2?.layer.cornerRadius = (button2?.frame.height)! / 2
+
+        
         loadDestination()
     }
     
@@ -75,10 +85,12 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         if destinationsForTrip.count > indexOfDestinationBeingPlanned {
             searchController?.searchBar.text = destinationsForTrip[indexOfDestinationBeingPlanned]
             button1?.isHidden = false
-            button?.frame.origin.y = 270
+            button?.frame.origin.y = 220
+            button2?.frame.origin.y = 270
         } else {
             button1?.isHidden = true
             button?.frame.origin.y = 170
+            button2?.frame.origin.y = 220
         }
     }
     
@@ -164,6 +176,23 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         button1?.translatesAutoresizingMaskIntoConstraints = false
         button1?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button1!)
+        
+        
+        //Button2
+        button2 = UIButton(type: .custom)
+        button2?.frame = CGRect.zero
+        button2?.setTitleColor(UIColor.white, for: .normal)
+        button2?.setBackgroundColor(color: UIColor.clear, forState: .normal)
+        button2?.layer.borderWidth = 1
+        button2?.layer.borderColor = UIColor.white.cgColor
+        button2?.layer.masksToBounds = true
+        button2?.titleLabel?.textAlignment = .center
+        button2?.titleLabel?.numberOfLines = 0
+        button2?.setTitle("I'll be there\n(this is a trip to visit me!)", for: .normal)
+        button2?.translatesAutoresizingMaskIntoConstraints = false
+        button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
+        self.addSubview(button2!)
+
     }
     
     func buttonClicked(sender:UIButton) {

@@ -712,6 +712,7 @@
 		FA48878E1F02C6320015F078 /* contactsTableViewCellForScrolling.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA48878D1F02C6320015F078 /* contactsTableViewCellForScrolling.swift */; };
 		FA4887901F033DCB0015F078 /* hideKeyboardWhenTappedAround.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA48878F1F033DCB0015F078 /* hideKeyboardWhenTappedAround.swift */; };
 		FA4887921F033F070015F078 /* destinationsDatesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4887911F033F070015F078 /* destinationsDatesCollectionViewCell.swift */; };
+		FA49FD281F4E4E770099A0E4 /* DetailedInformationSubviewMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA49FD271F4E4E770099A0E4 /* DetailedInformationSubviewMode.swift */; };
 		FA4CD9C41F45FDF9002CDE59 /* CenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CD9C31F45FDF9002CDE59 /* CenterViewController.swift */; };
 		FA4CD9C81F45FE29002CDE59 /* LeftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CD9C71F45FE29002CDE59 /* LeftViewController.swift */; };
 		FA4CD9CA1F45FE47002CDE59 /* RightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4CD9C91F45FE47002CDE59 /* RightViewController.swift */; };
@@ -1820,6 +1821,7 @@
 		FA48878D1F02C6320015F078 /* contactsTableViewCellForScrolling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = contactsTableViewCellForScrolling.swift; sourceTree = "<group>"; };
 		FA48878F1F033DCB0015F078 /* hideKeyboardWhenTappedAround.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hideKeyboardWhenTappedAround.swift; sourceTree = "<group>"; };
 		FA4887911F033F070015F078 /* destinationsDatesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = destinationsDatesCollectionViewCell.swift; sourceTree = "<group>"; };
+		FA49FD271F4E4E770099A0E4 /* DetailedInformationSubviewMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailedInformationSubviewMode.swift; sourceTree = "<group>"; };
 		FA4CD9C31F45FDF9002CDE59 /* CenterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenterViewController.swift; sourceTree = "<group>"; };
 		FA4CD9C71F45FE29002CDE59 /* LeftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftViewController.swift; sourceTree = "<group>"; };
 		FA4CD9C91F45FE47002CDE59 /* RightViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RightViewController.swift; sourceTree = "<group>"; };
@@ -4708,6 +4710,7 @@
 				FAE779631F4C849F002D2FAC /* InitiatorProgress.swift */,
 				FAE779671F4C9212002D2FAC /* PlaceToStayProgress.swift */,
 				FA0B88FC1F4D14EA0077186C /* TravelProgress.swift */,
+				FA49FD271F4E4E770099A0E4 /* DetailedInformationSubviewMode.swift */,
 			);
 			name = Enums;
 			sourceTree = "<group>";
@@ -5419,6 +5422,7 @@
 				FA25324B1F1D3B6D002BCE29 /* HLIpadHotelDetailsVC.swift in Sources */,
 				FA4887921F033F070015F078 /* destinationsDatesCollectionViewCell.swift in Sources */,
 				FA25327F1F1D3B6E002BCE29 /* TableSection.swift in Sources */,
+				FA49FD281F4E4E770099A0E4 /* DetailedInformationSubviewMode.swift in Sources */,
 				FA25322F1F1D3B6D002BCE29 /* HLHotelDetailsRatingSummaryCell.swift in Sources */,
 				FA2530F01F1D3B6D002BCE29 /* ASTPassengersPickerPresenter.swift in Sources */,
 				FA2531A01F1D3B6D002BCE29 /* PagesView.swift in Sources */,

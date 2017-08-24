@@ -65,7 +65,7 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         button4?.frame.size.height = 30
         button4?.frame.size.width += 20
         button4?.frame.origin.x = (bounds.size.width - (button4?.frame.width)!) / 2
-        button4?.frame.origin.y = 315
+        button4?.frame.origin.y = 365
         button4?.layer.cornerRadius = (button4?.frame.height)! / 2
         button4?.isHidden = true
         
@@ -73,7 +73,7 @@ class HowDoYouWantToGetThereQuestionView: UIView {
         button5?.frame.size.height = 30
         button5?.frame.size.width += 20
         button5?.frame.origin.x = (bounds.size.width - (button5?.frame.width)!) / 2
-        button5?.frame.origin.y = 365
+        button5?.frame.origin.y = 315
         button5?.layer.cornerRadius = (button5?.frame.height)! / 2
 
         button6?.sizeToFit()

@@ -210,10 +210,13 @@ extension WhereTravellingFromQuestionView: GMSAutocompleteResultsViewControllerD
         //Travelpayouts airport search
         geoLoader = AviasalesAirportsGeoSearchPerformer(delegate: self)
         if SavedPreferencesForTrip["assistantMode"] as! String == "initialItineraryBuilding" || SavedPreferencesForTrip["assistantMode"] as! String == "startingPoint" {
-            var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
-            startingPointDict["latitude"] = place.coordinate.latitude as NSNumber
-            startingPointDict["longitude"] = place.coordinate.longitude as NSNumber
-            DataContainerSingleton.sharedDataContainer.startingPointDict = startingPointDict as NSDictionary
+            var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as? [String:Any]
+            if startingPointDict == nil {
+                startingPointDict = [String:Any]()
+            }
+            startingPointDict?["latitude"] = place.coordinate.latitude as NSNumber
+            startingPointDict?["longitude"] = place.coordinate.longitude as NSNumber
+            DataContainerSingleton.sharedDataContainer.startingPointDict = startingPointDict as! NSDictionary
             
             geoLoader?.searchAirportsNearLatitude(place.coordinate.latitude, longitude: place.coordinate.longitude)
         } else if SavedPreferencesForTrip["assistantMode"] as! String == "endingPoint"{

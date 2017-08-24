@@ -20,5 +20,6 @@ enum PlaceToStayProgress {
     case typeChosenStayWithSomeoneIKnowAndDetailsProvided
     case typeChosenHotelAndPlanitHotelFavorited
     case typeChosenHotelAndPlanitHotelBooked
+    case typeChosenIllAlreadyBeThere
 }
 

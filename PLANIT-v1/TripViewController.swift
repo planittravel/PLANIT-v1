@@ -132,7 +132,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     var textView: UITextView?
     var incompleteColor = UIColor(red: 250/255, green: 190/255, blue: 190/255, alpha: 1)
     var completeColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
-    var detailedInformationSubviewMode = ""
+    var detailedInformationSubviewMode = DetailedInformationSubviewMode.none
     var isAssistantEnabled = true
     var doneButton: UIButton?
     var itineraryButton2: UIButton?
@@ -252,7 +252,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         self.popupBackgroundFilterView.isHidden = true
         self.addTwicketSegmentedControl()
         self.setupItineraryInfoView()
-        self.addUpButtonPointedUpOneSubview()
         self.backButton?.isHidden = true
 
         hamburgerArrowButton = Icomation(frame: CGRect(x: 15, y: 28, width: 24, height: 24))
@@ -265,6 +264,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         hamburgerArrowButton?.numberOfRotations = 1
         hamburgerArrowButton?.addTarget(self, action: #selector(self.hamburgerArrowButtonTouchedUpInside(sender:)), for: UIControlEvents.touchUpInside)
         
+        self.addUpButtonPointedUpOneSubview()
         
         //import PPN cities csv
         getCarRentalCities()
@@ -357,15 +357,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         //Save
         self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
-        
         scrollView.delegate = self
         scrollView.indicatorStyle = .white
         
-            if DataContainerSingleton.sharedDataContainer.firstName == nil {
-                spawnUserNameQuestionView()
-            } else {
-                spawnInstructionsQuestionView()
-            }
+        if DataContainerSingleton.sharedDataContainer.firstName == nil {
+            spawnUserNameQuestionView()
+        } else {
+            spawnInstructionsQuestionView()
+        }
         
         if NewOrAddedTripFromSegue == 0 {
             addSubviewsBasedOnProgress()
@@ -1483,9 +1482,15 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         }
 
         increaseProgressCircle(byPercent: standardProgressIncrement, onlyIfFirstDestination: false)
+        
+        if (DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! >= 2 {
+            spawnTripNameQuestionView()
+        }
     }
     
     func spawnTripNameQuestionView() {
+        self.backButton?.isHidden = false
+
         if tripNameQuestionView == nil {
             //Load next question
             tripNameQuestionView = Bundle.main.loadNibNamed("TripNameQuestionView", owner: self, options: nil)?.first! as? TripNameQuestionView
@@ -1808,6 +1813,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             
             yesCityDecidedQuestionView?.button?.addTarget(self, action: #selector(self.yesCityDecidedQuestionView_actuallyDiscoverMoreOptions(sender:)), for: UIControlEvents.touchUpInside)
             yesCityDecidedQuestionView?.button1?.addTarget(self, action: #selector(self.destinationDecidedDestinationChosen), for: UIControlEvents.touchUpInside)
+            yesCityDecidedQuestionView?.button2?.addTarget(self, action: #selector(self.yesCityDecidedQuestionView_illAlreadyBeThere(sender:)), for: UIControlEvents.touchUpInside)
 
             let heightConstraint = NSLayoutConstraint(item: yesCityDecidedQuestionView!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: (yesCityDecidedQuestionView?.frame.height)!)
             view.addConstraints([heightConstraint])
@@ -3195,22 +3201,95 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             spawnidkHowToGetThereQuestionView()
         }
     }
+    func yesCityDecidedQuestionView_illAlreadyBeThere(sender:UIButton) {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+        var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
+        let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
+            if destinationsForTrip.count == 1 {
+                travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true])
+            } else if destinationsForTrip.count > 1 {
+                travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":false])
+            }
+            
+            travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true])
+        } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
+//            if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "illAlreadyBeThere" {
+//                if flightSearchQuestionView != nil {
+//                    flightSearchQuestionView?.removeFromSuperview()
+//                    flightSearchQuestionView = nil
+//                    alreadyHaveFlightsQuestionView?.removeFromSuperview()
+//                    alreadyHaveFlightsQuestionView = nil
+//                    if doYouNeedARentalCarQuestionView != nil {
+//                        doYouNeedARentalCarQuestionView?.removeFromSuperview()
+//                        doYouNeedARentalCarQuestionView = nil
+//                        if carRentalSearchQuestionView != nil {
+//                            carRentalSearchQuestionView?.removeFromSuperview()
+//                            carRentalSearchQuestionView = nil
+//                        }
+//                    }
+//                }
+//                if doYouNeedARentalCarQuestionView != nil {
+//                    doYouNeedARentalCarQuestionView?.removeFromSuperview()
+//                    doYouNeedARentalCarQuestionView = nil
+//                    if carRentalSearchQuestionView != nil {
+//                        carRentalSearchQuestionView?.removeFromSuperview()
+//                        carRentalSearchQuestionView = nil
+//                    }
+//                    if aboutWhatTimeWillYouStartDrivingQuestionView != nil {
+//                        aboutWhatTimeWillYouStartDrivingQuestionView?.removeFromSuperview()
+//                        aboutWhatTimeWillYouStartDrivingQuestionView = nil
+//                    }
+//                }
+//                if busTrainOtherQuestionView != nil {
+//                    busTrainOtherQuestionView?.removeFromSuperview()
+//                    busTrainOtherQuestionView = nil
+//                }
+//                if idkHowToGetThereQuestionView != nil {
+//                    idkHowToGetThereQuestionView?.removeFromSuperview()
+//                    idkHowToGetThereQuestionView = nil
+//                }
+//            }
+            if destinationsForTrip.count == 1 {
+                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true]
+            } else if destinationsForTrip.count > 1 {
+                travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":false]
+            }
+        }
+
+        
+        if indexOfDestinationBeingPlanned >= placeToStayDictionaryArray.count {
+            placeToStayDictionaryArray.append(["typeOfPlaceToStay":"hotel"])
+        } else if indexOfDestinationBeingPlanned < placeToStayDictionaryArray.count {
+            placeToStayDictionaryArray[indexOfDestinationBeingPlanned] = ["typeOfPlaceToStay":"illAlreadyBeThere"]
+        }
+        
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["illAlreadyBeThereText"] = "I'll already be there."
+        placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["illAlreadyBeThereText"] = "I'll already be there."
+        
+        SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
+        SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
+        saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+    }
+    
     func howDoYouWantToGetThereQuestionView_illAlreadyBeThere(sender:UIButton) {
         if sender.isSelected == true {
-            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-            var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
-            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-            let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
-            if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
-                if destinationsForTrip.count == 1 {
-                    travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true])
-                } else if destinationsForTrip.count > 1 {
-                    travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":false])
-                }
-
-                travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true])
-            } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
-                if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "illAlreadyBeThere" {
+//            let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+//            var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
+//            let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
+//            let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+//            if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
+//                if destinationsForTrip.count == 1 {
+//                    travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true])
+//                } else if destinationsForTrip.count > 1 {
+//                    travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":false])
+//                }
+//
+//                travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true])
+//            } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
+//                if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "illAlreadyBeThere" {
                     if flightSearchQuestionView != nil {
                         flightSearchQuestionView?.removeFromSuperview()
                         flightSearchQuestionView = nil
@@ -3245,18 +3324,18 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                         idkHowToGetThereQuestionView?.removeFromSuperview()
                         idkHowToGetThereQuestionView = nil
                     }
-                }
-                if destinationsForTrip.count == 1 {
-                    travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true]
-                } else if destinationsForTrip.count > 1 {
-                    travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":false]
-                }
-            }
-            
-            travelDictionaryArray[indexOfDestinationBeingPlanned]["illAlreadyBeThereText"] = "I'll already be there."
-            
-            SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
-            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//                }
+//                if destinationsForTrip.count == 1 {
+//                    travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true]
+//                } else if destinationsForTrip.count > 1 {
+//                    travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":false]
+//                }
+//            }
+//            
+//            travelDictionaryArray[indexOfDestinationBeingPlanned]["illAlreadyBeThereText"] = "I'll already be there."
+//            
+//            SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
+//            saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
             planPlaceToStayOrReviewItinerary()
         }
@@ -3297,6 +3376,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
             if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
+                travelDictionaryArray[indexOfDestinationBeingPlanned]["personalCar"] = true
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
                 spawnAboutWhatTimeWillYouStartDrivingQuestionView()
             } else {
                 planPlaceToStayOrReviewItinerary()
@@ -3320,6 +3401,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
             if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "drive" {
+                travelDictionaryArray[indexOfDestinationBeingPlanned]["personalCar"] = true
+                saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
                 spawnAboutWhatTimeWillYouStartDrivingQuestionView()
             } else {
                 disableAndResetAssistant_moveToItinerary()
@@ -4096,14 +4179,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if (text == "\n") {
             textView.resignFirstResponder()
-            if detailedInformationSubviewMode == "stayWithSomeoneIKnow" {
+            if detailedInformationSubviewMode == DetailedInformationSubviewMode.stayWithSomeoneIKnow {
                 let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
                 var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
                 let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
                 placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["stayWithSomeoneIKnowText"] = textView.text
                 SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
                 saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-            } else if detailedInformationSubviewMode == "shortTermRental" {
+            } else if detailedInformationSubviewMode == DetailedInformationSubviewMode.shortTermRental {
                 let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
                 var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
                 let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
@@ -4111,7 +4194,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
                 saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                 
-            } else if detailedInformationSubviewMode == "hotel" {
+            } else if detailedInformationSubviewMode == DetailedInformationSubviewMode.hotel {
                 let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
                 var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
                 let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
@@ -4119,7 +4202,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
                 saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
 
-            } else if detailedInformationSubviewMode == "busTrainOther" {
+            } else if detailedInformationSubviewMode == DetailedInformationSubviewMode.busTrainOther {
                 let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
                 var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
                 let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
@@ -4127,7 +4210,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 SavedPreferencesForTrip["placeToStayDictionaryArray"] = travelDictionaryArray
                 saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                 
-            } else if detailedInformationSubviewMode == "illAlreadyBeThere" {
+            } else if detailedInformationSubviewMode == DetailedInformationSubviewMode.illAlreadyBeThere {
                 let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
                 var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
                 let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
@@ -4246,8 +4329,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
             }
         }
-        
-        handleHamburgerAndBackButton()
+
+//        handleHamburgerAndBackButton()
         
 //        else {
 //            hamburgerArrowButton?.isHidden = true
@@ -4824,6 +4907,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             if itinerarySendable {
                 itineraryButton2?.isHidden = false
                 itineraryButton2?.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
+                itineraryButton2?.layer.frame.origin = CGPoint(x: addInviteeButton.frame.maxX + 2, y: addInviteeButton.frame.minY + 3)
+                if (contacts?.count)! > 2 {
+                    addInviteeButton.frame.origin.y = 45
+                    itineraryButton2?.layer.frame.origin = CGPoint(x: addInviteeButton.frame.minX, y: addInviteeButton.frame.maxY - 5)
+                }
             } else {
                 itineraryButton2?.isHidden = true
                 itineraryButton2?.stopPulseEffect()
@@ -6485,7 +6573,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
             for item in 0 ... (contacts?.count)! {
                 let cell = contactsCollectionView.cellForItem(at: IndexPath(item: item, section: 0)) as! contactsCollectionViewCell
                 if cell.initialsLabel.textColor == UIColor.darkGray && IndexPath(item: item, section: 0) != indexPath {
-                    if indexPath == IndexPath(item: 0, section: 0) {
+                    if IndexPath(item: item, section: 0) == IndexPath(item: 0, section: 0) {
                         cell.thumbnailImage.image = UIImage(named: "no_contact_image")
                         cell.initialsLabel.textColor = UIColor.white
                     } else {
@@ -6979,14 +7067,14 @@ extension TripViewController {
 //                            return
 //                        }
                         appDelegate.centerContainer!.centerViewController = centerNavController
-                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
-                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
-                        let when = DispatchTime.now() + 5
-                        DispatchQueue.main.asyncAfter(deadline: when) {
-                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.stopPulseEffect()
-                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.stopPulseEffect()
-                            
-                        }
+//                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
+//                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
+//                        let when = DispatchTime.now() + 5
+//                        DispatchQueue.main.asyncAfter(deadline: when) {
+//                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.stopPulseEffect()
+//                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.stopPulseEffect()
+//                            
+//                        }
                     }
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
@@ -7007,14 +7095,14 @@ extension TripViewController {
 //                            return
 //                        }
                         appDelegate.centerContainer!.centerViewController = centerNavController
-                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
-                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
-                        let when = DispatchTime.now() + 5
-                        DispatchQueue.main.asyncAfter(deadline: when) {
-                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.stopPulseEffect()
-                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.stopPulseEffect()
-                            
-                        }
+//                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
+//                        (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.startPulse(with: UIColor.white, offset: CGSize(width: 0, height: 0), frequency:0.5)
+//                        let when = DispatchTime.now() + 5
+//                        DispatchQueue.main.asyncAfter(deadline: when) {
+//                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemLabel.stopPulseEffect()
+//                            (((appDelegate.centerContainer!.leftDrawerViewController as! UINavigationController).topViewController as! LeftViewController).menuTableView.cellForRow(at: IndexPath(row: 0, section: 3)) as! ExistingTripTableViewCell).menuItemImageView.stopPulseEffect()
+//                            
+//                        }
                     }
                     alertController.addAction(okAction)
                     self.present(alertController, animated: true, completion: nil)
@@ -7065,6 +7153,7 @@ extension TripViewController {
         let backButtonImage = #imageLiteral(resourceName: "backToSearch")
         backButton = UIButton(frame: CGRect(x: 10,y: 28,width: 80, height: 26))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromFlightSearchResultsSceneViewControllerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         
@@ -7079,6 +7168,8 @@ extension TripViewController {
     func flightSearchFormViewViewController_ViewDidAppear() {
         asyncUpdateProgress()
         addUpButtonPointedUpOneSubview()
+        self.hamburgerArrowButton?.isHidden = false
+        scrollView.isScrollEnabled = true
         
         self.segmentedControl?.isHidden = false
         self.searchSummaryLabelTopView.isHidden = true
@@ -7102,6 +7193,8 @@ extension TripViewController {
         let backButtonImage = #imageLiteral(resourceName: "backToSearch")
         backButton = UIButton(frame: CGRect(x: 10,y: 28,width: 80, height: 26))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromWaitingScreenViewControllerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         
@@ -7148,6 +7241,8 @@ extension TripViewController {
         let backButtonImage = #imageLiteral(resourceName: "backToResults")
         backButton = UIButton(frame: CGRect(x: 10,y: 28,width: 83, height: 25))
         backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromTicketViewViewControllerToFlightResults), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         
@@ -7158,8 +7253,10 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
-        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton = UIButton(frame: CGRect(x: 11,y: 19,width: 36, height: 41))
+        backButton?.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        backButton?.setImage(backButtonImage, for: .normal)
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromJRDatePickerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         asyncUpdateProgress()
@@ -7168,8 +7265,10 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
-        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton = UIButton(frame: CGRect(x: 11,y: 19,width: 36, height: 41))
+        backButton?.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        backButton?.setImage(backButtonImage, for: .normal)
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromJRAirportPickerToFlightSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         asyncUpdateProgress()
@@ -7212,7 +7311,7 @@ extension TripViewController {
         
         self.backButton?.removeFromSuperview()
         backButton = nil
-        backButton = UIButton(frame: CGRect(x: 5,y: 25,width: 50, height: 25))
+        backButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 70,y: 25,width: 50, height: 25))
         backButton?.setTitle("Done", for: .normal)
         backButton?.addTarget(self, action: #selector(popFromJRFilterToFlightResults), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
@@ -7245,7 +7344,7 @@ extension TripViewController {
             backButton = nil
         }
         
-        backButton = UIButton(frame: CGRect(x: 15,y: 26,width: 27, height: 30))
+        backButton = UIButton(frame: CGRect(x: (hamburgerArrowButton?.layer.frame.maxX)! + 12, y: 29,width: 21, height: 24))
         backButton?.setBackgroundImage(#imageLiteral(resourceName: "upArrow"), for: .normal)
         backButton?.addTarget(self, action: #selector(scrollUpOneSubview), for: UIControlEvents.touchUpInside)
         backButton?.setTitleColor(UIColor.white, for: .normal)
@@ -7327,6 +7426,8 @@ extension TripViewController {
     func hotelSearchFormViewViewController_ViewDidAppear() {
 //        addBackButtonPointedAtTripList()
         addUpButtonPointedUpOneSubview()
+        self.hamburgerArrowButton?.isHidden = false
+        scrollView.isScrollEnabled = true
         asyncUpdateProgress()
         
         self.segmentedControl?.isHidden = false
@@ -7372,8 +7473,10 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
-        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton = UIButton(frame: CGRect(x: 11,y: 19,width: 36, height: 41))
+        backButton?.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        backButton?.setImage(backButtonImage, for: .normal)
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromHotelResultsViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         
@@ -7448,8 +7551,10 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
-        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton = UIButton(frame: CGRect(x: 11,y: 19,width: 36, height: 41))
+        backButton?.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        backButton?.setImage(backButtonImage, for: .normal)
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromWaitingViewControllerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         
@@ -7478,8 +7583,10 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
-        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton = UIButton(frame: CGRect(x: 11,y: 19,width: 36, height: 41))
+        backButton?.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        backButton?.setImage(backButtonImage, for: .normal)
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromCityPickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         asyncUpdateProgress()
@@ -7488,8 +7595,10 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
-        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton = UIButton(frame: CGRect(x: 11,y: 19,width: 36, height: 41))
+        backButton?.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        backButton?.setImage(backButtonImage, for: .normal)
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromHLDatePickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         asyncUpdateProgress()
@@ -7498,8 +7607,10 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
-        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton = UIButton(frame: CGRect(x: 11,y: 19,width: 36, height: 41))
+        backButton?.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        backButton?.setImage(backButtonImage, for: .normal)
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromKidsPickerToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         asyncUpdateProgress()
@@ -7527,8 +7638,10 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
-        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton = UIButton(frame: CGRect(x: 11,y: 19,width: 36, height: 41))
+        backButton?.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        backButton?.setImage(backButtonImage, for: .normal)
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromHLSortToHotelResults), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         asyncUpdateProgress()
@@ -7543,8 +7656,10 @@ extension TripViewController {
         self.backButton?.removeFromSuperview()
         backButton = nil
         let backButtonImage = #imageLiteral(resourceName: "backButton")
-        backButton = UIButton(frame: CGRect(x: 18,y: 29,width: 16, height: 21))
-        backButton?.setBackgroundImage(backButtonImage, for: .normal)
+        backButton = UIButton(frame: CGRect(x: 11,y: 19,width: 36, height: 41))
+        backButton?.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        backButton?.setImage(backButtonImage, for: .normal)
+        hamburgerArrowButton?.isHidden = true
         backButton?.addTarget(self, action: #selector(popFromMapVCToHotelSearch), for: UIControlEvents.touchUpInside)
         self.topView.addSubview(backButton!)
         asyncUpdateProgress()
@@ -7828,20 +7943,20 @@ extension TripViewController {
         self.popupBackgroundFilterView.insertSubview(infoKeyButton_3_badgeButton!, aboveSubview: infoKeyButton_3!)
         
         
-        //item requires action by group
-        infoKeyButton_4.layer.cornerRadius = (infoKeyButton_4.frame.height) / 2
-        infoKeyButton_4.layer.borderWidth = 2
-        infoKeyButton_4.layer.borderColor = completeColor.cgColor
-        infoKeyButton_4.setTitleColor(completeColor, for: .normal)
-        //badge button
-        infoKeyButton_4_badgeButton = MIBadgeButton()
-        infoKeyButton_4_badgeButton?.layer.frame.origin = CGPoint(x: infoKeyButton_4.layer.frame.maxX - 5, y: infoKeyButton_4.layer.frame.minY + 1)
-        infoKeyButton_4_badgeButton?.badgeString = "!"
-        infoKeyButton_4_badgeButton?.badgeTextColor = UIColor.white
-        infoKeyButton_4_badgeButton?.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        infoKeyButton_4_badgeButton?.badgeBackgroundColor = UIColor.orange
-        self.popupBackgroundFilterView.insertSubview(infoKeyButton_4_badgeButton!, aboveSubview: infoKeyButton_4!)
-        
+//        //item requires action by group
+//        infoKeyButton_4.layer.cornerRadius = (infoKeyButton_4.frame.height) / 2
+//        infoKeyButton_4.layer.borderWidth = 2
+//        infoKeyButton_4.layer.borderColor = completeColor.cgColor
+//        infoKeyButton_4.setTitleColor(completeColor, for: .normal)
+//        //badge button
+//        infoKeyButton_4_badgeButton = MIBadgeButton()
+//        infoKeyButton_4_badgeButton?.layer.frame.origin = CGPoint(x: infoKeyButton_4.layer.frame.maxX - 5, y: infoKeyButton_4.layer.frame.minY + 1)
+//        infoKeyButton_4_badgeButton?.badgeString = "!"
+//        infoKeyButton_4_badgeButton?.badgeTextColor = UIColor.white
+//        infoKeyButton_4_badgeButton?.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+//        infoKeyButton_4_badgeButton?.badgeBackgroundColor = UIColor.orange
+//        self.popupBackgroundFilterView.insertSubview(infoKeyButton_4_badgeButton!, aboveSubview: infoKeyButton_4!)
+//        
         //item complete
         infoKeyButton_5.layer.cornerRadius = (infoKeyButton_5.frame.height) / 2
         infoKeyButton_5.layer.borderWidth = 2
@@ -7918,6 +8033,8 @@ extension TripViewController {
                 } else {
                     return PlaceToStayProgress.onlyTypeChosenStayWithSomeoneIKnow
                 }
+            } else if placeToStayDictionaryArray[senderTag - 1]["typeOfPlaceToStay"] as! String == "illAlreadyBeThere" {
+                return PlaceToStayProgress.typeChosenIllAlreadyBeThere
             }
         }
         return PlaceToStayProgress.noProgress
@@ -7954,7 +8071,7 @@ extension TripViewController {
             } else {
                 //Spawn alert "Great, let's find a place to stay. First let's select dates and destination"
                 let alertController = UIAlertController(title: "Skip to plan place to stay?", message: "This will skip Planit's comprehensive trip planning process...", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "Nevermind, continue planning", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                let cancelAction = UIAlertAction(title: "No, continue planning", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
                     self.isAssistantEnabled = true
                     self.handleTwicketSegmentedControl()
                     self.segmentedControl?.move(to: 0)
@@ -8183,7 +8300,7 @@ extension TripViewController {
 
             case .typeChosenHotelAndDetailsProvided:
                 //Show booked hotel details
-                detailedInformationSubviewMode = "hotel"
+                detailedInformationSubviewMode = DetailedInformationSubviewMode.hotel
                 //Show texted entered
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                 setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true, withEditButtonText: "Change place to stay", withEditButtonTag: sender.tag - 1)
@@ -8197,7 +8314,7 @@ extension TripViewController {
                 self.view.addSubview(detailedInformationSubview)
             case .typeChosenShortTermRentalAndDetailsProvided:
                 //Show short term rental details
-                detailedInformationSubviewMode = "shortTermRental"
+                detailedInformationSubviewMode = DetailedInformationSubviewMode.shortTermRental
                 //Show texted entered, with clickable links
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                 setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true, withEditButtonText: "Change place to stay", withEditButtonTag: sender.tag - 1)
@@ -8211,11 +8328,25 @@ extension TripViewController {
                 self.view.addSubview(detailedInformationSubview)
             case .typeChosenStayWithSomeoneIKnowAndDetailsProvided:
                 //Show stay with someone I know details
-                detailedInformationSubviewMode = "stayWithSomeoneIKnow"
+                detailedInformationSubviewMode = DetailedInformationSubviewMode.stayWithSomeoneIKnow
                 //Show texted entered
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                 setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true, withEditButtonText: "Change place to stay", withEditButtonTag: sender.tag - 1)
                 textView?.text = placeToStayDictionaryArray[sender.tag - 1]["stayWithSomeoneIKnowText"] as! String
+                var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
+                topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
+                textView?.contentOffset = CGPoint()
+                textView?.contentOffset.x = 0
+                textView?.contentOffset.y = -topCorrect!
+                textView?.resignFirstResponder()
+                self.view.addSubview(detailedInformationSubview)
+            case .typeChosenIllAlreadyBeThere:
+                //Show stay with someone I know details
+                detailedInformationSubviewMode = DetailedInformationSubviewMode.illAlreadyBeThere
+                //Show texted entered
+                animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+                setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true, withEditButtonText: "Change place to stay", withEditButtonTag: sender.tag - 1)
+                textView?.text = placeToStayDictionaryArray[sender.tag - 1]["illAlreadyBeThereText"] as! String
                 var topCorrect: CGFloat? = (textView?.bounds.size.height)! - (textView?.contentSize.height)!
                 topCorrect = (topCorrect! < CGFloat(0.0) ? 0.0 : topCorrect)
                 textView?.contentOffset = CGPoint()
@@ -8255,7 +8386,7 @@ extension TripViewController {
                     return TravelProgress.onlyTypeChosenBusTrainOther
                 }
             } else if travelDictionaryArray[index]["modeOfTransportation"] as! String == "illAlreadyBeThere"{
-                return TravelProgress.typeChoseIllAlreadyBeThere
+                return TravelProgress.typeChosenIllAlreadyBeThere
             } else if travelDictionaryArray[index]["modeOfTransportation"] as! String == "drive"{
                 if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["rentalCar"] != nil {
                     //PLANNED: FETCH DETAILS FROM PRICELINE
@@ -8313,7 +8444,7 @@ extension TripViewController {
             } else {
                 //Spawn alert "Great, let's find a place to stay. First let's select dates and destination"
                 let alertController = UIAlertController(title: "Skip to plan travel?", message: "This will skip Planit's comprehensive trip planning process...", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "Nevermind, continue planning", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                let cancelAction = UIAlertAction(title: "No, continue planning", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
                     self.isAssistantEnabled = true
                     self.handleTwicketSegmentedControl()
                     self.segmentedControl?.move(to: 0)
@@ -8492,7 +8623,7 @@ extension TripViewController {
                 alertController.addAction(changeAction)
                 self.present(alertController, animated: true, completion: nil)
             case .typeChosenBusTrainOtherAndDetailsProvided:
-                detailedInformationSubviewMode = "busTrainOther"
+                detailedInformationSubviewMode = DetailedInformationSubviewMode.busTrainOther
                 //Show text entered
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                 setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true, withEditButtonText: "Change travel", withEditButtonTag: sender.tag - 1)
@@ -8543,7 +8674,7 @@ extension TripViewController {
                 //PLANNED: FETCH DETAILS FROM PRICELINE
                 break
             case .typeChosenDriveAlreadyHaveCar:
-                detailedInformationSubviewMode = "drivePersonalCar"
+                detailedInformationSubviewMode = DetailedInformationSubviewMode.drivePersonalCar
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                 setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:false,withDoneButton:true, withEditButtonText: "Change travel", withEditButtonTag: sender.tag - 1)
                 
@@ -8592,8 +8723,9 @@ extension TripViewController {
                 alertController.addAction(cancelAction)
                 alertController.addAction(okAction)
                 alertController.addAction(changeAction)
-            case .typeChoseIllAlreadyBeThere:
-                detailedInformationSubviewMode = "illAlreadyBeThere"
+                self.present(alertController, animated: true, completion: nil)
+            case .typeChosenIllAlreadyBeThere:
+                detailedInformationSubviewMode = DetailedInformationSubviewMode.illAlreadyBeThere
                 // Show text "I'll already be there"
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
                 setupDetailedInformationView(size: CGSize(width: 250, height: 350), withTextView:true,withDoneButton:true, withEditButtonText: "Change travel", withEditButtonTag: sender.tag - 1)
@@ -8770,6 +8902,140 @@ extension TripViewController {
         self.googleMaps.camera = camera
     }
     
+    func detailedInformationEditButtonTouchedUpInside(sender:UIButton) {
+        let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
+        let assistantMode = SavedPreferencesForTrip["assistantMode"] as! String
+        var message = ""
+        if assistantMode == "initialItineraryBuilding" {
+            message = "This will skip Planit's comprehensive trip planning process..."
+        }
+        if detailedInformationSubviewMode == DetailedInformationSubviewMode.startingPointMap {
+            let alertController = UIAlertController(title: "Change your starting point?", message: message, preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+            }
+            let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                SavedPreferencesForTrip["assistantMode"] = "startingPoint" as NSString
+                
+                if assistantMode == "initialItineraryBuilding" {
+                    self.disableAndResetAssistant_moveToItinerary()
+                }
+                
+                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
+                self.spawnWhereTravellingFromQuestionView()
+                
+                self.isAssistantEnabled = true
+                self.handleTwicketSegmentedControl()
+                self.segmentedControl?.move(to: 0)
+                self.assistant()
+            }
+            alertController.addAction(cancelAction)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            detailedInformationDoneButtonTouchedUpInsideFunc()
+            
+        } else if detailedInformationSubviewMode == DetailedInformationSubviewMode.endingPointMap {
+            let alertController = UIAlertController(title: "Change your ending point?", message: message, preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+            }
+            let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                SavedPreferencesForTrip["assistantMode"] = "endingPoint" as NSString
+                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
+                if assistantMode == "initialItineraryBuilding" {
+                    self.disableAndResetAssistant_moveToItinerary()
+                }
+                
+                self.spawnWhereTravellingFromQuestionView()
+                
+                self.isAssistantEnabled = true
+                self.handleTwicketSegmentedControl()
+                self.segmentedControl?.move(to: 0)
+                self.assistant()
+            }
+            alertController.addAction(cancelAction)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            
+            detailedInformationDoneButtonTouchedUpInsideFunc()
+            
+        } else if detailedInformationSubviewMode == DetailedInformationSubviewMode.destinationMap {
+            let alertController = UIAlertController(title: "Change your destination?", message: message, preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+            }
+            let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                SavedPreferencesForTrip["assistantMode"] = "destination" as NSString
+                SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag
+                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
+                if assistantMode == "initialItineraryBuilding" {
+                    self.disableAndResetAssistant_moveToItinerary()
+                }
+                
+                self.spawnYesCityDecidedQuestionView()
+                
+                self.isAssistantEnabled = true
+                self.handleTwicketSegmentedControl()
+                self.segmentedControl?.move(to: 0)
+                self.assistant()
+            }
+            alertController.addAction(cancelAction)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            detailedInformationDoneButtonTouchedUpInsideFunc()
+            
+        } else if detailedInformationSubviewMode == DetailedInformationSubviewMode.stayWithSomeoneIKnow || detailedInformationSubviewMode == DetailedInformationSubviewMode.hotel || detailedInformationSubviewMode == DetailedInformationSubviewMode.shortTermRental {
+            let alertController = UIAlertController(title: "Let's find a place to stay!", message: message, preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+            }
+            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
+                SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
+                if assistantMode == "initialItineraryBuilding" {
+                    self.disableAndResetAssistant_moveToItinerary()
+                }
+                
+                self.spawnDoYouKnowWhereYouWillBeStayingQuestionView()
+                
+                self.isAssistantEnabled = true
+                self.handleTwicketSegmentedControl()
+                self.segmentedControl?.move(to: 0)
+                self.assistant()
+            }
+            alertController.addAction(cancelAction)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            detailedInformationDoneButtonTouchedUpInsideFunc()
+            
+        } else if detailedInformationSubviewMode == DetailedInformationSubviewMode.busTrainOther || detailedInformationSubviewMode == DetailedInformationSubviewMode.illAlreadyBeThere || detailedInformationSubviewMode == DetailedInformationSubviewMode.drivePersonalCar || detailedInformationSubviewMode == DetailedInformationSubviewMode.flyExternallyBooked {
+            let alertController = UIAlertController(title: "Let's plan your travel!", message: message, preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+            }
+            let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+                SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
+                SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
+                self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+                
+                if assistantMode == "initialItineraryBuilding" {
+                    self.disableAndResetAssistant_moveToItinerary()
+                }
+                
+                self.spawnHowDoYouWantToGetThereQuestionView()
+                
+                self.isAssistantEnabled = true
+                self.handleTwicketSegmentedControl()
+                self.segmentedControl?.move(to: 0)
+                self.assistant()
+            }
+            alertController.addAction(cancelAction)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            detailedInformationDoneButtonTouchedUpInsideFunc()
+            
+        }
+    }
 
     func destinationButtonTouchedUpInside(sender:UIButton) {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
@@ -8796,44 +9062,20 @@ extension TripViewController {
         } else if assistantMode == "initialItineraryBuilding" && isAssistantEnabled == true {
             if sender.tag == 0 {
                 if DataContainerSingleton.sharedDataContainer.homeAirport != nil && DataContainerSingleton.sharedDataContainer.homeAirport != "" {
-                detailedInformationSubviewMode = "startingPointMap"
+                detailedInformationSubviewMode = DetailedInformationSubviewMode.startingPointMap
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true, withEditButtonText: "Change starting point", withEditButtonTag: nil)
+                setupDetailedInformationView(size: CGSize(width: 300, height: 450), withTextView:false,withDoneButton:true, withEditButtonText: "Change starting point", withEditButtonTag: nil)
                 self.view.addSubview(detailedInformationSubview)
                 
                 var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
                 let latitude = startingPointDict["latitude"] as! Double
                 let longitude = startingPointDict["longitude"] as! Double
-                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
+                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: detailedInformationSubview.frame.height - 140))
                 
-                //PLANNED LINK BUTTON TO EDIT
-                //                //Edit starting point
-                //                if assistantMode == "disabled" {
-                //                    let alertController = UIAlertController(title: "Change your starting point?", message: "", preferredStyle: .alert)
-                //                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                //                    }
-                //                    let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                //                        SavedPreferencesForTrip["assistantMode"] = "startingPoint" as NSString
-                //                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                //                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                //
-                //                        self.spawnWhereTravellingFromQuestionView()
-                //
-                //                        self.isAssistantEnabled = true
-                //                        self.handleTwicketSegmentedControl()
-                //                        self.segmentedControl?.move(to: 0)
-                //                        self.assistant()
-                //                    }
-                //                    alertController.addAction(cancelAction)
-                //                    alertController.addAction(okAction)
-                //                    self.present(alertController, animated: true, completion: nil)
-                //
-                //
-                //                }
                 } else {
                     if initiatorProgress == InitiatorProgress.instructions || initiatorProgress == InitiatorProgress.dates {
                         let alertController = UIAlertController(title: "Skip to plan starting point?", message: "This will skip Planit's comprehensive trip planning process...", preferredStyle: .alert)
-                        let cancelAction = UIAlertAction(title: "Nevermind, continue planning", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                        let cancelAction = UIAlertAction(title: "No, continue planning", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
                             self.isAssistantEnabled = true
                             self.handleTwicketSegmentedControl()
                             self.segmentedControl?.move(to: 0)
@@ -8858,11 +9100,6 @@ extension TripViewController {
                     } else if initiatorProgress == InitiatorProgress.destination {
                         showFinishPlanningTripAlert(title: "Let's finish planning your destination!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
                         
-                        self.isAssistantEnabled = true
-                        self.handleTwicketSegmentedControl()
-                        self.segmentedControl?.move(to: 0)
-                        self.assistant()
-
                     } else {
                         self.isAssistantEnabled = true
                         self.handleTwicketSegmentedControl()
@@ -8872,54 +9109,28 @@ extension TripViewController {
                         self.spawnWhereTravellingFromQuestionView()
                     }
                 }
-            } else if sender.tag == destinationsForTrip.count + 1 {
-                if  (DataContainerSingleton.sharedDataContainer.homeAirport != nil || SavedPreferencesForTrip["endingPoint"] as! String != "") {
-                detailedInformationSubviewMode = "endingPointMap"
-                animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true, withEditButtonText: "Change ending point", withEditButtonTag: nil)
-                self.view.addSubview(detailedInformationSubview)
-                
-                var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
-                if let latitude = endingPointDict["latitude"] as? Double {
-                    if let longitude = endingPointDict["longitude"] as? Double {
-                        self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
+            } else if (sender.tag == destinationsForTrip.count + 1 && destinationsForTrip.count != 0) || (sender.tag == 2 && destinationsForTrip.count == 0) {
+                if  (DataContainerSingleton.sharedDataContainer.homeAirport != nil && DataContainerSingleton.sharedDataContainer.homeAirport != "") || SavedPreferencesForTrip["endingPoint"] as! String != "" {
+                    detailedInformationSubviewMode = DetailedInformationSubviewMode.endingPointMap
+                    animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
+                    setupDetailedInformationView(size: CGSize(width: 300, height: 450), withTextView:false,withDoneButton:true, withEditButtonText: "Change ending point", withEditButtonTag: nil)
+                    self.view.addSubview(detailedInformationSubview)
+                    
+                    var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
+                    if let latitude = endingPointDict["latitude"] as? Double {
+                        if let longitude = endingPointDict["longitude"] as? Double {
+                            self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: detailedInformationSubview.frame.height - 140))
+                        }
+                    } else {
+                        var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
+                        let latitude = startingPointDict["latitude"] as! Double
+                        let longitude = startingPointDict["longitude"] as! Double
+                        self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: detailedInformationSubview.frame.height - 140))
                     }
-                } else {
-                    var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
-                    let latitude = startingPointDict["latitude"] as! Double
-                    let longitude = startingPointDict["longitude"] as! Double
-                    self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
-                }
-                
-                
-                //                //PLANNED: LINK TO BUTTON Edit destination
-                //                //Edit final destination
-                //                if assistantMode == "disabled" {
-                //                    let alertController = UIAlertController(title: "Change your ending point?", message: "", preferredStyle: .alert)
-                //                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                //                    }
-                //                    let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                //                        SavedPreferencesForTrip["assistantMode"] = "endingPoint" as NSString
-                //                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                //                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                //
-                //                        self.spawnWhereTravellingFromQuestionView()
-                //
-                //                        self.isAssistantEnabled = true
-                //                        self.handleTwicketSegmentedControl()
-                //                        self.segmentedControl?.move(to: 0)
-                //                        self.assistant()
-                //                    }
-                //                    alertController.addAction(cancelAction)
-                //                    alertController.addAction(okAction)
-                //                    self.present(alertController, animated: true, completion: nil)
-                //
-                //
-                //                }
                 } else {
                     if initiatorProgress == InitiatorProgress.instructions || initiatorProgress == InitiatorProgress.dates {
                         let alertController = UIAlertController(title: "Skip to plan ending point?", message: "This will skip Planit's comprehensive trip planning process...", preferredStyle: .alert)
-                        let cancelAction = UIAlertAction(title: "Nevermind, continue planning", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                        let cancelAction = UIAlertAction(title: "No, continue planning", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
                             self.isAssistantEnabled = true
                             self.handleTwicketSegmentedControl()
                             self.segmentedControl?.move(to: 0)
@@ -8943,12 +9154,6 @@ extension TripViewController {
                         
                     } else if initiatorProgress == InitiatorProgress.destination {
                         showFinishPlanningTripAlert(title: "Let's finish planning your destination!", message: "", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-                        
-                        self.isAssistantEnabled = true
-                        self.handleTwicketSegmentedControl()
-                        self.segmentedControl?.move(to: 0)
-                        self.assistant()
-                        
                     } else {
                         self.isAssistantEnabled = true
                         self.handleTwicketSegmentedControl()
@@ -8961,45 +9166,22 @@ extension TripViewController {
             } else {
                 
                 if sender.tag - 1 < destinationsForTrip.count {
-                    self.detailedInformationSubviewMode = "destinationMap"
+                    self.detailedInformationSubviewMode = DetailedInformationSubviewMode.destinationMap
                     // Show text "I'll already be there"
                     self.animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                    self.setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true, withEditButtonText: "Change destination", withEditButtonTag: sender.tag - 1)
+                    self.setupDetailedInformationView(size: CGSize(width: 300, height: 450), withTextView:false,withDoneButton:true, withEditButtonText: "Change destination", withEditButtonTag: sender.tag - 1)
                     self.view.addSubview(self.detailedInformationSubview)
                     
                     var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
                     let latitude = destinationsForTripDictArray[sender.tag - 1]["latitude"] as! Double
                     let longitude = destinationsForTripDictArray[sender.tag - 1]["longitude"] as! Double
-                    self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
+                    self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: detailedInformationSubview.frame.height - 140))
                     
                     
-                    //                //PLANNED: LINK TO BUTTON Edit destination
-                    //                if assistantMode == "disabled" {
-                    //                    let alertController = UIAlertController(title: "Change your destination?", message: "", preferredStyle: .alert)
-                    //                    let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
-                    //                    }
-                    //                    let okAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                    //                        SavedPreferencesForTrip["assistantMode"] = "destination" as NSString
-                    //                        SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
-                    //                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                    //
-                    //                        self.spawnYesCityDecidedQuestionView()
-                    //
-                    //                        self.isAssistantEnabled = true
-                    //                        self.handleTwicketSegmentedControl()
-                    //                        self.segmentedControl?.move(to: 0)
-                    //                        self.assistant()
-                    //                    }
-                    //                    alertController.addAction(cancelAction)
-                    //                    alertController.addAction(okAction)
-                    //                    self.present(alertController, animated: true, completion: nil)
-                    //
-                    //                    //                }
-                    //
                 } else  {
                     if initiatorProgress == InitiatorProgress.instructions || initiatorProgress == InitiatorProgress.dates {
                         let alertController = UIAlertController(title: "Skip to plan destination?", message: "This will skip Planit's comprehensive trip planning process...", preferredStyle: .alert)
-                        let cancelAction = UIAlertAction(title: "Nevermind, continue planning", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
+                        let cancelAction = UIAlertAction(title: "No, continue planning", style: UIAlertActionStyle.cancel) { (result : UIAlertAction) -> Void in
                             self.isAssistantEnabled = true
                             self.handleTwicketSegmentedControl()
                             self.segmentedControl?.move(to: 0)
@@ -9045,23 +9227,17 @@ extension TripViewController {
                 }
             }
 
-            
-            
-            
-            
-//            showFinishPlanningTripAlert(title: "Almost there...", message: "Let's finish building your itinerary!", okButtonTitle: "OK", cancelButtonTitle: "Cancel")
-//            return
         } else if assistantMode == "disabled" {
             if sender.tag == 0 {
-                detailedInformationSubviewMode = "startingPointMap"
+                detailedInformationSubviewMode = DetailedInformationSubviewMode.startingPointMap
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true, withEditButtonText: "Change starting point", withEditButtonTag: nil)
+                setupDetailedInformationView(size: CGSize(width: 300, height: 450), withTextView:false,withDoneButton:true, withEditButtonText: "Change starting point", withEditButtonTag: nil)
                 self.view.addSubview(detailedInformationSubview)
                 
                 var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
                 let latitude = startingPointDict["latitude"] as! Double
                 let longitude = startingPointDict["longitude"] as! Double
-                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
+                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: detailedInformationSubview.frame.height - 140))
 
                 //PLANNED LINK BUTTON TO EDIT
 //                //Edit starting point
@@ -9088,22 +9264,22 @@ extension TripViewController {
 //                    
 //                }
             
-            } else if sender.tag == destinationsForTrip.count + 1 {
-                detailedInformationSubviewMode = "endingPointMap"
+            } else if sender.tag == destinationsForTrip.count + 1 || (sender.tag == 2 && destinationsForTrip.count == 0) {
+                detailedInformationSubviewMode = DetailedInformationSubviewMode.endingPointMap
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true, withEditButtonText: "Change ending point", withEditButtonTag: nil)
+                setupDetailedInformationView(size: CGSize(width: 300, height: 450), withTextView:false,withDoneButton:true, withEditButtonText: "Change ending point", withEditButtonTag: nil)
                 self.view.addSubview(detailedInformationSubview)
                 
                 var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
                 if let latitude = endingPointDict["latitude"] as? Double {
                     if let longitude = endingPointDict["longitude"] as? Double {
-                        self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
+                        self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: detailedInformationSubview.frame.height - 140))
                     }
                 } else {
                     var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
                     let latitude = startingPointDict["latitude"] as! Double
                     let longitude = startingPointDict["longitude"] as! Double
-                    self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
+                    self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: detailedInformationSubview.frame.height - 140))
                 }
 
                 
@@ -9133,16 +9309,16 @@ extension TripViewController {
 //                }
                 
             } else {
-                detailedInformationSubviewMode = "destinationMap"
+                detailedInformationSubviewMode = DetailedInformationSubviewMode.destinationMap
                 // Show text "I'll already be there"
                 animateInBackgroundFilterView(withInfoView: false, withBlurEffect: true, withCloseButton: false)
-                setupDetailedInformationView(size: CGSize(width: 300, height: 350), withTextView:false,withDoneButton:true, withEditButtonText: "Change destination", withEditButtonTag: sender.tag - 1)
+                setupDetailedInformationView(size: CGSize(width: 300, height: 450), withTextView:false,withDoneButton:true, withEditButtonText: "Change destination", withEditButtonTag: sender.tag - 1)
                 self.view.addSubview(detailedInformationSubview)
                 
                 var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
                 let latitude = destinationsForTripDictArray[sender.tag - 1]["latitude"] as! Double
                 let longitude = destinationsForTripDictArray[sender.tag - 1]["longitude"] as! Double
-                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: 260))
+                self.showLocationOnMap(latitude: latitude, longitude: longitude, frame: CGRect(x: 20,y: 20, width: 260, height: detailedInformationSubview.frame.height - 140))
 
                 
 //                //PLANNED: LINK TO BUTTON Edit destination
@@ -9204,7 +9380,6 @@ extension TripViewController {
                 detailedItinerarySubviewButton2?.tag = withEditButtonTag!
             }
         }
-        
         if withDoneButton {
             //detailedItinerarySubviewButton1
             detailedItinerarySubviewButton1 = UIButton(type: .custom)
@@ -9227,7 +9402,6 @@ extension TripViewController {
             detailedItinerarySubviewButton1?.frame.origin.y = size.height - 100
             detailedItinerarySubviewButton1?.layer.cornerRadius = (detailedItinerarySubviewButton1?.frame.height)! / 2
         }
-        
         if withTextView {
             //Textview
             textView = UITextView(frame: CGRect.zero)
@@ -9246,7 +9420,7 @@ extension TripViewController {
             textView?.clearsOnInsertion = true
             textView?.translatesAutoresizingMaskIntoConstraints = false
             detailedInformationSubview.addSubview(textView!)
-            textView?.frame = CGRect(x: 25, y: 130, width: 200, height: 140)
+            textView?.frame = CGRect(x: 25, y: 130, width: 200, height: 90)
             let width = 1.0
             let borderLine = UIView()
             borderLine.frame = CGRect(x: Double((textView?.frame.minX)!), y: Double((textView?.frame.maxY)!) - width, width: Double((textView?.frame.width)!), height: width)
@@ -9254,14 +9428,14 @@ extension TripViewController {
             self.detailedInformationSubview.addSubview(borderLine)
         }
     }
-    func detailedInformationDoneButtonTouchedUpInside(sender:UIButton) {
+    func detailedInformationDoneButtonTouchedUpInsideFunc() {
         animateOutBackgroundFilterView()
         detailedInformationSubview.isHidden = true
         self.detailedInformationSubview.removeFromSuperview()
         self.detailedInformationSubview.removeAllSubviews()
     }
-    func detailedInformationEditButtonTouchedUpInside(sender:UIButton) {
-        
+    func detailedInformationDoneButtonTouchedUpInside(sender:UIButton) {
+        detailedInformationDoneButtonTouchedUpInsideFunc()
     }
 }
 //MARK: Methods for Itinerary Tutorial
@@ -9288,19 +9462,19 @@ extension TripViewController {
             self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_requiresActionByYou_badgeButton, aboveSubview: itineraryTutorialView1_requiresActionByYou)
             
             
-            //item requires action by group
-            itineraryTutorialView1_requiresActionByGroup.layer.cornerRadius = (itineraryTutorialView1_requiresActionByGroup.frame.height) / 2
-            itineraryTutorialView1_requiresActionByGroup.layer.borderWidth = 2
-            itineraryTutorialView1_requiresActionByGroup.layer.borderColor = UIColor.darkGray.cgColor
-            itineraryTutorialView1_requiresActionByGroup.setTitleColor(UIColor.darkGray, for: .normal)
-            //badge button
-            let itineraryTutorialView1_requiresActionByGroup_badgeButton = MIBadgeButton()
-            itineraryTutorialView1_requiresActionByGroup_badgeButton.layer.frame.origin = CGPoint(x: itineraryTutorialView1_requiresActionByGroup.layer.frame.maxX - 5, y: itineraryTutorialView1_requiresActionByGroup.layer.frame.minY + 1)
-            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeString = "!"
-            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeTextColor = UIColor.white
-            itineraryTutorialView1_requiresActionByGroup_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeBackgroundColor = UIColor.orange
-            self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_requiresActionByGroup_badgeButton, aboveSubview: itineraryTutorialView1_requiresActionByGroup)
+//            //item requires action by group
+//            itineraryTutorialView1_requiresActionByGroup.layer.cornerRadius = (itineraryTutorialView1_requiresActionByGroup.frame.height) / 2
+//            itineraryTutorialView1_requiresActionByGroup.layer.borderWidth = 2
+//            itineraryTutorialView1_requiresActionByGroup.layer.borderColor = UIColor.darkGray.cgColor
+//            itineraryTutorialView1_requiresActionByGroup.setTitleColor(UIColor.darkGray, for: .normal)
+//            //badge button
+//            let itineraryTutorialView1_requiresActionByGroup_badgeButton = MIBadgeButton()
+//            itineraryTutorialView1_requiresActionByGroup_badgeButton.layer.frame.origin = CGPoint(x: itineraryTutorialView1_requiresActionByGroup.layer.frame.maxX - 5, y: itineraryTutorialView1_requiresActionByGroup.layer.frame.minY + 1)
+//            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeString = "!"
+//            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeTextColor = UIColor.white
+//            itineraryTutorialView1_requiresActionByGroup_badgeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+//            itineraryTutorialView1_requiresActionByGroup_badgeButton.badgeBackgroundColor = UIColor.orange
+//            self.itineraryTutorialView1.insertSubview(itineraryTutorialView1_requiresActionByGroup_badgeButton, aboveSubview: itineraryTutorialView1_requiresActionByGroup)
             
             //item complete
             itineraryTutorialView1_plannedAndConfirmed.layer.cornerRadius = (itineraryTutorialView1_plannedAndConfirmed.frame.height) / 2
@@ -9339,7 +9513,7 @@ extension TripViewController {
             self.smCalloutView.animation(withType: .stretch, presenting: true)
             self.smCalloutView.permittedArrowDirection = .down
             var calloutRect: CGRect = CGRect.zero
-            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: CGFloat(295))
+            calloutRect.origin = CGPoint(x: UIScreen.main.bounds.width / 2, y: topView.frame.height + destinationsDatesCollectionView.frame.minY)
             self.smCalloutView.presentCallout(from: calloutRect, in: self.view, constrainedTo: self.view, animated: true)
             //Skip 3 go to 4
             smCalloutViewMode = "itineraryTutorial4"
