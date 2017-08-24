@@ -1928,6 +1928,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
     }
 
     func spawnDoYouNeedARentalCarQuestionView() {
+        self.view.endEditing(true)
         if doYouNeedARentalCarQuestionView == nil {
             //Load next question
             doYouNeedARentalCarQuestionView = Bundle.main.loadNibNamed("DoYouNeedARentalCarQuestionView", owner: self, options: nil)?.first! as? DoYouNeedARentalCarQuestionView
@@ -2500,6 +2501,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         if alreadyHaveFlightsQuestionView == nil {
             //Load next question
             alreadyHaveFlightsQuestionView = Bundle.main.loadNibNamed("AlreadyHaveFlightsQuestionView", owner: self, options: nil)?.first! as? AlreadyHaveFlightsQuestionView
+            if flightSearchQuestionView == nil {
+                flightSearchQuestionView = Bundle.main.loadNibNamed("FlightSearchQuestionView", owner: self, options: nil)?.first! as? FlightSearchQuestionView
+            }
             self.scrollContentView.insertSubview(alreadyHaveFlightsQuestionView!, aboveSubview: flightSearchQuestionView!)
             alreadyHaveFlightsQuestionView?.tag = 35
             let bounds = UIScreen.main.bounds

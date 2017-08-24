@@ -85,6 +85,7 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         if destinationsForTrip.count > indexOfDestinationBeingPlanned {
             searchController?.searchBar.text = destinationsForTrip[indexOfDestinationBeingPlanned]
             button1?.isHidden = false
+            button1?.frame.origin.y = 170
             button?.frame.origin.y = 220
             button2?.frame.origin.y = 270
         } else {
@@ -92,6 +93,11 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
             button?.frame.origin.y = 170
             button2?.frame.origin.y = 220
         }
+        
+        if SavedPreferencesForTrip["assistantMode"] as! String != "initialItineraryBuilding" {
+            button2?.isHidden = true
+        }
+
     }
     
     func addViews() {

@@ -123,14 +123,13 @@ class AboutWhatTimeWillYouStartDrivingQuestionView: UIView {
         button2?.isHidden = false
         
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
         var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         
         formatter.dateFormat = "hh:mm a"
-        if let timeChosen = formatter.string(from: timePicker.date) {
-            travelDictionaryArray[indexOfDestinationBeingPlanned]["timeStartDriving"] = timeChosen
-        }
+        let timeChosen = formatter.string(from: timePicker.date)
+        travelDictionaryArray[indexOfDestinationBeingPlanned]["timeStartDriving"] = timeChosen
+        
         
     }
 
