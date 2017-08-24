@@ -67,7 +67,7 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         button1?.isHidden = true
 
         button2?.sizeToFit()
-        button2?.frame.size.height = 60
+        button2?.frame.size.height = 30
         button2?.frame.size.width += 20
         button2?.frame.origin.x = (bounds.size.width - (button2?.frame.width)!) / 2
         button2?.frame.origin.y = 170
@@ -187,8 +187,7 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         button2?.layer.borderColor = UIColor.white.cgColor
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.textAlignment = .center
-        button2?.titleLabel?.numberOfLines = 0
-        button2?.setTitle("I'll be there\n(this is a trip to visit me!)", for: .normal)
+        button2?.setTitle("I'll be there...this is a trip to visit me", for: .normal)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)

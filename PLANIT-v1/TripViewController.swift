@@ -3206,7 +3206,10 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
         var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
         var placeToStayDictionaryArray = SavedPreferencesForTrip["placeToStayDictionaryArray"] as! [[String:Any]]
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
-        let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        var destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
+        var destinationsForTripDictArray = SavedPreferencesForTrip["destinationsForTripDictArray"] as! [[String:Any]]
+        destinationsForTrip.append(DataContainerSingleton.sharedDataContainer.homeAirport!)
+        destinationsForTripDictArray.append(DataContainerSingleton.sharedDataContainer.startingPointDict as! [String : Any])
         if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
             if destinationsForTrip.count == 1 {
                 travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true])
@@ -3216,42 +3219,6 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             
             travelDictionaryArray.append(["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true])
         } else if indexOfDestinationBeingPlanned < travelDictionaryArray.count {
-//            if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String != "illAlreadyBeThere" {
-//                if flightSearchQuestionView != nil {
-//                    flightSearchQuestionView?.removeFromSuperview()
-//                    flightSearchQuestionView = nil
-//                    alreadyHaveFlightsQuestionView?.removeFromSuperview()
-//                    alreadyHaveFlightsQuestionView = nil
-//                    if doYouNeedARentalCarQuestionView != nil {
-//                        doYouNeedARentalCarQuestionView?.removeFromSuperview()
-//                        doYouNeedARentalCarQuestionView = nil
-//                        if carRentalSearchQuestionView != nil {
-//                            carRentalSearchQuestionView?.removeFromSuperview()
-//                            carRentalSearchQuestionView = nil
-//                        }
-//                    }
-//                }
-//                if doYouNeedARentalCarQuestionView != nil {
-//                    doYouNeedARentalCarQuestionView?.removeFromSuperview()
-//                    doYouNeedARentalCarQuestionView = nil
-//                    if carRentalSearchQuestionView != nil {
-//                        carRentalSearchQuestionView?.removeFromSuperview()
-//                        carRentalSearchQuestionView = nil
-//                    }
-//                    if aboutWhatTimeWillYouStartDrivingQuestionView != nil {
-//                        aboutWhatTimeWillYouStartDrivingQuestionView?.removeFromSuperview()
-//                        aboutWhatTimeWillYouStartDrivingQuestionView = nil
-//                    }
-//                }
-//                if busTrainOtherQuestionView != nil {
-//                    busTrainOtherQuestionView?.removeFromSuperview()
-//                    busTrainOtherQuestionView = nil
-//                }
-//                if idkHowToGetThereQuestionView != nil {
-//                    idkHowToGetThereQuestionView?.removeFromSuperview()
-//                    idkHowToGetThereQuestionView = nil
-//                }
-//            }
             if destinationsForTrip.count == 1 {
                 travelDictionaryArray[indexOfDestinationBeingPlanned] = ["modeOfTransportation":"illAlreadyBeThere","isRoundtrip":true]
             } else if destinationsForTrip.count > 1 {
@@ -3261,17 +3228,21 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 
         
         if indexOfDestinationBeingPlanned >= placeToStayDictionaryArray.count {
-            placeToStayDictionaryArray.append(["typeOfPlaceToStay":"hotel"])
+            placeToStayDictionaryArray.append(["typeOfPlaceToStay":"illAlreadyBeThere"])
         } else if indexOfDestinationBeingPlanned < placeToStayDictionaryArray.count {
             placeToStayDictionaryArray[indexOfDestinationBeingPlanned] = ["typeOfPlaceToStay":"illAlreadyBeThere"]
         }
         
         travelDictionaryArray[indexOfDestinationBeingPlanned]["illAlreadyBeThereText"] = "I'll already be there."
         placeToStayDictionaryArray[indexOfDestinationBeingPlanned]["illAlreadyBeThereText"] = "I'll already be there."
-        
+
+        SavedPreferencesForTrip["destinationsForTrip"] = destinationsForTrip
+        SavedPreferencesForTrip["destinationsForTripDictArray"] = destinationsForTripDictArray
         SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
         SavedPreferencesForTrip["placeToStayDictionaryArray"] = placeToStayDictionaryArray
         saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+        
+        initialItineraryBuildingCompleteReviewItinerary()
     }
     
     func howDoYouWantToGetThereQuestionView_illAlreadyBeThere(sender:UIButton) {
@@ -6064,7 +6035,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return destinationsDatesCell
             }
             
-            //Trip end date
+        //Trip end date
             if indexPath.row == destinationsDatesCollectionView.numberOfItems(inSection: 0) - 1 {
                 destinationsDatesCell.travelDateButton_badge.layer.frame.origin = CGPoint(x: destinationsDatesCell.travelDateButton.layer.frame.maxX - 33, y: destinationsDatesCell.travelDateButton.layer.frame.minY + 11)
                 destinationsDatesCell.travelDateButton_badge.isHidden = false
@@ -6193,6 +6164,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "carIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
                     } else if travelDictionaryArray[indexOfRoundtripTravel]["modeOfTransportation"] as! String == "busTrainOther" {
                         destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "busTrainOtherIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                    } else if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "illAlreadyBeThere" {
+                        destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "groupDeparting").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
                     }
                     
                     //set badge
@@ -6221,6 +6194,8 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "carIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
                     } else if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "busTrainOther" {
                         destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "busTrainOtherIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                    } else if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "illAlreadyBeThere" {
+                        destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "groupDeparting").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
                     }
                     
                     //set badge
@@ -6242,7 +6217,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 return destinationsDatesCell
             }
             
-            //2nd to (n - 1)th cell
+        //2nd to (n - 1)th cell
 
             //Find left and right dates
             var leftDatesDestinations = [String:Date]()
@@ -6320,11 +6295,13 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 
                 travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
                 if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "fly" {
-                    destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneTakingOff").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                    destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "airplaneLanding").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
                 } else if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "drive" {
                     destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "carIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
                 } else if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "busTrainOther" {
                     destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "busTrainOtherIcon").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
+                } else if travelDictionaryArray[indexPath.row - 1]["modeOfTransportation"] as! String == "illAlreadyBeThere" {
+                    destinationsDatesCell.travelButton.setBackgroundImage(#imageLiteral(resourceName: "groupArriving").withRenderingMode(UIImageRenderingMode.alwaysTemplate), for: .normal)
                 }
 
             }
@@ -6574,10 +6551,10 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 let cell = contactsCollectionView.cellForItem(at: IndexPath(item: item, section: 0)) as! contactsCollectionViewCell
                 if cell.initialsLabel.textColor == UIColor.darkGray && IndexPath(item: item, section: 0) != indexPath {
                     if IndexPath(item: item, section: 0) == IndexPath(item: 0, section: 0) {
-                        cell.thumbnailImage.image = UIImage(named: "no_contact_image")
+                        cell.thumbnailImage.image = UIImage(named: "no_contact_image_user")
                         cell.initialsLabel.textColor = UIColor.white
                     } else {
-                        cell.thumbnailImage.image = UIImage(named: "no_contact_image_user")
+                        cell.thumbnailImage.image = UIImage(named: "no_contact_image")
                         cell.initialsLabel.textColor = UIColor.white
                     }
                 }
