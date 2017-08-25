@@ -251,49 +251,9 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
             DispatchQueue.main.asyncAfter(deadline: when) {
                 
                 var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-                //            appDelegate.centerContainer!.toggleLeftDrawerSide(animated: true, completion: nil)
-                
-                
-                
-                
-                
-                //            let tripNameValue = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String
-                //            var leftViewController = self.storyboard?.instantiateViewController(withIdentifier: "LeftViewController") as! LeftViewController
-                //            let currentTrip
-                //            for row in 0 ... leftViewController.menuTableView.numberOfRows(inSection: 1) - 1 {
-                //                let cell = leftViewController.menuTableView.cellForRow(at: IndexPath(row: row, section: 1)) as! ExistingTripTableViewCell
-                //                if cell.existingTripTableViewLabel.text == tripNameValue {
-                //                    cell.backgroundColor = UIColor.gray
-                //                }
-                //            }
-                //
-                //
-                //
-                //
-                //
-                //
-                //            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! ExistingTripTableViewCell
-                //            let searchForTitle = cell.existingTripTableViewLabel.text
-                
                 //FIREBASEDISABLED
                 let channel = self.channels[DataContainerSingleton.sharedDataContainer.currenttrip!]
                 self.channelRef = self.channelRef.child(channel.id)
-                
-                //            let startingCurrentTrip = DataContainerSingleton.sharedDataContainer.currenttrip
-                //            for trip in 0...((DataContainerSingleton.sharedDataContainer.usertrippreferences?.count)! - 1) {
-                //                if DataContainerSingleton.sharedDataContainer.usertrippreferences?[trip].object(forKey: "trip_name") as? String == searchForTitle {
-                //                    DataContainerSingleton.sharedDataContainer.currenttrip = trip
-                //                }
-                //            }
-                
-                //            if ((appDelegate.centerContainer!.centerViewController as! UINavigationController).topViewController!.isKind(of: TripViewController.self)) && startingCurrentTrip == DataContainerSingleton.sharedDataContainer.currenttrip {
-                //                appDelegate.centerContainer!.toggleDrawerSide(DrawerSide.left, animated: true, completion: nil)
-                //                return
-                //            }
-                //
-                
-                //FIREBASEDISABLED
-                //            super.performSegue(withIdentifier: "tripListToTripViewController", sender: channel)
                 var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
                 
                 centerViewController.NewOrAddedTripFromSegue = 0

@@ -90,8 +90,8 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
             button2?.frame.origin.y = 270
         } else {
             button1?.isHidden = true
-            button?.frame.origin.y = 170
-            button2?.frame.origin.y = 220
+            button?.frame.origin.y = 270
+            button2?.frame.origin.y = 320
         }
         
         if SavedPreferencesForTrip["assistantMode"] as! String != "initialItineraryBuilding" {
@@ -193,7 +193,7 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
         button2?.layer.borderColor = UIColor.white.cgColor
         button2?.layer.masksToBounds = true
         button2?.titleLabel?.textAlignment = .center
-        button2?.setTitle("I'll be there...this is a trip to visit me", for: .normal)
+        button2?.setTitle("Group's destination is \((DataContainerSingleton.sharedDataContainer.homeAirport)!)", for: .normal)
         button2?.translatesAutoresizingMaskIntoConstraints = false
         button2?.addTarget(self, action: #selector(self.buttonClicked(sender:)), for: UIControlEvents.touchUpInside)
         self.addSubview(button2!)
