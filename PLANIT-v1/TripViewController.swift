@@ -2907,7 +2907,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
 //                }
             }
 
-            let continueAction = UIAlertAction(title: "Travel and accomodation", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
+            let continueAction = UIAlertAction(title: "Plan travel and accomodation", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
 
                 //set planning index to 0
                 let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
@@ -7216,9 +7216,10 @@ extension TripViewController {
         let JRSDKSearchInfo = NSKeyedUnarchiver.unarchiveObject(with: JRSDKSearchInfoAsData) as? JRSDKSearchInfo
         let travelSegments = JRSDKSearchInfo?.travelSegments
         let firstLeg = travelSegments?[0] as! JRSDKTravelSegment
-        let departureDate = firstLeg.departureDate
+        
+        
         formatter.dateFormat = "MM/dd"
-        let departureDateAsString = formatter.string(from: departureDate as Date)
+        var departureDateAsString = String()
 
         let departureAirport = firstLeg.originAirport
         let arrivalAirport = firstLeg.destinationAirport
@@ -7230,8 +7231,19 @@ extension TripViewController {
             let returnDate = secondLeg.departureDate
             let returnDateAsString = formatter.string(from: returnDate as Date)
 
+            let departureDate = firstLeg.departureDate
+            departureDateAsString = formatter.string(from: departureDate as Date)
+
+            
             self.searchSummaryLabelTopView.text = "\((departureAirport.iata)) ⇄ \((arrivalAirport.iata))\n\(departureDateAsString) - \(returnDateAsString)"
         } else {
+            
+            var dayComponent = DateComponents()
+            dayComponent.day = 0
+            var theCalendar = Calendar.current
+            let departureDate = theCalendar.date(byAdding: dayComponent, to: firstLeg.departureDate)
+            departureDateAsString = formatter.string(from: departureDate as! Date)
+
             self.searchSummaryLabelTopView.text = "\((departureAirport.iata)) → \((arrivalAirport.iata))\n\(departureDateAsString)"
 
         }

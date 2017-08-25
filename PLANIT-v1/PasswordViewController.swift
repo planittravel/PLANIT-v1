@@ -304,7 +304,17 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
                 var centerNavController = UINavigationController(rootViewController: centerViewController)
                 centerViewController.navigationController?.isNavigationBarHidden = true
                 appDelegate.centerContainer!.centerViewController = centerNavController
-                centerViewController.chat()
+
+                let when = DispatchTime.now() + 0.3
+                DispatchQueue.main.asyncAfter(deadline: when) {
+                    centerViewController.chat()
+                    if centerViewController.isAssistantEnabled {
+                        centerViewController.segmentedControl?.move(to: 2)
+                    } else {
+                        centerViewController.segmentedControl?.move(to: 1)
+                    }
+
+                }
             }
         }
 

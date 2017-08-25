@@ -137,11 +137,6 @@
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <variation key="default">
-                <mask key="subviews">
-                    <exclude reference="qtv-gi-Drx"/>
-                </mask>
-            </variation>
             <connections>
                 <outlet property="agencyInfoLabel" destination="eog-HV-JQy" id="fcZ-Xw-SGz"/>
                 <outlet property="buyButton" destination="wT0-eD-j9g" id="0Rh-mw-XAt"/>
