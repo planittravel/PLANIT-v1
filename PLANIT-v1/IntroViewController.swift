@@ -23,25 +23,36 @@ class IntroViewController: UIViewController, EAIntroDelegate {
         var page1 = EAIntroPage()
         page1.title = "Propose itineraries and share"
         page1.titleFont = UIFont.boldSystemFont(ofSize: 25)
+        page1.titlePositionY = 475
         page1.desc = description1
         page1.titleIconView = UIImageView(image: #imageLiteral(resourceName: "itineraryIcon"))
+        page1.titleIconPositionY = 200
         var page2 = EAIntroPage()
         page2.title = "See everyone else's plans"
         page2.titleFont = UIFont.boldSystemFont(ofSize: 25)
+        page2.titlePositionY = 475
         page2.desc = description2
         page2.titleIconView = UIImageView(image: #imageLiteral(resourceName: "twoPeopleIcon"))
+        page2.titleIconPositionY = 200
         var page3 = EAIntroPage()
         page3.title = "Track where you want to go\nand where you've been"
         page3.titleFont = UIFont.boldSystemFont(ofSize: 25)
+        page3.titlePositionY = 475
         page3.desc = description3
         page3.titleIconView = UIImageView(image: #imageLiteral(resourceName: "globePinIcon"))
+        page3.titleIconPositionY = 200
         intro = EAIntroView(frame: self.view.frame, andPages: [page1, page2, page3])
         intro?.delegate = self
-        intro?.skipButtonAlignment = EAViewAlignment.center
+        intro?.skipButtonAlignment = EAViewAlignment.right
+        intro?.skipButton.setTitle("Plan a trip!", for: .normal)
         intro?.skipButton.addTarget(self, action: #selector(setTripViewControllerAsCenterViewController), for: UIControlEvents.touchUpInside)
-        intro?.skipButtonY = 80.0
+        intro?.skipButtonY = 60.0
+        intro?.showSkipButtonOnlyOnLastPage = true
         intro?.pageControlY = 42.0
         intro?.show(in: self.view, animateDuration: 0.1)
+        
+        
+        
         
     }
     
