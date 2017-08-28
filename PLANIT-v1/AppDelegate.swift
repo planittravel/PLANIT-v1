@@ -58,8 +58,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //Set root VC
         
-        window!.rootViewController = mainStoryboard.instantiateViewController(withIdentifier: "IntroViewController") as! IntroViewController
-//        window!.rootViewController = centerContainer
+//        window!.rootViewController = mainStoryboard.instantiateViewController(withIdentifier: "IntroViewController") as! IntroViewController
+        window!.rootViewController = centerContainer
         window!.makeKeyAndVisible()
         
         

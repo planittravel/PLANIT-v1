@@ -17,14 +17,27 @@ class CenterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(setUpTripController), name: NSNotification.Name(rawValue: "setUpTripController"), object: nil)
+        
         self.navigationController?.isNavigationBarHidden = true
         
         if DataContainerSingleton.sharedDataContainer.usertrippreferences == nil || DataContainerSingleton.sharedDataContainer.usertrippreferences?.count == 0 {
             DataContainerSingleton.sharedDataContainer.currenttrip = 0
+            setUpIntroViewController()
+        } else {
+            setUpTripController()
         }
-        setUpTripController()
     }
     
+    
+    func setUpIntroViewController(){
+        var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "IntroViewController") as! IntroViewController
+        
+        var centerNavController = UINavigationController(rootViewController: centerViewController)
+        centerViewController.navigationController?.isNavigationBarHidden = true
+        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.centerContainer!.centerViewController = centerNavController
+    }
     
     func setUpTripController() {
         var centerViewController = self.storyboard?.instantiateViewController(withIdentifier: "TripViewController") as! TripViewController
