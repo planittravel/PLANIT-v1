@@ -52,6 +52,9 @@ pod 'ZKPulseView', '~> 0.0.1’
 # badging
 pod 'MIBadgeButton-Swift', :git => 'https://github.com/mustafaibrahim989/MIBadgeButton-Swift.git', :branch => 'master'
 
+# intro view
+pod 'EAIntroView', '~> 2.10'
+
 # Pods for TravelPayouts
 pod 'AviasalesSDK', '~> 3.0.0'
 pod 'SDWebImage', '~> 3.7'

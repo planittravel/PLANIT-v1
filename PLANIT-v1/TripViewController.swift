@@ -6962,7 +6962,7 @@ extension TripViewController {
             self.didYouBuyTheFlightQuestionPopover = nil
             self.popupBackgroundFilterView.removeFromSuperview()
             self.popupBackgroundFilterView.isHidden = true
-            self.spawnDoYouNeedARentalCarQuestionView()
+//            self.spawnDoYouNeedARentalCarQuestionView()
         }
     }
     
@@ -7025,7 +7025,7 @@ extension TripViewController {
             self.didYouBuyTheHotelQuestionView = nil
             self.popupBackgroundFilterView.removeFromSuperview()
             self.popupBackgroundFilterView.isHidden = true
-            self.planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView()
+//            self.planTravelAndPlaceToStayForAnotherDestinationOrSendProposalQuestionView()
         }
     }
     

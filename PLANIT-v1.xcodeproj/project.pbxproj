@@ -748,6 +748,7 @@
 		FA6361241F267C44003F9477 /* HotelItemsAccessoryMethodsPerformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6361231F267C44003F9477 /* HotelItemsAccessoryMethodsPerformer.swift */; };
 		FA647D3D1EE7666E00B36138 /* LoginUser.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FA647D3C1EE7666E00B36138 /* LoginUser.graphql */; };
 		FA647D3F1EE775A100B36138 /* GetAllUsers.graphql in Resources */ = {isa = PBXBuildFile; fileRef = FA647D3E1EE775A100B36138 /* GetAllUsers.graphql */; };
+		FA6903A11F53BB4800955610 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6903A01F53BB4800955610 /* IntroViewController.swift */; };
 		FA70D01F1EFA5CB000126176 /* destinationsSwipedRightTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA70D01E1EFA5CB000126176 /* destinationsSwipedRightTableViewCell.swift */; };
 		FA77D1EF1EFDCE6E00A37A05 /* CarRentalSearchQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA77D1EE1EFDCE6E00A37A05 /* CarRentalSearchQuestionView.swift */; };
 		FA77D1F11EFDCED700A37A05 /* CarRentalSearchQuestionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA77D1F01EFDCED700A37A05 /* CarRentalSearchQuestionView.xib */; };
@@ -1858,6 +1859,7 @@
 		FA6361231F267C44003F9477 /* HotelItemsAccessoryMethodsPerformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HotelItemsAccessoryMethodsPerformer.swift; sourceTree = "<group>"; };
 		FA647D3C1EE7666E00B36138 /* LoginUser.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LoginUser.graphql; sourceTree = "<group>"; };
 		FA647D3E1EE775A100B36138 /* GetAllUsers.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GetAllUsers.graphql; sourceTree = "<group>"; };
+		FA6903A01F53BB4800955610 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		FA70D01E1EFA5CB000126176 /* destinationsSwipedRightTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = destinationsSwipedRightTableViewCell.swift; sourceTree = "<group>"; };
 		FA77D1EE1EFDCE6E00A37A05 /* CarRentalSearchQuestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarRentalSearchQuestionView.swift; sourceTree = "<group>"; };
 		FA77D1F01EFDCED700A37A05 /* CarRentalSearchQuestionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CarRentalSearchQuestionView.xib; sourceTree = "<group>"; };
@@ -4578,6 +4580,7 @@
 			children = (
 				FA8F08741F46D00A00628AFE /* DrawerViewController */,
 				FAAF6EBA1F4B312800345B95 /* PasswordViewController.swift */,
+				FA6903A01F53BB4800955610 /* IntroViewController.swift */,
 				FAA8F2651E351B9500CD7337 /* SettingsViewController.swift */,
 				FA9E39801EBBD2A900F6CB0B /* bucketListViewController.swift */,
 				FAA8F25C1E351B9500CD7337 /* EmailViewController.swift */,
@@ -5782,6 +5785,7 @@
 				FA2530CC1F1D3B6D002BCE29 /* JRFilterTicketBounds.m in Sources */,
 				FA2531E51F1D3B6D002BCE29 /* HLControlCollectionViewCell.swift in Sources */,
 				FA2533261F1D3B6E002BCE29 /* BottomDrawer+Objc.swift in Sources */,
+				FA6903A11F53BB4800955610 /* IntroViewController.swift in Sources */,
 				FA25319A1F1D3B6D002BCE29 /* HLScrollableSegmentedControl.swift in Sources */,
 				FA25318F1F1D3B6D002BCE29 /* NSArray+Functional.m in Sources */,
 				FA25327B1F1D3B6E002BCE29 /* PriceSection.swift in Sources */,

@@ -119,6 +119,9 @@ PODS:
   - DrawerController/Core (3.2.1)
   - DrawerController/DrawerVisualStates (3.2.1):
     - DrawerController/Core
+  - EAIntroView (2.10.0):
+    - EARestrictedScrollView (~> 1.1.0)
+  - EARestrictedScrollView (1.1.0)
   - Fabric (1.6.12)
   - Firebase/Auth (4.0.4):
     - Firebase/Core
@@ -267,6 +270,7 @@ DEPENDENCIES:
   - Crashlytics
   - CSVImporter (~> 1.7)
   - DrawerController (~> 3.2)
+  - EAIntroView (~> 2.10)
   - Fabric
   - Firebase/Auth
   - Firebase/Core
@@ -335,6 +339,8 @@ SPEC CHECKSUMS:
   Crashlytics: dfbae35ef22ca189240d230ad501feea4ee85d2d
   CSVImporter: 9b7fb2a308977137d9a64e7898ec54168c38ce96
   DrawerController: d2f25c567a1786476d74bfe8cde9a5bdd39972a9
+  EAIntroView: 3494b7bbd1212e3a4f7e8d16194a1b00e7b9abb2
+  EARestrictedScrollView: b0c2a3f92fb2610bb44d71c5e4893777c89e45ef
   Fabric: f050464eac45a2ce5a8e6e6a07e977c0df32fe28
   Firebase: 1492bf04e1b73a7353b4fb2cf5a20bac9692f341
   FirebaseAnalytics: ad41720e3e67fc63fbe3d2948d3e26932a8de311
@@ -378,6 +384,6 @@ SPEC CHECKSUMS:
   UIColor+FlatColors: 6c699df7a575281794c688c64cee6c44fd1f93b4
   ZKPulseView: 22ea7a0ee3a7a77be46ddba8139400d5be8bdbaf
 
-PODFILE CHECKSUM: d6059a4cbd655a7d882e523e792e02f80eabcd15
+PODFILE CHECKSUM: a134aeab4efb946c54ba0b3f83d3c460b7731ec4
 
 COCOAPODS: 1.1.1

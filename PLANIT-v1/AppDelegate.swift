@@ -57,7 +57,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         centerContainer!.maximumLeftDrawerWidth = 305
         
         //Set root VC
-        window!.rootViewController = centerContainer
+        
+        window!.rootViewController = mainStoryboard.instantiateViewController(withIdentifier: "IntroViewController") as! IntroViewController
+//        window!.rootViewController = centerContainer
         window!.makeKeyAndVisible()
         
         
