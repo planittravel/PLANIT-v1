@@ -42,12 +42,12 @@ class IntroViewController: UIViewController, EAIntroDelegate {
         intro?.skipButtonY = 80.0
         intro?.pageControlY = 42.0
         intro?.show(in: self.view, animateDuration: 0.1)
-
         
     }
     
-    
-    
+    func introWillFinish(_ introView: EAIntroView!, wasSkipped: Bool) {
+        setTripViewControllerAsCenterViewController()
+    }
     
     func setTripViewControllerAsCenterViewController() {
         
@@ -61,31 +61,6 @@ class IntroViewController: UIViewController, EAIntroDelegate {
         var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.centerContainer!.centerViewController = centerNavController
 
-        
-        
-        
-//        var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
-//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "setUpTripController"), object: nil)
-//        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//
-//        //Instantiate VCs from storyboard
-//        let centerViewController = mainStoryboard.instantiateViewController(withIdentifier: "CenterViewController") as! CenterViewController
-//        let leftViewController = mainStoryboard.instantiateViewController(withIdentifier: "LeftViewController") as! LeftViewController
-//        let rightViewController = mainStoryboard.instantiateViewController(withIdentifier: "RightViewController") as! RightViewController
-//        
-//        //Create nav controllers
-//        let leftSideNav = UINavigationController(rootViewController: leftViewController)
-//        let centerNav = UINavigationController(rootViewController: centerViewController)
-//        let rightNav = UINavigationController(rootViewController: rightViewController)
-//        
-//        //Create instance of DrawerController and set open and close gesture modes
-//        appDelegate.centerContainer = DrawerController(centerViewController: centerNav, leftDrawerViewController: leftSideNav)
-//        appDelegate.centerContainer!.openDrawerGestureModeMask = OpenDrawerGestureMode.panningCenterView
-//        appDelegate.centerContainer!.closeDrawerGestureModeMask = CloseDrawerGestureMode.panningCenterView
-//        appDelegate.centerContainer!.maximumLeftDrawerWidth = 305
-//        
-//        //Set root VC
-//        appDelegate.window!.rootViewController = centerContainer
 
     }
 }

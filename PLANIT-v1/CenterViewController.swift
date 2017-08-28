@@ -17,8 +17,6 @@ class CenterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(setUpTripController), name: NSNotification.Name(rawValue: "setUpTripController"), object: nil)
-        
         self.navigationController?.isNavigationBarHidden = true
         
         if DataContainerSingleton.sharedDataContainer.usertrippreferences == nil || DataContainerSingleton.sharedDataContainer.usertrippreferences?.count == 0 {
