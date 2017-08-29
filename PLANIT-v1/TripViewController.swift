@@ -3332,7 +3332,11 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
             saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
             
-            planPlaceToStayOrReviewItinerary()
+            if SavedPreferencesForTrip["assistantMode"] as! String == "travel" {
+                disableAndResetAssistant_moveToItinerary()
+            } else {
+                planPlaceToStayOrReviewItinerary()
+            }
         }
     }
     func howDoYouWantToGetThereQuestionView_skipThisIPlannedRoundTripTravel(sender:UIButton) {
@@ -4008,14 +4012,14 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 if travelDictionaryArray[i]["modeOfTransportation"] as! String == "illAlreadyBeThere" {
                     didPlanRoundTripTravel = true
                 } else if travelDictionaryArray[i]["modeOfTransportation"] as! String == "fly" {
-                    if travelDictionaryArray[i]["isRoundtrip"] as! Bool != nil {
-                        if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
+                    if travelDictionaryArray[i]["isRoundtrip"] as? Bool != nil {
+                        if travelDictionaryArray[i]["isRoundtrip"] as? Bool == true {
                             didPlanRoundTripTravel = true
                         }
                     }
                 } else if travelDictionaryArray[i]["modeOfTransportation"] as! String == "drive" {
-                    if travelDictionaryArray[i]["isRoundtrip"] as! Bool != nil {
-                        if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
+                    if travelDictionaryArray[i]["isRoundtrip"] as? Bool != nil {
+                        if travelDictionaryArray[i]["isRoundtrip"] as? Bool == true {
                             didPlanRoundTripTravel = true
                         }
                     }
@@ -6170,7 +6174,7 @@ extension TripViewController: UICollectionViewDelegate, UICollectionViewDataSour
                         var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
                         if i < travelDictionaryArray.count {
                             if travelDictionaryArray[i]["isRoundtrip"] as? Bool != nil {
-                                if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
+                                if travelDictionaryArray[i]["isRoundtrip"] as? Bool == true {
                                     isRoundtripTravelPlanned = true
                                     indexOfRoundtripTravel = i
                                 }
@@ -8390,7 +8394,7 @@ extension TripViewController {
                     return TravelProgress.typeChosenFlyAndPlanitFlightBooked
                 } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightsSavedOnPlanit"] != nil {
                     return TravelProgress.typeChosenFlyAndPlanitFlightFavorited
-                } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightNotFromPlanit"] as! Bool == true {
+                } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["flightNotFromPlanit"] as? Bool == true {
                     return TravelProgress.typeChosenFlyAndDetailsProvided
                 } else {
                     return TravelProgress.onlyTypeChosenFly
@@ -8407,7 +8411,7 @@ extension TripViewController {
                 if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["rentalCar"] != nil {
                     //PLANNED: FETCH DETAILS FROM PRICELINE
                     return TravelProgress.typeChosenDriveRentalCar
-                } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["personalCar"] as! Bool == true {
+                } else if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[index]["personalCar"] as? Bool == true {
                     return TravelProgress.typeChosenDriveAlreadyHaveCar
                 } else {
                     return TravelProgress.onlyTypeChosenDrive
@@ -8495,7 +8499,7 @@ extension TripViewController {
                     var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
                     if i < travelDictionaryArray.count {
                         if travelDictionaryArray[i]["isRoundtrip"] as? Bool != nil {
-                            if travelDictionaryArray[i]["isRoundtrip"] as! Bool == true {
+                            if travelDictionaryArray[i]["isRoundtrip"] as? Bool == true {
                                 if travelDictionaryArray[i]["modeOfTransportation"] as! String == "fly" {
                                     if (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightBookedOnPlanit"] != nil || (SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]])[i]["flightNotFromPlanit"] != nil {
                                         
@@ -8634,7 +8638,7 @@ extension TripViewController {
                     self.assistant()
                 }
                 let changeAction = UIAlertAction(title: "Not flying", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
+                    SavedPreferencesForTrip["assistantMode"] = "travel" as NSString
                     SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
                     self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                     
@@ -8682,7 +8686,7 @@ extension TripViewController {
                     self.assistant()
                 }
                 let changeAction = UIAlertAction(title: "Not bus or train", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
+                    SavedPreferencesForTrip["assistantMode"] = "travel" as NSString
                     SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
                     self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                     
@@ -8736,7 +8740,7 @@ extension TripViewController {
                     self.assistant()
                 }
                 let changeAction = UIAlertAction(title: "Not driving", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in
-                    SavedPreferencesForTrip["assistantMode"] = "placeToStay" as NSString
+                    SavedPreferencesForTrip["assistantMode"] = "travel" as NSString
                     SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] = sender.tag - 1
                     self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                     
