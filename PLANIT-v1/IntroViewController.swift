@@ -24,14 +24,15 @@ class IntroViewController: UIViewController, EAIntroDelegate {
         let bounds = UIScreen.main.bounds
 
         var page1 = EAIntroPage()
-        page1.title = "Propose itineraries and share"
+        page1.title = "Propose itineraries..."
         page1.titleFont = UIFont.boldSystemFont(ofSize: 25)
         page1.titlePositionY = 300
         page1.desc = description1
         page1.titleIconView = UIImageView(image: #imageLiteral(resourceName: "itineraryIcon"))
+//                page1.titleIconView = UIImageView(image: #imageLiteral(resourceName: "Artboard 1"))
         page1.titleIconPositionY = bounds.height - page1.titlePositionY - 195
         var page2 = EAIntroPage()
-        page2.title = "See everyone else's plans"
+        page2.title = "See everyone else's plans..."
         page2.titleFont = UIFont.boldSystemFont(ofSize: 25)
         page2.titlePositionY = 300
         page2.desc = description2

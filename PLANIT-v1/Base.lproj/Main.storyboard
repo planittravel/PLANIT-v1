@@ -332,9 +332,13 @@
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="F1c-ig-w97" firstAttribute="leading" secondItem="H9c-uF-gMZ" secondAttribute="leading" id="9EC-gR-s6B"/>
+                            <constraint firstAttribute="trailing" secondItem="F1c-ig-w97" secondAttribute="trailing" id="Fw1-qP-lJi"/>
+                            <constraint firstItem="F1c-ig-w97" firstAttribute="top" secondItem="H9c-uF-gMZ" secondAttribute="top" id="Jkd-Ad-Zea"/>
                             <constraint firstItem="6Fx-Zc-f9p" firstAttribute="top" secondItem="H9c-uF-gMZ" secondAttribute="top" id="PTf-S9-2UX"/>
                             <constraint firstAttribute="trailing" secondItem="F1c-ig-w97" secondAttribute="trailing" id="Rzs-nh-cxO"/>
                             <constraint firstItem="IVr-bq-wos" firstAttribute="top" secondItem="6Fx-Zc-f9p" secondAttribute="bottom" id="U38-ES-q2t"/>
+                            <constraint firstItem="IVr-bq-wos" firstAttribute="top" secondItem="F1c-ig-w97" secondAttribute="bottom" id="VoA-eK-W1P"/>
+                            <constraint firstItem="F1c-ig-w97" firstAttribute="leading" secondItem="H9c-uF-gMZ" secondAttribute="leading" id="aJk-SC-IdU"/>
                             <constraint firstAttribute="bottom" secondItem="F1c-ig-w97" secondAttribute="bottom" id="b65-TM-ITA"/>
                             <constraint firstItem="F1c-ig-w97" firstAttribute="top" secondItem="H9c-uF-gMZ" secondAttribute="top" id="gPT-3y-fH5"/>
                             <constraint firstItem="6Fx-Zc-f9p" firstAttribute="leading" secondItem="H9c-uF-gMZ" secondAttribute="leading" id="jmc-i1-ZQ6"/>
@@ -363,11 +367,10 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </imageView>
-                            <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mhi-m1-XdU">
-                                <rect key="frame" x="0.0" y="-1" width="375" height="668"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="bki-3O-0ed">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="668"/>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mhi-m1-XdU">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="bki-3O-0ed">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                                 <blurEffect style="light"/>
@@ -494,6 +497,12 @@
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Mhi-m1-XdU" firstAttribute="leading" secondItem="gtV-M1-UaZ" secondAttribute="leading" id="0o3-iN-kZ7"/>
+                            <constraint firstItem="Mhi-m1-XdU" firstAttribute="top" secondItem="gtV-M1-UaZ" secondAttribute="top" id="8j4-3U-CeJ"/>
+                            <constraint firstAttribute="trailing" secondItem="Mhi-m1-XdU" secondAttribute="trailing" id="RDh-ik-2yQ"/>
+                            <constraint firstAttribute="bottom" secondItem="Mhi-m1-XdU" secondAttribute="bottom" id="dYb-6p-7ie"/>
+                        </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="zHC-i1-YbP"/>
@@ -548,10 +557,9 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </imageView>
-                            <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nUd-DK-C82">
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nUd-DK-C82">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="9pB-nt-hR4">
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="9pB-nt-hR4">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
@@ -1070,10 +1078,14 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="nUd-DK-C82" firstAttribute="top" secondItem="muN-a6-dmD" secondAttribute="top" id="3Cj-XJ-d83"/>
                             <constraint firstItem="SNF-xw-05H" firstAttribute="top" secondItem="CD1-TJ-nzS" secondAttribute="bottom" constant="45" id="5Wz-3O-2Gi"/>
                             <constraint firstItem="4fw-4a-zq8" firstAttribute="top" secondItem="SNF-xw-05H" secondAttribute="bottom" id="Kwd-Fg-vOb"/>
                             <constraint firstItem="EeG-2u-mWE" firstAttribute="width" secondItem="muN-a6-dmD" secondAttribute="width" id="OrC-3N-7iz"/>
+                            <constraint firstAttribute="trailing" secondItem="nUd-DK-C82" secondAttribute="trailing" id="Smj-X7-7Ay"/>
+                            <constraint firstItem="nUd-DK-C82" firstAttribute="leading" secondItem="muN-a6-dmD" secondAttribute="leading" id="YYY-wb-iYu"/>
                             <constraint firstAttribute="trailing" secondItem="SNF-xw-05H" secondAttribute="trailing" id="iOS-Ta-8lF"/>
+                            <constraint firstItem="4fw-4a-zq8" firstAttribute="top" secondItem="nUd-DK-C82" secondAttribute="bottom" id="oND-IJ-Dtu"/>
                             <constraint firstItem="SNF-xw-05H" firstAttribute="leading" secondItem="muN-a6-dmD" secondAttribute="leading" id="p4B-UB-W6a"/>
                         </constraints>
                         <variation key="default">
@@ -2288,10 +2300,9 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </imageView>
-                            <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="APO-Sp-SPB">
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="APO-Sp-SPB">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="RRq-Of-Uk3">
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="RRq-Of-Uk3">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
@@ -2357,9 +2368,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="APO-Sp-SPB" firstAttribute="top" secondItem="WMK-sP-FeH" secondAttribute="top" id="DlX-du-wIm"/>
+                            <constraint firstItem="APO-Sp-SPB" firstAttribute="leading" secondItem="WMK-sP-FeH" secondAttribute="leading" id="FE9-8b-VrG"/>
+                            <constraint firstAttribute="bottom" secondItem="APO-Sp-SPB" secondAttribute="bottom" id="SaT-R1-9UW"/>
                             <constraint firstAttribute="bottom" secondItem="EQ3-AO-EB0" secondAttribute="bottom" id="SqQ-rC-UZV"/>
                             <constraint firstItem="EQ3-AO-EB0" firstAttribute="leading" secondItem="WMK-sP-FeH" secondAttribute="leading" id="hjV-JJ-A6q"/>
                             <constraint firstAttribute="trailing" secondItem="EQ3-AO-EB0" secondAttribute="trailing" id="lFe-EQ-tI5"/>
+                            <constraint firstAttribute="trailing" secondItem="APO-Sp-SPB" secondAttribute="trailing" id="oG1-fH-nry"/>
                             <constraint firstItem="EQ3-AO-EB0" firstAttribute="top" secondItem="WMK-sP-FeH" secondAttribute="top" id="tmh-oR-bwm"/>
                         </constraints>
                         <variation key="default">
@@ -11655,9 +11670,9 @@ AAAAAAAAAAAABApgA
         <image name="white line" width="450" height="450"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="D0h-av-d3S"/>
-        <segue reference="5m0-36-R99"/>
+        <segue reference="4hW-EN-T1K"/>
         <segue reference="1VF-PM-MLD"/>
+        <segue reference="5m0-36-R99"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

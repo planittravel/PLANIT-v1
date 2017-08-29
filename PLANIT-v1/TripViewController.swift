@@ -2093,6 +2093,9 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                 self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (aboutWhatTimeWillYouStartDrivingQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
             } else if travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "busTrainOther" || travelDictionaryArray[indexOfDestinationBeingPlanned]["modeOfTransportation"] as! String == "fly" {
                 if doYouNeedARentalCarQuestionView == nil {
+                    if flightSearchQuestionView == nil {
+                        flightSearchQuestionView = Bundle.main.loadNibNamed("FlightSearchQuestionView", owner: self, options: nil)?.first! as? FlightSearchQuestionView
+                    }
                     self.scrollContentView.insertSubview(doYouKnowWhereYouWillBeStayingQuestionView!, aboveSubview: flightSearchQuestionView!)
                     self.doYouKnowWhereYouWillBeStayingQuestionView!.frame = CGRect(x: 0, y: (flightSearchQuestionView?.frame.maxY)!, width: scrollView.frame.width, height: bounds.size.height - scrollView.frame.minY)
                 } else if carRentalSearchQuestionView == nil {
@@ -3035,7 +3038,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
             let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
             if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
-                if destinationsForTrip.count == 1 {
+                if destinationsForTrip.count <= 1 {
                     travelDictionaryArray.append(["modeOfTransportation":"fly","isRoundtrip":true])
                 } else if destinationsForTrip.count > 1 {
                     travelDictionaryArray.append(["modeOfTransportation":"fly","isRoundtrip":false])
@@ -3083,7 +3086,7 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
             let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
             let destinationsForTrip = SavedPreferencesForTrip["destinationsForTrip"] as! [String]
             if indexOfDestinationBeingPlanned >= travelDictionaryArray.count {
-                if destinationsForTrip.count == 1 {
+                if destinationsForTrip.count <= 1 {
                     travelDictionaryArray.append(["modeOfTransportation":"drive","isRoundtrip":true])
                 } else if destinationsForTrip.count > 1 {
                     travelDictionaryArray.append(["modeOfTransportation":"drive","isRoundtrip":false])
@@ -8470,6 +8473,7 @@ extension TripViewController {
                     self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                     
                     self.spawnHowDoYouWantToGetThereQuestionView()
+                    self.howDoYouWantToGetThereQuestionView?.questionLabel?.text = "How do you want to get there?"
                     
                     self.isAssistantEnabled = true
                     self.handleTwicketSegmentedControl()

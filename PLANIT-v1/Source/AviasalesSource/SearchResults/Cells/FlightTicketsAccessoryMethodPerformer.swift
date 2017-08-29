@@ -86,7 +86,11 @@ import AviasalesSDK
         let indexOfDestinationBeingPlanned = SavedPreferencesForTrip["indexOfDestinationBeingPlanned"] as! Int
         
         var travelDictionaryArray = SavedPreferencesForTrip["travelDictionaryArray"] as! [[String:Any]]
-        travelDictionaryArray[indexOfDestinationBeingPlanned]["isRoundtrip"] = isRoundtrip
+        if travelDictionaryArray.count > 0 {
+            travelDictionaryArray[indexOfDestinationBeingPlanned]["isRoundtrip"] = isRoundtrip
+        } else {
+            travelDictionaryArray.append(["isRoundtrip":isRoundtrip])
+        }
         SavedPreferencesForTrip["travelDictionaryArray"] = travelDictionaryArray
         saveUpdatedExistingTrip(SavedPreferencesForTrip: SavedPreferencesForTrip)
         
@@ -101,7 +105,7 @@ import AviasalesSDK
     func checkIfIsMultiDestinationTrip() -> Bool {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
         var destinationsForTrip = (SavedPreferencesForTrip["destinationsForTrip"] as! [String])
-        if destinationsForTrip.count == 1 {
+        if destinationsForTrip.count <= 1 {
             return false
         }
         return true
@@ -113,11 +117,15 @@ import AviasalesSDK
     
     //Starting point
     func checkIfStartingPointAirportFound() -> Bool {
-        var startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as! [String:Any]
-        if let startingPointAirportAsString = startingPointDict["JRSDKAirport"] as? String {
-            if startingPointAirportAsString == "noAirportFound" {
-                return false
+       
+        if let startingPointDict = DataContainerSingleton.sharedDataContainer.startingPointDict as? [String:Any] {
+            if let startingPointAirportAsString = startingPointDict["JRSDKAirport"] as? String {
+                if startingPointAirportAsString == "noAirportFound" {
+                    return false
+                }
             }
+        } else {
+            return false
         }
         return true
     }
@@ -139,11 +147,14 @@ import AviasalesSDK
     }
     func checkIfEndingPointAirportFound() -> Bool {
         let SavedPreferencesForTrip = fetchSavedPreferencesForTrip()
-        var endingPointDict = SavedPreferencesForTrip["endingPointDict"] as! [String:Any]
-        if let endingPointAirportAsString = endingPointDict["JRSDKAirport"] as? String {
-            if endingPointAirportAsString == "noAirportFound" {
-                return false
+        if let endingPointDict = SavedPreferencesForTrip["endingPointDict"] as? [String:Any] {
+            if let endingPointAirportAsString = endingPointDict["JRSDKAirport"] as? String {
+                if endingPointAirportAsString == "noAirportFound" {
+                    return false
+                }
             }
+        } else {
+            return false
         }
         return true
     }
