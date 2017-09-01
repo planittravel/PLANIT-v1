@@ -107,6 +107,12 @@ PODS:
   - BlocksKit/UIKit (2.2.5):
     - BlocksKit/Core
     - BlocksKit/DynamicDelegate
+  - Bolts (1.8.4):
+    - Bolts/AppLinks (= 1.8.4)
+    - Bolts/Tasks (= 1.8.4)
+  - Bolts/AppLinks (1.8.4):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.8.4)
   - BZipCompression (1.0.2)
   - Cartography (1.1.0)
   - Crashlytics (3.8.5):
@@ -123,6 +129,22 @@ PODS:
     - EARestrictedScrollView (~> 1.1.0)
   - EARestrictedScrollView (1.1.0)
   - Fabric (1.6.12)
+  - Facebook-iOS-SDK (4.1.0):
+    - Bolts (~> 1.1)
+    - Facebook-iOS-SDK/CoreKit (= 4.1.0)
+    - Facebook-iOS-SDK/LoginKit (= 4.1.0)
+    - Facebook-iOS-SDK/ShareKit (= 4.1.0)
+  - Facebook-iOS-SDK/CoreKit (4.1.0):
+    - Bolts (~> 1.1)
+    - Facebook-iOS-SDK/CoreKit/no-arc (= 4.1.0)
+  - Facebook-iOS-SDK/CoreKit/no-arc (4.1.0):
+    - Bolts (~> 1.1)
+  - Facebook-iOS-SDK/LoginKit (4.1.0):
+    - Bolts (~> 1.1)
+    - Facebook-iOS-SDK/CoreKit
+  - Facebook-iOS-SDK/ShareKit (4.1.0):
+    - Bolts (~> 1.1)
+    - Facebook-iOS-SDK/CoreKit
   - Firebase/Auth (4.0.4):
     - Firebase/Core
     - FirebaseAuth (= 4.0.0)
@@ -272,6 +294,7 @@ DEPENDENCIES:
   - DrawerController (~> 3.2)
   - EAIntroView (~> 2.10)
   - Fabric
+  - Facebook-iOS-SDK (~> 4.1)
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
@@ -334,6 +357,7 @@ SPEC CHECKSUMS:
   AviasalesSDK: 582acc3c2f42e3ea91849d057ab96aac3ae1866b
   AXRatingView: b975cd1a11c6c2e76c8999c166e089ed26f54133
   BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
+  Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
   BZipCompression: e0f96508e60eb93b5f5d4c7de1eb3dd0ac4f9ae9
   Cartography: 0538ccb4044acbbda2266335fc58cb4228794d90
   Crashlytics: dfbae35ef22ca189240d230ad501feea4ee85d2d
@@ -342,6 +366,7 @@ SPEC CHECKSUMS:
   EAIntroView: 3494b7bbd1212e3a4f7e8d16194a1b00e7b9abb2
   EARestrictedScrollView: b0c2a3f92fb2610bb44d71c5e4893777c89e45ef
   Fabric: f050464eac45a2ce5a8e6e6a07e977c0df32fe28
+  Facebook-iOS-SDK: f42dfb27283bf5f05e3a9edc88459a75b9892d99
   Firebase: 1492bf04e1b73a7353b4fb2cf5a20bac9692f341
   FirebaseAnalytics: ad41720e3e67fc63fbe3d2948d3e26932a8de311
   FirebaseAuth: ebb6abcbabae00fc47446d690c19ce68d8484fde
@@ -384,6 +409,6 @@ SPEC CHECKSUMS:
   UIColor+FlatColors: 6c699df7a575281794c688c64cee6c44fd1f93b4
   ZKPulseView: 22ea7a0ee3a7a77be46ddba8139400d5be8bdbaf
 
-PODFILE CHECKSUM: a134aeab4efb946c54ba0b3f83d3c460b7731ec4
+PODFILE CHECKSUM: aa57c4a455801c0df4103a4d742ab01e9e70a004
 
 COCOAPODS: 1.1.1

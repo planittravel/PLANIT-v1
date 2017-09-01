@@ -55,6 +55,9 @@ pod 'MIBadgeButton-Swift', :git => 'https://github.com/mustafaibrahim989/MIBadge
 # intro view
 pod 'EAIntroView', '~> 2.10'
 
+# Facebook login
+pod 'Facebook-iOS-SDK', '~> 4.1'
+
 # Pods for TravelPayouts
 pod 'AviasalesSDK', '~> 3.0.0'
 pod 'SDWebImage', '~> 3.7'

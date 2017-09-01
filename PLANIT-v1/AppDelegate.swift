@@ -12,8 +12,11 @@ import GoogleMaps
 import GooglePlaces
 import Firebase
 import DrawerController
+import FBSDKCoreKit
 
 var apollo = ApolloClient(url: URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!)
+//var apollo = ApolloClient(url: URL(string: "https://api.graph.cool/simple/v1/cj72eoh8u003o0110fo9yremv")!)
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,6 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         
@@ -101,6 +106,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
+    }
+    
+    
+    //FB setup
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        let handled: Bool = FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
+        // Add any custom logic here.
+        return handled
     }
     
 }

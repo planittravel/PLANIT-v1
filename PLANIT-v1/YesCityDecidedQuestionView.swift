@@ -75,6 +75,9 @@ class YesCityDecidedQuestionView: UIView, UISearchControllerDelegate, UISearchBa
 
         
         loadDestination()
+        button?.isHidden = true
+        button2?.isHidden = true
+
     }
     
     func loadDestination() {
