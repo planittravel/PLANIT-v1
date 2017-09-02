@@ -1,0 +1,6 @@
+mutation CreateUser($AuthProviderSignupData:AuthProviderSignupData!){
+# replace both tokens!
+createUser(authProvider: $AuthProviderSignupData) {
+auth0UserId
+}
+}

@@ -35,6 +35,7 @@ class TripListViewController: UIViewController, UITableViewDataSource, UITableVi
     var formatter = DateFormatter()
 
     
+    
     //Times VC viewed
 //    var timesViewedNonTrip = [String: Int]()
     

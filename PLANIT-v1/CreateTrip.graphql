@@ -1,8 +1,0 @@
-mutation CreateTrip ($trip: CreateTripInput!) {
-createTrip(input: $trip) {
-clientMutationId
-changedTrip {
-id
-}
-}
-}

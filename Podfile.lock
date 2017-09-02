@@ -129,22 +129,25 @@ PODS:
     - EARestrictedScrollView (~> 1.1.0)
   - EARestrictedScrollView (1.1.0)
   - Fabric (1.6.12)
-  - Facebook-iOS-SDK (4.1.0):
-    - Bolts (~> 1.1)
-    - Facebook-iOS-SDK/CoreKit (= 4.1.0)
-    - Facebook-iOS-SDK/LoginKit (= 4.1.0)
-    - Facebook-iOS-SDK/ShareKit (= 4.1.0)
-  - Facebook-iOS-SDK/CoreKit (4.1.0):
-    - Bolts (~> 1.1)
-    - Facebook-iOS-SDK/CoreKit/no-arc (= 4.1.0)
-  - Facebook-iOS-SDK/CoreKit/no-arc (4.1.0):
-    - Bolts (~> 1.1)
-  - Facebook-iOS-SDK/LoginKit (4.1.0):
-    - Bolts (~> 1.1)
-    - Facebook-iOS-SDK/CoreKit
-  - Facebook-iOS-SDK/ShareKit (4.1.0):
-    - Bolts (~> 1.1)
-    - Facebook-iOS-SDK/CoreKit
+  - FacebookCore (0.2.0):
+    - Bolts (~> 1.8)
+    - FBSDKCoreKit (~> 4.15)
+  - FacebookLogin (0.2.0):
+    - Bolts (~> 1.8)
+    - FacebookCore (~> 0.2)
+    - FBSDKCoreKit (~> 4.15)
+    - FBSDKLoginKit (~> 4.15)
+  - FacebookShare (0.2.0):
+    - Bolts (~> 1.8)
+    - FacebookCore (~> 0.2)
+    - FBSDKCoreKit (~> 4.15)
+    - FBSDKShareKit (~> 4.15)
+  - FBSDKCoreKit (4.24.0):
+    - Bolts (~> 1.7)
+  - FBSDKLoginKit (4.24.0):
+    - FBSDKCoreKit
+  - FBSDKShareKit (4.24.0):
+    - FBSDKCoreKit
   - Firebase/Auth (4.0.4):
     - Firebase/Core
     - FirebaseAuth (= 4.0.0)
@@ -294,7 +297,9 @@ DEPENDENCIES:
   - DrawerController (~> 3.2)
   - EAIntroView (~> 2.10)
   - Fabric
-  - Facebook-iOS-SDK (~> 4.1)
+  - FacebookCore
+  - FacebookLogin
+  - FacebookShare
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Database
@@ -366,7 +371,12 @@ SPEC CHECKSUMS:
   EAIntroView: 3494b7bbd1212e3a4f7e8d16194a1b00e7b9abb2
   EARestrictedScrollView: b0c2a3f92fb2610bb44d71c5e4893777c89e45ef
   Fabric: f050464eac45a2ce5a8e6e6a07e977c0df32fe28
-  Facebook-iOS-SDK: f42dfb27283bf5f05e3a9edc88459a75b9892d99
+  FacebookCore: 2cb3f0fbff218e9d3119cec84bae983b232412de
+  FacebookLogin: c9d606504735780a9e3002465a615512e0a691a5
+  FacebookShare: 8e9ee8ea06505e6a1d3d719b0cc63e840fb8aaeb
+  FBSDKCoreKit: f8c9eb0dd34a9cd277c7b60da4b32226d142502d
+  FBSDKLoginKit: 1214c6d5a1c4995b694d8db8a9ba6910c6028acf
+  FBSDKShareKit: a2ed9d7781a4eda9ac20d7404305e795b10251ac
   Firebase: 1492bf04e1b73a7353b4fb2cf5a20bac9692f341
   FirebaseAnalytics: ad41720e3e67fc63fbe3d2948d3e26932a8de311
   FirebaseAuth: ebb6abcbabae00fc47446d690c19ce68d8484fde
@@ -409,6 +419,6 @@ SPEC CHECKSUMS:
   UIColor+FlatColors: 6c699df7a575281794c688c64cee6c44fd1f93b4
   ZKPulseView: 22ea7a0ee3a7a77be46ddba8139400d5be8bdbaf
 
-PODFILE CHECKSUM: aa57c4a455801c0df4103a4d742ab01e9e70a004
+PODFILE CHECKSUM: 107a8ab50428c4a65a3d875bdb9c29cc6f417c61
 
 COCOAPODS: 1.1.1

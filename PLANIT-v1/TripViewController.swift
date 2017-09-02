@@ -422,6 +422,8 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                     
                     //Create trip on server
+                apollo.perform(mutation: CreateUserMutation(AuthProviderSignupData:, resultHandler: <#T##((GraphQLResult<GraphQLMappable>?, Error?) -> Void)?##((GraphQLResult<GraphQLMappable>?, Error?) -> Void)?##(GraphQLResult<GraphQLMappable>?, Error?) -> Void#>)
+//                apollo.perform(mutation: CreateUserMutation(, resultHandler: <#T##((GraphQLResult<GraphQLMappable>?, Error?) -> Void)?##((GraphQLResult<GraphQLMappable>?, Error?) -> Void)?##(GraphQLResult<GraphQLMappable>?, Error?) -> Void#>)
                     apollo.perform(mutation: CreateTripMutation(trip: CreateTripInput(tripName: tripNameValue)), resultHandler: { (result, error) in
                         guard let data = result?.data else { return }
                         let tripID = data.createTrip?.changedTrip?.id

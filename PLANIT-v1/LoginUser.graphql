@@ -1,5 +1,0 @@
-mutation LoginUser($user: LoginUserInput!) {
-loginUser(input: $user) {
-token
-}
-}

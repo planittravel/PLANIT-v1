@@ -1,7 +1,0 @@
-query GetUserID {
-viewer {
-user {
-id
-}
-}
-}

@@ -17,6 +17,11 @@ class CenterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        if FBSDKAccessToken.current() {
+//            // User is logged in, do work such as go to next view controller.
+//        }
+
+        
         self.navigationController?.isNavigationBarHidden = true
         
         if DataContainerSingleton.sharedDataContainer.usertrippreferences == nil || DataContainerSingleton.sharedDataContainer.usertrippreferences?.count == 0 {

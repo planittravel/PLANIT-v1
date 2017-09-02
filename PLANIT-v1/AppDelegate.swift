@@ -14,8 +14,9 @@ import Firebase
 import DrawerController
 import FBSDKCoreKit
 
+
 var apollo = ApolloClient(url: URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!)
-//var apollo = ApolloClient(url: URL(string: "https://api.graph.cool/simple/v1/cj72eoh8u003o0110fo9yremv")!)
+//var apollo = ApolloClient(url: URL(string: "https://api.graph.cool/simple/v1/cj72ithdy04ht0179dfr3ldc9")!)
 
 
 @UIApplicationMain

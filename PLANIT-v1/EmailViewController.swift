@@ -8,6 +8,9 @@
 
 import UIKit
 import DrawerController
+import FacebookCore
+import FBSDKLoginKit
+
 
 class EmailViewController: UIViewController, UITextFieldDelegate {
     
@@ -17,6 +20,8 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
     
     var hamburgerArrowButton: Icomation?
 
+    //FB Login
+    var loginButton: FBSDKLoginButton?
 
     func hamburgerArrowButtonTouchedUpInside(sender:Icomation){
         var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -37,8 +42,29 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
             self.view.endEditing(true)
         }
     }
+    
+    // Once the button is clicked, show the login dialog
+    @objc func loginButtonClicked() {
+        let loginManager = FBSDKLoginManager()
+        loginManager.logIn([ .PublicProfile ], viewController: self) { loginResult in
+            switch loginResult {
+            case .Failed(let error):
+                print(error)
+            case .Cancelled:
+                print("User cancelled login.")
+            case .Success(let grantedPermissions, let declinedPermissions, let accessToken):
+                print("Logged in!")
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loginButton = FBSDKLoginButton(readPermissions: [ .PublicProfile ])
+        loginButton.center = view.center
+        
+        view.addSubview(loginButton)
+        loginButton.addTarget(self, selector: #selector(self.loginButtonClicked(sender:)), for: UIControlEvents.touchUpInside)
         
         // MARK: Register notifications
         //Drawer
