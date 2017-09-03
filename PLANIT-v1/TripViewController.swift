@@ -422,20 +422,20 @@ class TripViewController: UIViewController, UITextFieldDelegate, UIScrollViewDel
                     saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
                     
                     //Create trip on server
-                apollo.perform(mutation: CreateUserMutation(AuthProviderSignupData:, resultHandler: <#T##((GraphQLResult<GraphQLMappable>?, Error?) -> Void)?##((GraphQLResult<GraphQLMappable>?, Error?) -> Void)?##(GraphQLResult<GraphQLMappable>?, Error?) -> Void#>)
-//                apollo.perform(mutation: CreateUserMutation(, resultHandler: <#T##((GraphQLResult<GraphQLMappable>?, Error?) -> Void)?##((GraphQLResult<GraphQLMappable>?, Error?) -> Void)?##(GraphQLResult<GraphQLMappable>?, Error?) -> Void#>)
-                    apollo.perform(mutation: CreateTripMutation(trip: CreateTripInput(tripName: tripNameValue)), resultHandler: { (result, error) in
-                        guard let data = result?.data else { return }
-                        let tripID = data.createTrip?.changedTrip?.id
-                        
-                        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
-                        SavedPreferencesForTrip["tripID"] = tripID as! NSString
-                        //Save
-                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
-                        
-                        print(error ?? "no error message")
-                    })
-                    
+//                apollo.perform(mutation: CreateUserMutation(AuthProviderSignupData:, resultHandler: <#T##((GraphQLResult<GraphQLMappable>?, Error?) -> Void)?##((GraphQLResult<GraphQLMappable>?, Error?) -> Void)?##(GraphQLResult<GraphQLMappable>?, Error?) -> Void#>)
+//                apollo.perform(mutation: CreateUserMutation(, resultHandler: ((GraphQLResult<GraphQLMappable>?, Error?) -> Void)?)
+//                    apollo.perform(mutation: CreateTripMutation(trip: CreateTripInput(tripName: tripNameValue)), resultHandler: { (result, error) in
+//                        guard let data = result?.data else { return }
+//                        let tripID = data.createTrip?.changedTrip?.id
+//                        
+//                        let SavedPreferencesForTrip = self.fetchSavedPreferencesForTrip()
+//                        SavedPreferencesForTrip["tripID"] = tripID as! NSString
+//                        //Save
+//                        self.saveTripBasedOnNewAddedOrExisting(SavedPreferencesForTrip: SavedPreferencesForTrip)
+//                        
+//                        print(error ?? "no error message")
+//                    })
+//                    
                     //Create new firebase channel
                     if let name = DataContainerSingleton.sharedDataContainer.usertrippreferences?[DataContainerSingleton.sharedDataContainer.currenttrip!].object(forKey: "trip_name") as? String {
                         let test = DataContainerSingleton.sharedDataContainer.token

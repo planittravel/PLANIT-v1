@@ -8,11 +8,13 @@
 
 import UIKit
 import DrawerController
-import FacebookCore
 import FBSDKLoginKit
+import FBSDKCoreKit
+import FacebookCore
+import FacebookLogin
 
 
-class EmailViewController: UIViewController, UITextFieldDelegate {
+class EmailViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButtonDelegate {
     
     // MARK: Outlets
     @IBOutlet weak var emailAddress: UITextField!
@@ -22,6 +24,7 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
 
     //FB Login
     var loginButton: FBSDKLoginButton?
+    var loginDict: [String:Any]?
 
     func hamburgerArrowButtonTouchedUpInside(sender:Icomation){
         var appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -43,28 +46,76 @@ class EmailViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func loginButtonWillLogin(_ loginButton: FBSDKLoginButton!) -> Bool {
+        
+        return true
+    }
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
+        print("logout")
+        
+        //When you call the logOut, the user is logged out of your app. it will not logout you from your fb account. if you want to do so, go into the safari app, you can go Facebook.com and logout of your account.
+        let loginManager: FBSDKLoginManager = FBSDKLoginManager()
+        loginManager.logOut()
+    }
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
+        if error != nil {
+            print(error)
+        } else {
+            fetchProfile()
+        }
+    }
     // Once the button is clicked, show the login dialog
     @objc func loginButtonClicked() {
-        let loginManager = FBSDKLoginManager()
-        loginManager.logIn([ .PublicProfile ], viewController: self) { loginResult in
-            switch loginResult {
-            case .Failed(let error):
-                print(error)
-            case .Cancelled:
-                print("User cancelled login.")
-            case .Success(let grantedPermissions, let declinedPermissions, let accessToken):
-                print("Logged in!")
+        
+        if FBSDKAccessToken.current() != nil {
+            fetchProfile()
+        } else {
+        
+            let loginManager = FBSDKLoginManager()
+            loginManager.logIn(withReadPermissions: ["email","public_profile","user_friends"], from: self, handler: { (loginResult: FBSDKLoginManagerLoginResult?, error: Error?) -> Void in
+                if (loginResult?.isCancelled)! {
+                    print("User cancelled login.")
+                } else {
+                    if error != nil {
+                        print(error!)
+                        return
+                    } else {
+                        self.loginDict = ["grantedPermissions":loginResult?.grantedPermissions!,"declinedPermissions": loginResult?.declinedPermissions!,"accesToken": loginResult?.token!]
+                    }
+                }
+            })
+        }
+    }
+    
+    func fetchProfile() {
+        let parameters = ["fields": "email,picture.type(large),name,gender,age_range,cover,timezone,verified,updated_time,education,religion,friends"]
+        
+        FBSDKGraphRequest(graphPath: "me", parameters: parameters).start{ (connection,result,error)-> Void in
+            
+            if error != nil {   // Error occured while logging in
+                print(error!)
+                return
             }
+            
+            // Details received successfully
+            let dictionary = result as! [String: AnyObject]
+            // pass this dictionary object into your model class initialiser
         }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loginButton = FBSDKLoginButton(readPermissions: [ .PublicProfile ])
-        loginButton.center = view.center
+        //FB Login
+        loginButton = { () -> FBSDKLoginButton in 
+            let button = FBSDKLoginButton()
+            button.readPermissions = ["email", "user_friends"]
+            return button
+        }()
+        loginButton?.center = view.center
+        loginButton?.addTarget(self, action: #selector(self.loginButtonClicked), for: UIControlEvents.touchUpInside)
+        loginButton?.delegate = self
+        view.addSubview(loginButton!)
         
-        view.addSubview(loginButton)
-        loginButton.addTarget(self, selector: #selector(self.loginButtonClicked(sender:)), for: UIControlEvents.touchUpInside)
         
         // MARK: Register notifications
         //Drawer

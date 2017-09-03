@@ -92,20 +92,20 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
         createPasswordLabel.isHidden = true
         enterPasswordLabel.isHidden = true
         
-        apollo.fetch(query: GetAllUsersQuery(where: UserWhereArgs(username: UserUsernameWhereArgs(eq: DataContainerSingleton.sharedDataContainer.emailAddress)))) { (result, error) in
-            guard let data = result?.data else { return }
-            
-            let matchingUsersCount = data.viewer?.allUsers?.edges?.count
-            if matchingUsersCount == 1 {
-                self.existingUser = true
-            }
-            if self.existingUser == true {
-                self.enterPasswordLabel.isHidden = false
-            }
-            else {
-                self.createPasswordLabel.isHidden = false
-            }
-        }
+//        apollo.fetch(query: GetAllUsersQuery(where: UserWhereArgs(username: UserUsernameWhereArgs(eq: DataContainerSingleton.sharedDataContainer.emailAddress)))) { (result, error) in
+//            guard let data = result?.data else { return }
+//            
+//            let matchingUsersCount = data.viewer?.allUsers?.edges?.count
+//            if matchingUsersCount == 1 {
+//                self.existingUser = true
+//            }
+//            if self.existingUser == true {
+//                self.enterPasswordLabel.isHidden = false
+//            }
+//            else {
+//                self.createPasswordLabel.isHidden = false
+//            }
+//        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -127,71 +127,71 @@ class PasswordViewController: UIViewController, UITextFieldDelegate {
             if !existingUser {
             
             //Create account and authenticate instance
-            apollo.perform(mutation: CreateUserMutation(user: CreateUserInput(password: DataContainerSingleton.sharedDataContainer.password!, username: DataContainerSingleton.sharedDataContainer.emailAddress!)), resultHandler: { (result, error) in
-                guard let data = result?.data else { return }
-                let token = data.createUser?.token
-                
-//                //Authenticate
-//                apollo = {
-//                    let configuration = URLSessionConfiguration.default
-//                    // Add additional headers as needed
-//                    configuration.httpAdditionalHeaders = ["Authorization": "Bearer <\(token)>"]
-//                    
-//                    let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
-//                    
-//                    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-//                }()
-                
-                //Save token to singleton
-                DataContainerSingleton.sharedDataContainer.token = token
-                
-                //resign first responder and seque
-                self.Password.resignFirstResponder()
-                
-                
-                self.successfulLoginOrSignUpOpenDrawer()
-            })
+//            apollo.perform(mutation: CreateUserMutation(user: CreateUserInput(password: DataContainerSingleton.sharedDataContainer.password!, username: DataContainerSingleton.sharedDataContainer.emailAddress!)), resultHandler: { (result, error) in
+//                guard let data = result?.data else { return }
+//                let token = data.createUser?.token
+//                
+////                //Authenticate
+////                apollo = {
+////                    let configuration = URLSessionConfiguration.default
+////                    // Add additional headers as needed
+////                    configuration.httpAdditionalHeaders = ["Authorization": "Bearer <\(token)>"]
+////                    
+////                    let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
+////                    
+////                    return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+////                }()
+//                
+//                //Save token to singleton
+//                DataContainerSingleton.sharedDataContainer.token = token
+//                
+//                //resign first responder and seque
+//                self.Password.resignFirstResponder()
+//                
+//                
+//                self.successfulLoginOrSignUpOpenDrawer()
+//            })
             } else if existingUser {
                 
-                apollo.perform(mutation: LoginUserMutation(user: LoginUserInput(username: DataContainerSingleton.sharedDataContainer.emailAddress!, password: DataContainerSingleton.sharedDataContainer.password!)), resultHandler: { (result, error) in
-                    
-                    guard let data = result?.data else { return }
-                    
-                    var token: String?
-                    if data.loginUser?.token != nil {
-                        token = data.loginUser?.token
-                    }
-                    
-                    if token == nil {
-                        UIView.animate(withDuration: 0.5) {
-                            self.createPasswordLabel.text = "Invalid password, please try again"
-                            self.enterPasswordLabel.text = "Invalid password, please try again"
-                            self.Password.becomeFirstResponder()
-                        }
-                        return
-                    } else {
-                        
-//                        //Authenticate
-//                        apollo = {
-//                            let configuration = URLSessionConfiguration.default
-//                            // Add additional headers as needed
-//                            configuration.httpAdditionalHeaders = ["Authorization": "Bearer <\(token)>"]
-//                            
-//                            let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
-//                            
-//                            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
-//                        }()
-//
-                        //Save token to singleton
-                        DataContainerSingleton.sharedDataContainer.token = token
-                        
-                        //resign first responder and seque
-                        self.Password.resignFirstResponder()
-                        
-                        self.successfulLoginOrSignUpOpenDrawer()
-//                        super.performSegue(withIdentifier: "passwordToTripList", sender: self)
-                    }
-                })
+//                apollo.perform(mutation: LoginUserMutation(user: LoginUserInput(username: DataContainerSingleton.sharedDataContainer.emailAddress!, password: DataContainerSingleton.sharedDataContainer.password!)), resultHandler: { (result, error) in
+//                    
+//                    guard let data = result?.data else { return }
+//                    
+//                    var token: String?
+//                    if data.loginUser?.token != nil {
+//                        token = data.loginUser?.token
+//                    }
+//                    
+//                    if token == nil {
+//                        UIView.animate(withDuration: 0.5) {
+//                            self.createPasswordLabel.text = "Invalid password, please try again"
+//                            self.enterPasswordLabel.text = "Invalid password, please try again"
+//                            self.Password.becomeFirstResponder()
+//                        }
+//                        return
+//                    } else {
+//                        
+////                        //Authenticate
+////                        apollo = {
+////                            let configuration = URLSessionConfiguration.default
+////                            // Add additional headers as needed
+////                            configuration.httpAdditionalHeaders = ["Authorization": "Bearer <\(token)>"]
+////                            
+////                            let url = URL(string: "https://us-west-2.api.scaphold.io/graphql/deserted-salt")!
+////                            
+////                            return ApolloClient(networkTransport: HTTPNetworkTransport(url: url, configuration: configuration))
+////                        }()
+////
+//                        //Save token to singleton
+//                        DataContainerSingleton.sharedDataContainer.token = token
+//                        
+//                        //resign first responder and seque
+//                        self.Password.resignFirstResponder()
+//                        
+//                        self.successfulLoginOrSignUpOpenDrawer()
+////                        super.performSegue(withIdentifier: "passwordToTripList", sender: self)
+//                    }
+//                })
             }
             
         } else {
